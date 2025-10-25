@@ -1,0 +1,13 @@
+{
+  "protectedPaths": [
+    "/encrypt/encrypt01.html",
+    "/encrypt01.html",
+    "/deploy/environment/docker.html"
+  ],
+  "protectedPathsMap": {
+    "/encrypt/encrypt01.html": "加密 1",
+    "/encrypt01.html": "加密 1",
+    "/deploy/environment/docker.html": "centos安装docker"
+  },
+  "generatedAt": "2025-10-25T23:25:50.951Z"
+}
