@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="https://newzone.top/atom.xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
+  <id>https://newzone.top/</id>
+  <title>学习笔记</title>
+  <subtitle>开源工具、效率方法、心理学探索的自我提升笔记，记录并输出一切能让自己提升的知识。</subtitle>
+  <icon>https://newzone.top/favicon.ico</icon>
+  <updated>2025-10-23T13:14:00.004Z</updated>
+  <generator>@vuepress/plugin-feed</generator>
+  <link rel="self" href="https://newzone.top/atom.xml"/>
+  <link rel="alternate" href="https://newzone.top/"/>
+  <category term="RAG"/>
+  <entry>
+    <title type="text">RAG系统实战课00 开篇词</title>
+    <id>https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE00.html</id>
+    <link href="https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE00.html"/>
+    <updated>2025-10-23T13:12:43.000Z</updated>
+    <summary type="html"><![CDATA[<p>RAG系统实战课00 开篇词</p>
+<ul>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE01.html" target="_blank">RAG系统实战课01</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE02.html" target="_blank">RAG系统实战课02</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE03.html" target="_blank">RAG系统实战课03</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE04.html" target="_blank">RAG系统实战课04</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE05.html" target="_blank">RAG系统实战课05</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE06.html" target="_blank">RAG系统实战课06</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE07.html" target="_blank">RAG系统实战课07</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE08.html" target="_blank">RAG系统实战课08</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE09.html" target="_blank">RAG系统实战课09</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE10.html" target="_blank">RAG系统实战课10</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE11.html" target="_blank">RAG系统实战课11</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE12.html" target="_blank">RAG系统实战课12</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE13.html" target="_blank">RAG系统实战课13</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE14.html" target="_blank">RAG系统实战课14</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE15.html" target="_blank">RAG系统实战课15</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE16.html" target="_blank">RAG系统实战课16</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE17.html" target="_blank">RAG系统实战课17</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE18.html" target="_blank">RAG系统实战课18</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE19.html" target="_blank">RAG系统实战课19</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE20.html" target="_blank">RAG系统实战课20</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE21.html" target="_blank">RAG系统实战课21</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE22.html" target="_blank">RAG系统实战课22</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE23.html" target="_blank">RAG系统实战课23</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE24.html" target="_blank">RAG系统实战课24</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE25.html" target="_blank">RAG系统实战课25 加餐1</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE26.html" target="_blank">RAG系统实战课26 加餐2</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE27.html" target="_blank">RAG系统实战课27 结束语</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE28.html" target="_blank">RAG系统实战课28 结课测试</a></li>
+</ul>]]></summary>
+    <content type="html"><![CDATA[<p>RAG系统实战课00 开篇词</p>
+<ul>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE01.html" target="_blank">RAG系统实战课01</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE02.html" target="_blank">RAG系统实战课02</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE03.html" target="_blank">RAG系统实战课03</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE04.html" target="_blank">RAG系统实战课04</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE05.html" target="_blank">RAG系统实战课05</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE06.html" target="_blank">RAG系统实战课06</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE07.html" target="_blank">RAG系统实战课07</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE08.html" target="_blank">RAG系统实战课08</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE09.html" target="_blank">RAG系统实战课09</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE10.html" target="_blank">RAG系统实战课10</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE11.html" target="_blank">RAG系统实战课11</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE12.html" target="_blank">RAG系统实战课12</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE13.html" target="_blank">RAG系统实战课13</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE14.html" target="_blank">RAG系统实战课14</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE15.html" target="_blank">RAG系统实战课15</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE16.html" target="_blank">RAG系统实战课16</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE17.html" target="_blank">RAG系统实战课17</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE18.html" target="_blank">RAG系统实战课18</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE19.html" target="_blank">RAG系统实战课19</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE20.html" target="_blank">RAG系统实战课20</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE21.html" target="_blank">RAG系统实战课21</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE22.html" target="_blank">RAG系统实战课22</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE23.html" target="_blank">RAG系统实战课23</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE24.html" target="_blank">RAG系统实战课24</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE25.html" target="_blank">RAG系统实战课25 加餐1</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE26.html" target="_blank">RAG系统实战课26 加餐2</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE27.html" target="_blank">RAG系统实战课27 结束语</a></li>
+<li><a href="/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE28.html" target="_blank">RAG系统实战课28 结课测试</a></li>
+</ul>
+]]></content>
+    <category term="RAG"/>
+    <published>2025-10-23T00:00:00.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">RAG系统实战课01</title>
+    <id>https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE01.html</id>
+    <link href="https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE01.html"/>
+    <updated>2025-10-23T13:12:43.000Z</updated>
+    <summary type="html"><![CDATA[<p>RAG系统实战课01</p>
+]]></summary>
+    <content type="html"><![CDATA[<p>RAG系统实战课01</p>
+]]></content>
+    <category term="RAG"/>
+    <published>2025-10-23T00:00:00.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">RAG系统实战课02</title>
+    <id>https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE02.html</id>
+    <link href="https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE02.html"/>
+    <updated>2025-10-23T13:12:43.000Z</updated>
+    <summary type="html"><![CDATA[<p>RAG系统实战课02</p>
+]]></summary>
+    <content type="html"><![CDATA[<p>RAG系统实战课02</p>
+]]></content>
+    <category term="RAG"/>
+    <published>2025-10-23T00:00:00.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">RAG系统实战课03</title>
+    <id>https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE03.html</id>
+    <link href="https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE03.html"/>
+    <updated>2025-10-23T13:12:43.000Z</updated>
+    <summary type="html"><![CDATA[<p>RAG系统实战课03</p>
+]]></summary>
+    <content type="html"><![CDATA[<p>RAG系统实战课03</p>
+]]></content>
+    <category term="RAG"/>
+    <published>2025-10-23T00:00:00.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">RAG系统实战课04</title>
+    <id>https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE04.html</id>
+    <link href="https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE04.html"/>
+    <updated>2025-10-23T13:12:43.000Z</updated>
+    <summary type="html"><![CDATA[<p>RAG系统实战课04</p>
+]]></summary>
+    <content type="html"><![CDATA[<p>RAG系统实战课04</p>
+]]></content>
+    <category term="RAG"/>
+    <published>2025-10-23T00:00:00.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">RAG系统实战课05</title>
+    <id>https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE05.html</id>
+    <link href="https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE05.html"/>
+    <updated>2025-10-23T13:12:43.000Z</updated>
+    <summary type="html"><![CDATA[<p>RAG系统实战课05</p>
+]]></summary>
+    <content type="html"><![CDATA[<p>RAG系统实战课05</p>
+]]></content>
+    <category term="RAG"/>
+    <published>2025-10-23T00:00:00.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">RAG系统实战课06</title>
+    <id>https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE06.html</id>
+    <link href="https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE06.html"/>
+    <updated>2025-10-23T13:12:43.000Z</updated>
+    <summary type="html"><![CDATA[<p>RAG系统实战课06</p>
+]]></summary>
+    <content type="html"><![CDATA[<p>RAG系统实战课06</p>
+]]></content>
+    <category term="RAG"/>
+    <published>2025-10-23T00:00:00.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">RAG系统实战课07</title>
+    <id>https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE07.html</id>
+    <link href="https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE07.html"/>
+    <updated>2025-10-23T13:12:43.000Z</updated>
+    <summary type="html"><![CDATA[<p>RAG系统实战课07</p>
+]]></summary>
+    <content type="html"><![CDATA[<p>RAG系统实战课07</p>
+]]></content>
+    <category term="RAG"/>
+    <published>2025-10-23T00:00:00.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">RAG系统实战课08</title>
+    <id>https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE08.html</id>
+    <link href="https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE08.html"/>
+    <updated>2025-10-23T13:12:43.000Z</updated>
+    <summary type="html"><![CDATA[<p>RAG系统实战课08</p>
+]]></summary>
+    <content type="html"><![CDATA[<p>RAG系统实战课08</p>
+]]></content>
+    <category term="RAG"/>
+    <published>2025-10-23T00:00:00.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">RAG系统实战课09</title>
+    <id>https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE09.html</id>
+    <link href="https://newzone.top/posts/RAG%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98%E8%AF%BE09.html"/>
+    <updated>2025-10-23T13:12:43.000Z</updated>
+    <summary type="html"><![CDATA[<p>RAG系统实战课09</p>
+]]></summary>
+    <content type="html"><![CDATA[<p>RAG系统实战课09</p>
+]]></content>
+    <category term="RAG"/>
+    <published>2025-10-23T00:00:00.000Z</published>
+  </entry>
+</feed>
