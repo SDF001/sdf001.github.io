@@ -1,11 +1,16 @@
 {
   "protectedPaths": [
     "/encrypt/encrypt01.html",
-    "/deploy/environment/docker.html"
+    "/encrypt/test-secret.html",
+    "/deploy/environment/docker.html",
+    "/docs/secret/solo-secret.html",
+    "/encrypt/test-secret.html"
   ],
   "protectedPathsMap": {
     "/encrypt/encrypt01.html": "加密 1",
-    "/deploy/environment/docker.html": "centos安装docker"
+    "/encrypt/test-secret.html": "加密目录测试页面",
+    "/deploy/environment/docker.html": "centos安装docker",
+    "/docs/secret/solo-secret.html": "🔒 solo-secret"
   },
-  "generatedAt": "2025/10/26 19:19:32"
+  "generatedAt": "2025/10/26 19:43:28"
 }
