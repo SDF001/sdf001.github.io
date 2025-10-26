@@ -455,19 +455,22 @@
                 }
               };
 
-              // 增加延迟确保DOM完全渲染
+              // 增加更长的延迟确保DOM完全渲染和侧边栏加载
               setTimeout(() => {
                 replaceEncryptedIcons();
 
-                // 如果图标替换失败，重试几次
-                setTimeout(() => {
-                  const lockIcons = document.querySelectorAll('span[style*="font-size: 1em"]');
-                  if (lockIcons.length === 0) {
-                    console.log('🔄 图标替换可能失败，重新尝试...');
-                    replaceEncryptedIcons();
-                  }
-                }, 1000);
-              }, 100);
+                // 多次重试确保图标替换成功
+                [1000, 2000, 3000].forEach(delay => {
+                  setTimeout(() => {
+                    const lockIcons = document.querySelectorAll('span[style*="font-size: 1em"]');
+                    const totalExpected = document.querySelectorAll('.vp-sidebar a[href*="encrypt"], .vp-sidebar a[href*="secret"], .vp-sidebar a[href*="docker"]').length;
+                    if (lockIcons.length < totalExpected) {
+                      console.log('🔄 第' + (delay/1000) + '次重试图标替换 (当前: ' + lockIcons.length + ', 期望: ' + totalExpected + ')');
+                      replaceEncryptedIcons();
+                    }
+                  }, delay);
+                });
+              }, 500);
 
             // 更新字数统计和阅读时间
             updatePageStats(decryptedStr);
@@ -668,12 +671,18 @@
       }
     }
 
+    // 确保页面完全加载后再执行密码检查
+    function initializePasswordCheck() {
+      console.log('🔍 开始初始化密码检查...');
+      trySavedPassword();
+    }
+
     // 立即执行密码检查（在DOM解析完成后尽早执行）
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', trySavedPassword);
+      document.addEventListener('DOMContentLoaded', initializePasswordCheck);
     } else {
       // DOM已经加载完成，立即执行
-      trySavedPassword();
+      initializePasswordCheck();
     }
   </script>
 
