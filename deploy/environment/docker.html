@@ -348,6 +348,136 @@
             if (window.VuePress) {
               window.VuePress.init();
             }
+
+            // 重新初始化图标系统并替换加密图标
+            setTimeout(() => {
+              // 重新初始化iconify图标
+              if (window.Iconify && window.Iconify.scan) {
+                window.Iconify.scan();
+              }
+
+              // 重新初始化VPIcon组件
+              const vpIcons = document.querySelectorAll('vp-icon');
+              vpIcons.forEach(icon => {
+                if (icon && icon.__vue_app__) {
+                  // 触发Vue组件重新渲染
+                  icon.__vue_app__.update();
+                }
+              });
+
+              // 替换加密相关侧边栏项目的图标为🔒
+              const replaceEncryptedIcons = () => {
+                // 动态获取加密配置
+                let protectedPaths = [];
+                try {
+                  // 尝试从配置文件中获取加密路径
+                  fetch('/encrypt-paths.json')
+                    .then(response => response.json())
+                    .then(data => {
+                      protectedPaths = data.protectedPaths || [];
+                      performIconReplacement(protectedPaths);
+                    })
+                    .catch(error => {
+                      console.warn('⚠️ 无法加载加密配置文件，使用回退方案:', error);
+                      // 回退方案：基于当前页面路径推断
+                      const currentPath = window.location.pathname;
+                      protectedPaths = [currentPath];
+                      performIconReplacement(protectedPaths);
+                    });
+                } catch (error) {
+                  console.warn('⚠️ 加载加密配置失败，使用回退方案:', error);
+                  const currentPath = window.location.pathname;
+                  protectedPaths = [currentPath];
+                  performIconReplacement(protectedPaths);
+                }
+              };
+
+              // 执行图标替换
+              const performIconReplacement = (protectedPaths) => {
+                // 从加密路径中提取目录模式
+                const directoryPatterns = [];
+                protectedPaths.forEach(path => {
+                  // 提取目录部分，如 /encrypt/、/secret/、/deploy/environment/
+                  const dirMatch = path.match(/^(/[^/]+/)/);
+                  if (dirMatch) {
+                    directoryPatterns.push(dirMatch[1]);
+                  }
+                  // 也添加文件名模式
+                  const fileName = path.split('/').pop();
+                  if (fileName && !directoryPatterns.includes(fileName)) {
+                    directoryPatterns.push(fileName.replace('.html', ''));
+                  }
+                });
+
+                // 查找所有侧边栏链接
+                const sidebarLinks = document.querySelectorAll('.vp-sidebar a, .vp-sidebar-link a');
+                const encryptedSidebarItems = [];
+
+                sidebarLinks.forEach(link => {
+                  const href = link.getAttribute('href') || '';
+                  const isEncrypted = directoryPatterns.some(pattern => href.includes(pattern));
+
+                  if (isEncrypted) {
+                    // 找到包含该链接的侧边栏项目
+                    let parent = link.closest('.vp-sidebar-link, .vp-sidebar-header');
+                    if (parent) {
+                      // 找到该项目中的图标元素
+                      const iconElement = parent.querySelector('vp-icon, .vp-icon');
+                      if (iconElement) {
+                        encryptedSidebarItems.push({
+                          element: iconElement,
+                          isHeader: parent.classList.contains('vp-sidebar-header'),
+                          href: href
+                        });
+                      }
+                    }
+                  }
+                });
+
+                // 替换图标为🔒
+                encryptedSidebarItems.forEach(({ element, isHeader, href }) => {
+                  // 创建新的🔒图标元素
+                  const lockIcon = document.createElement('span');
+                  lockIcon.textContent = '🔒';
+                  lockIcon.style.cssText = 'font-size: 1em; margin-right: 0.5em; display: inline-block; width: 1em; text-align: center;';
+
+                  // 替换原有图标
+                  if (element.parentNode) {
+                    element.parentNode.replaceChild(lockIcon, element);
+                  }
+
+                  console.log('🔒 已替换' + (isHeader ? '目录' : '页面') + '图标为🔒: ' + href);
+                });
+
+                if (encryptedSidebarItems.length > 0) {
+                  console.log('🔒 共替换了 ' + encryptedSidebarItems.length + ' 个加密页面的图标');
+                  console.log('📋 使用的加密模式:', directoryPatterns);
+                }
+              };
+
+              replaceEncryptedIcons();
+            }, 50);
+
+            // 更新字数统计和阅读时间
+            updatePageStats(decryptedStr);
+
+            // 修复侧边栏重复箭头问题
+            setTimeout(() => {
+              const fixSidebarArrows = () => {
+                const sidebarHeaders = document.querySelectorAll('.vp-sidebar-header');
+                sidebarHeaders.forEach(header => {
+                  const arrows = header.querySelectorAll('.vp-arrow');
+                  if (arrows.length > 1) {
+                    for (let i = 1; i < arrows.length; i++) {
+                      arrows[i].remove();
+                    }
+                    console.log('🔧 修复了侧边栏重复箭头问题');
+                  }
+                });
+              };
+
+              fixSidebarArrows();
+            }, 100);
           }, 50);
         }, 300);
 
@@ -382,6 +512,49 @@
       } else {
         showError(`密码错误，请重新输入！`);
         document.getElementById('passwordInput').value = '';
+      }
+    }
+
+    // 更新字数统计和阅读时间
+    function updatePageStats(content) {
+      try {
+        // 计算中文字数（排除HTML标签）
+        const textContent = content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+        const chineseCharCount = (textContent.match(/[\u4e00-\u9fa5]/g) || []).length;
+        const englishWordCount = (textContent.match(/[a-zA-Z]+/g) || []).length;
+        const totalWordCount = chineseCharCount + englishWordCount;
+
+        // 计算阅读时间（中文每分钟300字，英文每分钟200词）
+        const chineseReadingTime = Math.ceil(chineseCharCount / 300);
+        const englishReadingTime = Math.ceil(englishWordCount / 200);
+        const totalReadingTime = Math.max(chineseReadingTime, englishReadingTime, 1);
+
+        // 查找并更新字数统计元素
+        const wordInfoElement = document.querySelector('.page-word-info span');
+        const wordCountMeta = document.querySelector('.page-word-info meta[property="wordCount"]');
+        const readingTimeElement = document.querySelector('.page-reading-time-info span');
+        const readingTimeMeta = document.querySelector('.page-reading-time-info meta[property="timeRequired"]');
+
+        if (wordInfoElement) {
+          wordInfoElement.textContent = `约 ${totalWordCount} 字`;
+        }
+        if (wordCountMeta) {
+          wordCountMeta.setAttribute('content', totalWordCount);
+        }
+        if (readingTimeElement) {
+          if (totalReadingTime === 1) {
+            readingTimeElement.textContent = '小于 1 分钟';
+          } else {
+            readingTimeElement.textContent = `大约 ${totalReadingTime} 分钟`;
+          }
+        }
+        if (readingTimeMeta) {
+          readingTimeMeta.setAttribute('content', `PT${totalReadingTime}M`);
+        }
+
+        console.log(`📊 字数统计已更新: ${totalWordCount} 字, 阅读时间: ${totalReadingTime} 分钟`);
+      } catch (error) {
+        console.warn('⚠️ 更新字数统计失败:', error);
       }
     }
 
