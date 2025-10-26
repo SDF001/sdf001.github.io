@@ -828,8 +828,21 @@
       const remainingAttempts = maxAttempts - currentAttempts;
 
       try {
-        // 使用 AES-256-CBC 解密
-        const key = CryptoJS.enc.Utf8.parse(password.padEnd(32, '0').substring(0, 32));
+        // 使用 AES-256-CBC 解密，密钥填充逻辑必须与加密时一致
+        function padKeyTo32BytesForDecrypt(key) {
+          // 如果密码已经是32字节，直接返回
+          if (key.length >= 32) {
+            return key.substring(0, 32);
+          }
+          // 如果密码不足32字节，重复填充直到32字节
+          let paddedKey = key;
+          while (paddedKey.length < 32) {
+            paddedKey += key;
+          }
+          return paddedKey.substring(0, 32);
+        }
+
+        const key = CryptoJS.enc.Utf8.parse(padKeyTo32BytesForDecrypt(password));
         const iv = CryptoJS.enc.Utf8.parse('R7NTHazlPUSciblN');
 
         const decrypted = CryptoJS.AES.decrypt(encryptedData, key, {
