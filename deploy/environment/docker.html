@@ -285,22 +285,41 @@
         }
 
         // 解密成功：保存密码（如果需要）并显示内容
+        console.log('🔍 开始成功处理分支');
+
         if (document.getElementById('remember').checked) {
+          console.log('💾 保存密码到本地存储');
           savePassword(inputPassword);
+        } else {
+          console.log('🔓 不保存密码');
         }
 
+        console.log('🔄 开始替换页面内容');
         // 使用更安全的方式替换页面内容
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = decryptedStr;
+        console.log('📝 创建临时容器，内容长度:', decryptedStr.length);
 
         // 替换整个 body 内容
-        document.body.innerHTML = tempDiv.querySelector('body').innerHTML;
+        const bodyContent = tempDiv.querySelector('body');
+        if (bodyContent) {
+          console.log('📄 找到body元素，开始替换');
+          document.body.innerHTML = bodyContent.innerHTML;
+          console.log('✅ body内容替换完成');
+        } else {
+          console.log('❌ 未找到body元素');
+        }
 
         // 更新页面标题
         const newTitle = tempDiv.querySelector('title');
         if (newTitle) {
+          console.log('🏷️ 更新页面标题为:', newTitle.textContent);
           document.title = newTitle.textContent;
+        } else {
+          console.log('⚠️ 未找到标题元素');
         }
+
+        console.log('✅ 成功处理分支完成');
 
         // 执行新内容中的脚本
         const scripts = tempDiv.querySelectorAll('script');
