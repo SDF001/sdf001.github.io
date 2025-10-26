@@ -37,20 +37,9 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    /* 隐藏主内容直到解密完成 */
+    /* 简单的隐藏规则，确保密码输入框可以显示 */
     #app {
       display: none;
-    }
-    /* 立即隐藏body内容，防止闪现 */
-    body > :not(#loading-mask) {
-      display: none !important;
-    }
-    /* 确保加载遮罩在最上层 */
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
     }
   </style>
   <style>
@@ -332,23 +321,10 @@
           // 设置新的HTML内容
           document.documentElement.innerHTML = decryptedStr;
 
-          // 移除加载遮罩相关的CSS规则，恢复正常显示
-          const styleSheets = document.styleSheets;
-          for (let i = 0; i < styleSheets.length; i++) {
-            try {
-              const rules = styleSheets[i].cssRules || styleSheets[i].rules;
-              for (let j = rules.length - 1; j >= 0; j--) {
-                const rule = rules[j];
-                if (rule.selectorText && (
-                  rule.selectorText.includes('body > :not(#loading-mask)') ||
-                  rule.selectorText === '#app'
-                )) {
-                  styleSheets[i].deleteRule(j);
-                }
-              }
-            } catch (e) {
-              // 忽略跨域样式表的错误
-            }
+          // 简单地移除#app的隐藏规则
+          const app = document.getElementById('app');
+          if (app) {
+            app.style.display = 'block';
           }
 
           // 延迟执行脚本，确保DOM完全加载
@@ -471,6 +447,13 @@
       // 隐藏加载遮罩
       hideLoadingMask();
 
+      // 显示整个app容器
+      const app = document.getElementById('app');
+      if (app) {
+        app.style.display = 'block';
+      }
+
+      // 确保密码输入框区域可见
       const passwordProtected = document.querySelector('.password-protected');
       if (passwordProtected) {
         passwordProtected.style.display = 'block';
