@@ -307,7 +307,10 @@
           document.body.innerHTML = bodyContent.innerHTML;
           console.log('✅ body内容替换完成');
         } else {
-          console.log('❌ 未找到body元素');
+          console.log('❌ 未找到body元素，使用整个内容');
+          // 如果没有找到body元素，直接使用整个解密内容
+          document.body.innerHTML = decryptedStr;
+          console.log('✅ 使用整个内容替换body完成');
         }
 
         // 更新页面标题
