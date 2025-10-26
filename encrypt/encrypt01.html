@@ -271,9 +271,17 @@
         console.log('解密字符串trim后是否为空:', decryptedStr.trim() === '');
 
         // 检查解密结果
+        console.log('🔍 检查解密结果条件:');
+        console.log('!decryptedStr:', !decryptedStr);
+        console.log('decryptedStr.trim() === "":', decryptedStr.trim() === '');
+        console.log('条件结果:', !decryptedStr || decryptedStr.trim() === '');
+
         if (!decryptedStr || decryptedStr.trim() === '') {
+          console.log('❌ 进入错误处理分支');
           handleError();
           return;
+        } else {
+          console.log('✅ 解密验证通过，进入成功处理分支');
         }
 
         // 解密成功：保存密码（如果需要）并显示内容
