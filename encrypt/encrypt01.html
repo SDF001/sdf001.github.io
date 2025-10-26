@@ -107,7 +107,7 @@
 </head>
 <body>
   <div id="app">
-    <div class="password-protected">
+    <div class="password-protected" style="display: none;">
       <div class="modal" id="passwordModal">
         <div class="modal-content">
           <h3>请输入访问密码</h3>
@@ -383,6 +383,7 @@
           if (now - savedData.timestamp < weekInMs) {
             const decryptedPassword = decryptPasswordFromStorage(savedData.encryptedPassword);
             if (decryptedPassword) {
+              console.log('✅ 使用保存的密码自动登录');
               document.getElementById('passwordInput').value = decryptedPassword;
               document.getElementById('remember').checked = true;
               verifyPassword();
@@ -393,10 +394,33 @@
       } catch (error) {
         console.warn('读取保存的密码失败:', error);
       }
+
+      // 没有保存的密码或已过期，显示密码输入框
+      showPasswordInput();
     }
 
-    // 页面加载时尝试使用保存的密码
-    window.addEventListener('DOMContentLoaded', trySavedPassword);
+    // 显示密码输入框
+    function showPasswordInput() {
+      const passwordProtected = document.querySelector('.password-protected');
+      if (passwordProtected) {
+        passwordProtected.style.display = 'block';
+        // 聚焦到密码输入框
+        setTimeout(() => {
+          const passwordInput = document.getElementById('passwordInput');
+          if (passwordInput) {
+            passwordInput.focus();
+          }
+        }, 100);
+      }
+    }
+
+    // 立即执行密码检查（在DOM解析完成后尽早执行）
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', trySavedPassword);
+    } else {
+      // DOM已经加载完成，立即执行
+      trySavedPassword();
+    }
   </script>
 
   <style>
