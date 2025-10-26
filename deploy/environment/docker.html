@@ -37,28 +37,9 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    /* 增强的防闪现隐藏规则 */
+    /* 简单的隐藏规则，只隐藏主要内容区域 */
     #app {
-      display: none !important;
-      opacity: 0 !important;
-      visibility: hidden !important;
-    }
-
-    /* 隐藏所有可能闪现的内容 */
-    body > :not(#loading-mask):not(.modal) {
-      opacity: 0 !important;
-      visibility: hidden !important;
-    }
-
-    /* 确保在VuePress完全加载前内容不可见 */
-    .theme-container,
-    .vp-navbar,
-    .vp-sidebar,
-    .vp-page,
-    .vp-footer {
-      display: none !important;
-      opacity: 0 !important;
-      visibility: hidden !important;
+      display: none;
     }
   </style>
   <style>
@@ -73,7 +54,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 1000;
+      z-index: 10001;
     }
     .modal-content {
       background: #fff;
@@ -340,36 +321,10 @@
           // 设置新的HTML内容
           document.documentElement.innerHTML = decryptedStr;
 
-          // 智能地移除#app的隐藏规则，使用平滑过渡
+          // 简单地移除#app的隐藏规则
           const app = document.getElementById('app');
           if (app) {
             app.style.display = 'block';
-            app.style.opacity = '0';
-            app.style.visibility = 'visible';
-
-            // 等待VuePress初始化完成后再显示内容
-            setTimeout(() => {
-              app.style.transition = 'opacity 0.3s ease-in-out';
-              app.style.opacity = '1';
-
-              // 恢复其他组件显示
-              const themeContainer = document.querySelector('.theme-container');
-              const navbar = document.querySelector('.vp-navbar');
-              const sidebar = document.querySelector('.vp-sidebar');
-              const footer = document.querySelector('.vp-footer');
-
-              [themeContainer, navbar, sidebar, footer].forEach(element => {
-                if (element) {
-                  element.style.display = '';
-                  element.style.opacity = '0';
-                  element.style.visibility = 'visible';
-                  setTimeout(() => {
-                    element.style.transition = 'opacity 0.3s ease-in-out';
-                    element.style.opacity = '1';
-                  }, 100);
-                }
-              });
-            }, 100);
           }
 
           // 延迟执行脚本，确保DOM完全加载
@@ -525,34 +480,7 @@
       hideLoadingMask();
       const app = document.getElementById('app');
       if (app) {
-        // 逐步恢复内容显示，防止闪现
         app.style.display = 'block';
-        app.style.opacity = '0';
-        app.style.visibility = 'visible';
-
-        // 使用淡入效果平滑显示内容
-        setTimeout(() => {
-          app.style.transition = 'opacity 0.3s ease-in-out';
-          app.style.opacity = '1';
-
-          // 恢复其他VuePress组件的显示
-          const themeContainer = document.querySelector('.theme-container');
-          const navbar = document.querySelector('.vp-navbar');
-          const sidebar = document.querySelector('.vp-sidebar');
-          const footer = document.querySelector('.vp-footer');
-
-          [themeContainer, navbar, sidebar, footer].forEach(element => {
-            if (element) {
-              element.style.display = '';
-              element.style.opacity = '0';
-              element.style.visibility = 'visible';
-              setTimeout(() => {
-                element.style.transition = 'opacity 0.3s ease-in-out';
-                element.style.opacity = '1';
-              }, 100);
-            }
-          });
-        }, 50);
       }
     }
 
@@ -577,7 +505,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 1000;
+      z-index: 10001;
     }
     .modal-content {
       background: #fff;
