@@ -265,29 +265,48 @@
           savePassword(inputPassword);
         }
 
-        // 直接替换整个页面内容（保持VuePress结构）
-        document.documentElement.innerHTML = decryptedStr;
+        // 显示加载提示，提升用户体验
+        const loadingDiv = document.createElement('div');
+        loadingDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10000;';
+        loadingDiv.innerHTML = '<p style="margin: 0; color: #333;">正在加载页面内容...</p>';
+        document.body.appendChild(loadingDiv);
 
         // 保存解密状态，防止重复密码验证
         sessionStorage.setItem('vuepress_unlocked_' + window.location.pathname, 'true');
 
-        // 执行新页面中的脚本以激活VuePress功能
+        // 使用更平滑的方式替换内容
         setTimeout(() => {
-          const scripts = document.querySelectorAll('script');
-          scripts.forEach(script => {
-            if (!script.hasAttribute('data-executed')) {
-              const newScript = document.createElement('script');
-              if (script.src) {
-                newScript.src = script.src;
-              } else {
-                newScript.textContent = script.textContent;
+          // 移除加载提示
+          if (loadingDiv.parentNode) {
+            loadingDiv.parentNode.removeChild(loadingDiv);
+          }
+
+          // 替换页面内容
+          document.documentElement.innerHTML = decryptedStr;
+
+          // 延迟执行脚本，确保DOM完全加载
+          setTimeout(() => {
+            const scripts = document.querySelectorAll('script');
+            scripts.forEach(script => {
+              if (!script.hasAttribute('data-executed')) {
+                const newScript = document.createElement('script');
+                if (script.src) {
+                  newScript.src = script.src;
+                } else {
+                  newScript.textContent = script.textContent;
+                }
+                newScript.setAttribute('data-executed', 'true');
+                document.head.appendChild(newScript);
+                document.head.removeChild(newScript);
               }
-              newScript.setAttribute('data-executed', 'true');
-              document.head.appendChild(newScript);
-              document.head.removeChild(newScript);
+            });
+
+            // 触发VuePress的初始化事件
+            if (window.VuePress) {
+              window.VuePress.init();
             }
-          });
-        }, 100);
+          }, 50);
+        }, 300);
 
         // 执行新内容中的脚本
         const scripts = tempDiv.querySelectorAll('script');
@@ -301,10 +320,7 @@
           document.head.appendChild(newScript);
         });
 
-        // 解密完成后立即移除页面中的图标元素
-        setTimeout(() => {
-          removePageIcons();
-        }, 100);
+        // 解密成功，不需要移除图标
 
       } catch (err) {
         handleError();
