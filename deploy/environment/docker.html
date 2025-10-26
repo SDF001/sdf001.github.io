@@ -239,19 +239,10 @@
       }
 
       try {
-        // 调试信息
-        console.log('🔍 开始密码验证');
-        console.log('输入密码:', inputPassword);
-        console.log('密码长度:', inputPassword.length);
-
         // 配置AES解密参数
         const paddedKey = padKeyTo32Bytes(inputPassword);
-        console.log('填充后密钥:', paddedKey);
-        console.log('填充后密钥长度:', paddedKey.length);
-
         const key = CryptoJS.enc.Utf8.parse(paddedKey);
         const iv = CryptoJS.enc.Utf8.parse(CONFIG.iv);
-        console.log('IV:', CONFIG.iv);
 
         // 执行解密
         const decrypted = CryptoJS.AES.decrypt(
@@ -260,69 +251,46 @@
           { iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
         );
 
-        console.log('解密对象:', decrypted.toString());
-        console.log('解密对象类型:', typeof decrypted.toString());
-
         // 转换解密结果为字符串
         const decryptedStr = CryptoJS.enc.Utf8.stringify(decrypted);
-        console.log('解密字符串:', decryptedStr);
-        console.log('解密字符串长度:', decryptedStr.length);
-        console.log('解密字符串是否为空:', !decryptedStr);
-        console.log('解密字符串trim后是否为空:', decryptedStr.trim() === '');
 
         // 检查解密结果
-        console.log('🔍 检查解密结果条件:');
-        console.log('!decryptedStr:', !decryptedStr);
-        console.log('decryptedStr.trim() === "":', decryptedStr.trim() === '');
-        console.log('条件结果:', !decryptedStr || decryptedStr.trim() === '');
-
         if (!decryptedStr || decryptedStr.trim() === '') {
-          console.log('❌ 进入错误处理分支');
           handleError();
           return;
-        } else {
-          console.log('✅ 解密验证通过，进入成功处理分支');
         }
 
         // 解密成功：保存密码（如果需要）并显示内容
-        console.log('🔍 开始成功处理分支');
-
         if (document.getElementById('remember').checked) {
-          console.log('💾 保存密码到本地存储');
           savePassword(inputPassword);
-        } else {
-          console.log('🔓 不保存密码');
         }
 
-        console.log('🔄 开始替换页面内容');
-        // 使用更安全的方式替换页面内容
+        // 替换页面内容
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = decryptedStr;
-        console.log('📝 创建临时容器，内容长度:', decryptedStr.length);
 
-        // 替换整个 body 内容
-        const bodyContent = tempDiv.querySelector('body');
-        if (bodyContent) {
-          console.log('📄 找到body元素，开始替换');
-          document.body.innerHTML = bodyContent.innerHTML;
-          console.log('✅ body内容替换完成');
+        // 查找VuePress的内容容器
+        const contentContainer = document.querySelector('.page-content, .vp-page-content, main, #markdown-content');
+
+        if (contentContainer) {
+          // 提取markdown内容区域的内容
+          const markdownContentDiv = tempDiv.querySelector('#markdown-content');
+          if (markdownContentDiv) {
+            contentContainer.innerHTML = markdownContentDiv.innerHTML;
+          } else {
+            // 如果没有找到markdown容器，使用整个解密内容
+            contentContainer.innerHTML = decryptedStr;
+          }
         } else {
-          console.log('❌ 未找到body元素，使用整个内容');
-          // 如果没有找到body元素，直接使用整个解密内容
+          // 未找到内容容器，替换整个页面
           document.body.innerHTML = decryptedStr;
-          console.log('✅ 使用整个内容替换body完成');
         }
 
         // 更新页面标题
         const newTitle = tempDiv.querySelector('title');
         if (newTitle) {
-          console.log('🏷️ 更新页面标题为:', newTitle.textContent);
           document.title = newTitle.textContent;
-        } else {
-          console.log('⚠️ 未找到标题元素');
         }
-
-        console.log('✅ 成功处理分支完成');
 
         // 执行新内容中的脚本
         const scripts = tempDiv.querySelectorAll('script');
