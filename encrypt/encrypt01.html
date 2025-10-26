@@ -41,6 +41,17 @@
     #app {
       display: none;
     }
+    /* 立即隐藏body内容，防止闪现 */
+    body > :not(#loading-mask) {
+      display: none !important;
+    }
+    /* 确保加载遮罩在最上层 */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
   </style>
   <style>
     /* 内联样式，确保密码输入框正常显示 */
@@ -315,8 +326,30 @@
 
         // 使用更平滑的方式替换内容
         setTimeout(() => {
-          // 替换整个HTML内容，确保包含完整的VuePress结构
+          // 先清除页面内容
+          document.documentElement.innerHTML = '';
+
+          // 设置新的HTML内容
           document.documentElement.innerHTML = decryptedStr;
+
+          // 移除加载遮罩相关的CSS规则，恢复正常显示
+          const styleSheets = document.styleSheets;
+          for (let i = 0; i < styleSheets.length; i++) {
+            try {
+              const rules = styleSheets[i].cssRules || styleSheets[i].rules;
+              for (let j = rules.length - 1; j >= 0; j--) {
+                const rule = rules[j];
+                if (rule.selectorText && (
+                  rule.selectorText.includes('body > :not(#loading-mask)') ||
+                  rule.selectorText === '#app'
+                )) {
+                  styleSheets[i].deleteRule(j);
+                }
+              }
+            } catch (e) {
+              // 忽略跨域样式表的错误
+            }
+          }
 
           // 延迟执行脚本，确保DOM完全加载
           setTimeout(() => {
