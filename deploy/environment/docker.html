@@ -590,7 +590,7 @@
 
     // 显示密码输入框（带动画）
     function showPasswordInput() {
-      // 减少等待时间，立即显示
+      // 增加等待时间，避免闪屏
       setTimeout(() => {
         // 淡出初始加载遮罩
         const initialLoading = document.getElementById('initial-loading');
@@ -608,8 +608,8 @@
           passwordContainer.classList.add('show');
           // 聚焦到密码输入框
           document.getElementById('passwordInput').focus();
-        }, 200); // 减少过渡时间
-      }, 300); // 大幅减少等待时间
+        }, 400); // 增加过渡时间，避免闪屏
+      }, 600); // 增加等待时间，避免闪屏
     }
 
     // 初始化函数
