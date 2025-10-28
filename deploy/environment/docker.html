@@ -484,8 +484,71 @@
           content.style.display = '';
         }
 
+        // 7. 重新初始化VuePress侧边栏交互功能
+        reinitializeSidebarInteractions();
+
         console.log('加密内容已解密并显示');
       }, 100); // 增加延迟确保DOM完全渲染
+    }
+
+    // 重新初始化VuePress侧边栏交互功能
+    function reinitializeSidebarInteractions() {
+      try {
+        // 查找所有可折叠的侧边栏组
+        const sidebarGroups = document.querySelectorAll('.vp-sidebar-group');
+
+        sidebarGroups.forEach(group => {
+          const header = group.querySelector('.vp-sidebar-header');
+          const arrow = group.querySelector('.vp-arrow');
+
+          if (header && arrow) {
+            // 移除旧的点击事件监听器（如果存在）
+            header.replaceWith(header.cloneNode(true));
+            const newHeader = group.querySelector('.vp-sidebar-header');
+
+            // 添加新的点击事件监听器
+            newHeader.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+
+              // 切换折叠状态 - 使用VuePress Hope主题的类名
+              const isCollapsed = group.classList.contains('collapsed');
+
+              if (isCollapsed) {
+                // 展开组
+                group.classList.remove('collapsed');
+                arrow.classList.remove('end');
+                arrow.classList.add('down');
+              } else {
+                // 折叠组
+                group.classList.add('collapsed');
+                arrow.classList.remove('down');
+                arrow.classList.add('end');
+              }
+            });
+
+            // 确保箭头初始状态正确
+            if (!group.classList.contains('collapsed')) {
+              arrow.classList.remove('end');
+              arrow.classList.add('down');
+            }
+          }
+        });
+
+        // 确保侧边栏其他交互功能正常
+        const sidebarLinks = document.querySelectorAll('.vp-sidebar a, .sidebar-nav a');
+        sidebarLinks.forEach(link => {
+          // 确保链接可以正常点击
+          if (link.onclick === null && link.href) {
+            link.style.pointerEvents = 'auto';
+            link.style.cursor = 'pointer';
+          }
+        });
+
+        console.log('✅ VuePress侧边栏交互功能已重新初始化');
+      } catch (error) {
+        console.warn('⚠️ 重新初始化侧边栏时出现错误:', error);
+      }
     }
 
     // 保存密码到 localStorage
