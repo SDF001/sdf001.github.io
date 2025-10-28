@@ -443,8 +443,33 @@
 
     // 显示解密后的内容
     function showDecryptedContent(decryptedStr) {
-      // 完全替换页面内容
-      document.documentElement.innerHTML = decryptedStr;
+      // 尝试智能替换：只替换内容区域，保持VuePress应用结构
+      try {
+        // 解析解密后的HTML
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = decryptedStr;
+
+        // 查找新内容中的主要区域
+        const newThemeContainer = tempDiv.querySelector('.theme-container');
+        const newApp = tempDiv.querySelector('#app');
+
+        if (newThemeContainer && document.querySelector('.theme-container')) {
+          // 只替换theme-container内容，保持VuePress应用结构
+          console.log('🔄 使用智能替换模式，保持VuePress结构');
+          document.querySelector('.theme-container').innerHTML = newThemeContainer.innerHTML;
+        } else if (newApp && document.querySelector('#app')) {
+          // 替换app内容
+          console.log('🔄 使用app替换模式');
+          document.querySelector('#app').innerHTML = newApp.innerHTML;
+        } else {
+          // 回退到完全替换
+          console.log('⚠️ 回退到完全替换模式');
+          document.documentElement.innerHTML = decryptedStr;
+        }
+      } catch (error) {
+        console.warn('⚠️ 智能替换失败，使用完全替换模式:', error);
+        document.documentElement.innerHTML = decryptedStr;
+      }
 
       // 精确清理加密页面相关元素，不影响VuePress功能
       setTimeout(() => {
@@ -484,104 +509,8 @@
           content.style.display = '';
         }
 
-        // 7. 重新初始化VuePress侧边栏交互功能
-        reinitializeSidebarInteractions();
-
         console.log('加密内容已解密并显示');
       }, 100); // 增加延迟确保DOM完全渲染
-    }
-
-    // 重新初始化VuePress侧边栏交互功能
-    function reinitializeSidebarInteractions() {
-      try {
-        // 等待DOM完全稳定后再操作
-        setTimeout(() => {
-          console.log('🔄 开始重新初始化VuePress侧边栏交互...');
-
-          // 方法1: 重新绑定VuePress Hope主题的侧边栏事件
-          const sidebarGroups = document.querySelectorAll('.vp-sidebar-group');
-          console.log('📋 找到 ' + sidebarGroups.length + ' 个侧边栏组');
-
-          sidebarGroups.forEach(function(group, index) {
-            const header = group.querySelector('.vp-sidebar-header');
-            const arrow = group.querySelector('.vp-arrow');
-            const children = group.querySelector('.vp-sidebar-links');
-
-            if (header && arrow) {
-              console.log('🔧 处理第 ' + (index + 1) + ' 个侧边栏组:', group.querySelector('.vp-sidebar-title')?.textContent);
-
-              // 移除所有现有的点击监听器
-              const newHeader = header.cloneNode(true);
-              header.parentNode.replaceChild(newHeader, header);
-
-              // 重新绑定点击事件，完全模拟VuePress Hope主题的行为
-              newHeader.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                console.log('🖱️ 侧边栏组被点击:', group.querySelector('.vp-sidebar-title')?.textContent);
-
-                // 切换collapsed类
-                const isCollapsed = group.classList.contains('collapsed');
-
-                if (isCollapsed) {
-                  // 展开
-                  console.log('📂 展开侧边栏组');
-                  group.classList.remove('collapsed');
-                  if (children) children.style.display = '';
-                  arrow.classList.remove('end');
-                  arrow.classList.add('down');
-                } else {
-                  // 折叠
-                  console.log('📁 折叠侧边栏组');
-                  group.classList.add('collapsed');
-                  if (children) children.style.display = 'none';
-                  arrow.classList.remove('down');
-                  arrow.classList.add('end');
-                }
-              });
-
-              // 确保初始状态正确
-              if (!group.classList.contains('collapsed')) {
-                arrow.classList.remove('end');
-                arrow.classList.add('down');
-                if (children) children.style.display = '';
-              } else {
-                arrow.classList.remove('down');
-                arrow.classList.add('end');
-                if (children) children.style.display = 'none';
-              }
-            }
-          });
-
-          // 方法2: 确保所有侧边栏链接可点击
-          const sidebarLinks = document.querySelectorAll('.vp-sidebar a, .vp-sidebar-link');
-          sidebarLinks.forEach(function(link, index) {
-            link.style.pointerEvents = 'auto';
-            link.style.cursor = 'pointer';
-            link.addEventListener('click', function(e) {
-              // 确保链接能正常工作
-              console.log('🔗 侧边栏链接被点击:', link.textContent);
-            });
-          });
-
-          // 方法3: 尝试重新初始化VuePress应用实例
-          try {
-            // 查找Vue应用实例
-            if (window.Vue && window.__VUE__) {
-              console.log('🟢 检测到Vue应用，尝试重新挂载...');
-              // 这里可能需要更复杂的Vue重新挂载逻辑
-            }
-          } catch (vueError) {
-            console.log('⚠️ Vue重新挂载失败，使用原生JavaScript');
-          }
-
-          console.log('✅ VuePress侧边栏交互功能重新初始化完成');
-        }, 200); // 增加延迟确保DOM完全渲染
-
-      } catch (error) {
-        console.error('❌ 重新初始化侧边栏时出现错误:', error);
-      }
     }
 
     // 保存密码到 localStorage
