@@ -1,206 +1,45 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
-    <title>LearnData - 读书笔记</title>
-    <meta name="description" content="读书笔记" />
-    <meta name="keywords" content="读书笔记,阅读笔记" />
-    <link rel="stylesheet" href="https://oss.newzone.top/docsify/main/4.13.1/themes/vue.css" />
-    <link rel="stylesheet" href="https://oss.newzone.top/docsify/docsify-toc/dist/toc.css" />
-    <!-- <link rel="stylesheet" href="https://oss.newzone.top/docsify/docsify-gifcontrol/dist/docsify-gifcontrol.css"> -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="keywords" content="自我提升,效率提升,开源工具,学习笔记" />
     <style>
-      .anchor {
-        font-weight: bold;
-        text-shadow:
-          0 1px 3px rgba(0, 0, 0, 0.4),
-          0 0 30px rgba(0, 0, 0, 0.075);
+      :root {
+        --vp-c-bg: #fff;
       }
 
-      .app-name {
-        width: 150px;
+      [data-theme="dark"] {
+        --vp-c-bg: #252232;
       }
 
-      section.cover h1 {
-        margin: 1.5rem 0 1.5rem;
-      }
-
-      section.cover p {
-        text-shadow:
-          0 1px 3px rgba(0, 0, 0, 0.4),
-          0 0 30px rgba(0, 0, 0, 0.075);
-      }
-
-      .app-sub-sidebar li:before {
-        content: "○";
-      }
-
-      /* toc 距离顶端的距离 */
-      .page_toc {
-        top: 12rem;
-      }
-
-      /* 宽度大于 1300px 才会显示 TOC */
-      @media screen and (max-width: 1300px) {
-        .nav {
-          display: none;
-        }
-      }
-
-      /* 宽度小于 1300px 则隐藏 waline 评论框，避免异常 */
-      @media screen and (min-width: 1300px) {
-        #waline {
-          display: none;
-        }
+      html,
+      body {
+        background: var(--vp-c-bg);
       }
     </style>
-  </head>
-
-  <body class="body--ready">
-    <div id="app">🏃‍🏃‍🏃‍💨 加载中...</div>
     <script>
-      window.$docsify = {
-        name: "<p>🌈 读书笔记</p>", // 文档标题，会显示在侧边栏顶部
-        nameLink: "https://newzone.top/", // 点击文档标题后跳转的链接地址。
-        // repo: 'https://github.com/rockbenben/LearnData',
-        // logo: '/_media/icon.svg', // 在侧边栏中出现的网站图标，你可以使用 CSS 来更改大小
-        // homepage: 'README.md', // 设置首页文件加载路径。适合不想将 README.md 作为入口文件渲染，或者是文档存放在其他位置的情况使用。
-        // coverpage: true, // 启用封面页。开启后是加载 _coverpage.md 文件，也可以自定义文件名。
-        // onlyCover: true, // 只在访问主页时加载封面。
-        notFoundPage: "README.md", // 404 时返回主页，也可以自定义加载的文件名。
-        auto2top: true, // 切换页面后是否自动跳转到页面顶部
-        // routerMode: 'history', // 设置路由模式，浏览器链接里不会出现 #
-        // relativePath: true, //默认为绝对路径，为 true 则链接会使用相对路径。
+      const userMode = localStorage.getItem("vuepress-theme-hope-scheme");
+      const systemDarkMode = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-        loadNavbar: true, // 加载自定义导航栏。设置为 true 后会加载 _navbar.md 文件，也可以自定义加载的文件名。
-        mergeNavbar: true, // 小屏设备下合并导航栏到侧边栏。
-        topMargin: 40, // 让你的内容页在滚动到指定的锚点时，距离页面顶部有一定空间。当你使用固定页头布局时这个选项很有用，可以让你的锚点对齐标题栏。
-
-        loadSidebar: true, // 加载自定义侧边栏。设置为 true 后会加载 _sidebar.md 文件，也可以自定义加载的文件名。
-        // autoHeader: true, // 同时设置 loadSidebar 和 autoHeader 后，可以根据 _sidebar.md 的内容自动为每个页面增加标题
-
-        maxLevel: 4, //默认情况下会抓取文档中所有标题渲染成目录，可配置最大支持渲染的标题层级。
-        subMaxLevel: 2, //自定义侧边栏后默认不会再生成目录，你也可以通过设置生成目录的最大层级开启这个功能。
-
-        // 我们可以通过 {docsify-updated} 变量显示文档更新日期。并且通过 formatUpdated 配置日期格式。参考 https://github.com/lukeed/tinydate#patterns
-        // formatUpdated: '{YYYY}-{MM}-{DD} {HH}:{mm}:{ss}',
-
-        // 全文搜索插件会根据当前页面上的超链接获取文档内容，在 localStorage 内建立文档索引。
-        search: "auto", // 默认值
-        // 搜索完整配置参数
-        search: {
-          maxAge: 86400000, // 缓存过期时间，单位毫秒，默认一天
-          paths: "auto",
-          placeholder: "🔍 搜索",
-          noData: "😒 找不到结果，请缩短搜索词",
-
-          // 搜索标题的最大层级，1 - 6
-          depth: 2,
-
-          hideOtherSidebarContent: false, // 是否隐藏其他侧边栏内容
-        },
-
-        // 定义路由别名，可以更自由的定义路由规则。支持正则。
-        alias: {
-          "/foo/(.*)": "/bar/$1", // supports regexp
-          "/zh-cn/changelog": "/changelog",
-          "/.*/_sidebar.md": "/_sidebar.md", // See #301
-        },
-
-        toc: {
-          scope: ".markdown-section",
-          headings: "h2, h3, h4, h5, h6",
-          title: "",
-        },
-        pagination: {
-          previousText: "PREVIOUS",
-          nextText: "NEXT",
-          crossChapter: true,
-        },
-        //gifcontrol: {
-        //mode: 'click'
-        //},
-
-        // docsify-waline 计算数字和评论支持
-        count: {
-          language: "chinese", // default:english|chinese
-        },
-        // 如有 Waline 后端，可添加阅读量统计：https://waline.js.org/guide/get-started.html
-
-        // 添加页脚
-        footer: {
-          copy: "盛年不重来，一日难再晨。 —— ",
-          auth: '🏷️ <a href="https://newzone.top/" target="_blank">LearnData</a><br/><br/><span id="sitetime"></span>',
-          //pre: '<hr/>',
-          style: "text-align: left;",
-          //class: 'className',
-        },
-      };
-    </script>
-
-    <script src="https://oss.newzone.top/docsify/main/4.13.1/docsify.min.js"></script>
-    <script src="https://oss.newzone.top/docsify/main/4.13.1/plugins/search.min.js"></script>
-    <script src="https://oss.newzone.top/docsify/main/4.13.1/plugins/zoom-image.min.js"></script>
-    <script src="https://oss.newzone.top/docsify/docsify-pagination/dist/docsify-pagination.min.js"></script>
-    <script src="https://oss.newzone.top/docsify/docsify-toc/dist/toc.js"></script>
-    <script src="https://oss.newzone.top/docsify/docsify-footer-enh/dist/docsify-footer-enh.min.js"></script>
-    <!-- 
-    <script src="https://oss.newzone.top/docsify/docsify-gifcontrol/dist/docsify-gifcontrol.js"></script>
-    -->
-
-    <!-- 使用 Gitter 实现一个 IM 即时通讯聊天室功能 
-    <script>
-      ((window.gitter = {}).chat = {}).options = {
-        room: 'usthe/sureness'
-      };
-    </script>
-    <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
-    -->
-
-    <script src="https://oss.newzone.top/jquery/3.7.1/dist/jquery.min.js"></script>
-    <script src="https://oss.newzone.top/instantpage.min.js"></script>
-    <!-- 添加网站运行时间统计 -->
-    <script language="javascript">
-      function siteTime() {
-        window.setTimeout("siteTime()", 1000);
-        var seconds = 1000;
-        var minutes = seconds * 60;
-        var hours = minutes * 60;
-        var days = hours * 24;
-        var years = days * 365;
-        var today = new Date();
-        var todayYear = today.getFullYear();
-        var todayMonth = today.getMonth() + 1;
-        var todayDate = today.getDate();
-        var todayHour = today.getHours();
-        var todayMinute = today.getMinutes();
-        var todaySecond = today.getSeconds();
-        /* Date.UTC() -- 返回 date 对象距世界标准时间 (UTC)1970 年 1 月 1 日午夜之间的毫秒数 (时间戳)
-      year - 作为 date 对象的年份，为 4 位年份值
-      month - 0-11 之间的整数，做为 date 对象的月份
-      day - 1-31 之间的整数，做为 date 对象的天数
-      hours - 0(午夜 24 点)-23 之间的整数，做为 date 对象的小时数
-      minutes - 0-59 之间的整数，做为 date 对象的分钟数
-      seconds - 0-59 之间的整数，做为 date 对象的秒数
-      microseconds - 0-999 之间的整数，做为 date 对象的毫秒数 */
-        var t1 = Date.UTC(2022, 7, 23, 22, 22, 22); //北京时间 2022-07-23 22:22:22 //LearnData 首个 commit 时间，改为你自己值得纪念的日子吧
-        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
-        var diff = t2 - t1;
-        var diffYears = Math.floor(diff / years);
-        var diffDays = Math.floor(diff / days - diffYears * 365);
-        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
-        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
-        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
-        if (diffYears > 0) {
-          document.getElementById("sitetime").innerHTML = " 已运行 " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分 " + diffSeconds + " 秒 ";
-        } else {
-          document.getElementById("sitetime").innerHTML = " 已运行 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分 " + diffSeconds + " 秒 ";
-        }
+      if (userMode === "dark" || (userMode !== "light" && systemDarkMode)) {
+        document.documentElement.setAttribute("data-theme", "dark");
       }
-      siteTime();
     </script>
-    <script src="https://oss.newzone.top/docsify/docsify-count/dist/countable.min.js"></script>
-    <script src="https://oss.newzone.top/docsify/docsify-waline/docsify-waline.min.js"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"读书笔记","image":[""],"dateModified":"2025-10-18T04:12:54.000Z","author":[{"@type":"Person","name":"LearnData","url":"https://newzone.top"}]}</script><meta property="og:url" content="https://newzone.top/reading/"><meta property="og:site_name" content="学习笔记"><meta property="og:title" content="读书笔记"><meta property="og:description" content="读书笔记 曾经我尝试使用 Notion 来管理书单，用 Calibre、Logseq 来对电子书记读书笔记。然而，我渐渐发现自己几乎从不回头再看这些电子书的笔记。因此，我决定放弃电子书这种方式，而将我的注意力更多地集中在实体书籍上的摘要总结上。 现在，当我对某本书的知识点感兴趣时，我会重新翻开那本实体书，重新阅读其中的书签部分，将其变为工具书。这种方式..."><meta property="og:type" content="article"><meta property="og:locale" content="zh-CN"><meta property="og:updated_time" content="2025-10-18T04:12:54.000Z"><meta property="article:modified_time" content="2025-10-18T04:12:54.000Z"><link rel="alternate" type="application/atom+xml" href="https://newzone.top/atom.xml" title="学习笔记 Atom Feed"><link rel="alternate" type="application/json" href="https://newzone.top/feed.json" title="学习笔记 JSON Feed"><link rel="alternate" type="application/rss+xml" href="https://newzone.top/rss.xml" title="学习笔记 RSS Feed"><link rel="icon" href="/favicon.ico"><title>读书笔记 | 学习笔记</title><meta name="description" content="读书笔记 曾经我尝试使用 Notion 来管理书单，用 Calibre、Logseq 来对电子书记读书笔记。然而，我渐渐发现自己几乎从不回头再看这些电子书的笔记。因此，我决定放弃电子书这种方式，而将我的注意力更多地集中在实体书籍上的摘要总结上。 现在，当我对某本书的知识点感兴趣时，我会重新翻开那本实体书，重新阅读其中的书签部分，将其变为工具书。这种方式...">
+    <link rel="stylesheet" href="/assets/css/styles.ab020b79.css">
+    <link rel="preload" href="/assets/js/runtime~app.7197fb08.js" as="script"><link rel="preload" href="/assets/css/styles.ab020b79.css" as="style"><link rel="preload" href="/assets/js/6109.8f3ec41a.js" as="script"><link rel="preload" href="/assets/js/app.d18a8e25.js" as="script">
+    
+    <!-- 统计代码区域-->
+  </head>
+  <body>
+    <div id="app"><!--[--><!--[--><!--[--><span tabindex="-1"></span><a href="#main-content" class="vp-skip-link sr-only">跳至主要內容</a><!--]--><!--[--><div class="theme-container external-link-icon has-toc" vp-container><!--[--><header id="navbar" class="vp-navbar" vp-navbar><div class="vp-navbar-start"><button type="button" class="vp-toggle-sidebar-button" title="Toggle Sidebar"><span class="icon"></span></button><!--[--><a class="route-link vp-brand" href="/" aria-label="带我回家"><img class="vp-nav-logo" src="/logo.svg" alt><!----><span class="vp-site-name hide-in-pad">学习笔记</span></a><!--]--></div><div class="vp-navbar-center"><!--[--><nav class="vp-nav-links"><div class="vp-nav-item hide-in-mobile"><a class="route-link auto-link" href="/blog.html" aria-label="博客"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:blog" sizing="height" height="1em"></iconify-icon><!--]-->博客<!----></a></div><div class="vp-nav-item hide-in-mobile"><div class="vp-dropdown-wrapper"><button type="button" class="vp-dropdown-title" aria-label="应用"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:bars-staggered" sizing="height" height="1em"></iconify-icon>应用<!--]--><span class="arrow"></span><ul class="vp-dropdown"><li class="vp-dropdown-item"><a class="route-link auto-link" href="/apps/Applist.html" aria-label="必备应用"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:list" sizing="both" width="1em" height="1em"></iconify-icon><!--]-->必备应用<!----></a></li><li class="vp-dropdown-item"><a class="route-link auto-link" href="/apps/Chrome.html" aria-label="常用扩展"><!--[--><iconify-icon class="vp-icon" icon="fa6-brands:chrome" sizing="both" width="1em" height="1em"></iconify-icon><!--]-->常用扩展<!----></a></li><li class="vp-dropdown-item"><h4 class="vp-dropdown-subtitle">服务/专题</h4><ul class="vp-dropdown-subitems"><li class="vp-dropdown-subitem"><a class="route-link auto-link" href="/apps/topic/" aria-label="专题示例"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:dice-d20" sizing="both" width="1em" height="1em"></iconify-icon><!--]-->专题示例<!----></a></li></ul></li></ul></button></div></div><div class="vp-nav-item hide-in-mobile"><div class="vp-dropdown-wrapper"><button type="button" class="vp-dropdown-title" aria-label="生活"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:bed-pulse" sizing="height" height="1em"></iconify-icon>生活<!--]--><span class="arrow"></span><ul class="vp-dropdown"><li class="vp-dropdown-item"><a class="route-link auto-link" href="/family/Diet.html" aria-label="健康饮食"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:wheat-awn-circle-exclamation" sizing="both" width="1em" height="1em"></iconify-icon><!--]-->健康饮食<!----></a></li><li class="vp-dropdown-item"><a class="route-link auto-link" href="/family/Coupon.html" aria-label="网购攻略"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:cart-shopping" sizing="both" width="1em" height="1em"></iconify-icon><!--]-->网购攻略<!----></a></li></ul></button></div></div><div class="vp-nav-item hide-in-mobile"><div class="vp-dropdown-wrapper"><button type="button" class="vp-dropdown-title" aria-label="工具"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:toolbox" sizing="height" height="1em"></iconify-icon>工具<!--]--><span class="arrow"></span><ul class="vp-dropdown"><li class="vp-dropdown-item"><a class="auto-link external-link" href="https://www.aishort.top/" aria-label="ChatGPT SC" rel="noopener noreferrer" target="_blank"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:bolt" sizing="both" width="1em" height="1em"></iconify-icon><!--]-->ChatGPT SC<!----></a></li><li class="vp-dropdown-item"><a class="auto-link external-link" href="https://prompt.newzone.top/" aria-label="IMGPrompt" rel="noopener noreferrer" target="_blank"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:image" sizing="both" width="1em" height="1em"></iconify-icon><!--]-->IMGPrompt<!----></a></li><li class="vp-dropdown-item"><a class="auto-link external-link" href="https://tools.newzone.top/json-translate" aria-label="多语言翻译" rel="noopener noreferrer" target="_blank"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:language" sizing="both" width="1em" height="1em"></iconify-icon><!--]-->多语言翻译<!----></a></li><li class="vp-dropdown-item"><a class="auto-link external-link" href="https://nav.newzone.top/" aria-label="工具收藏" rel="noopener noreferrer" target="_blank"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:bars" sizing="both" width="1em" height="1em"></iconify-icon><!--]-->工具收藏<!----></a></li></ul></button></div></div></nav><!--]--></div><div class="vp-navbar-end"><!--[--><div class="vp-nav-item hide-in-mobile"><button type="button" class="vp-appearance-button" tabindex="-1" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" class="icon outlook-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="outlook icon" name="outlook"><path d="M224 800c0 9.6 3.2 44.8 6.4 54.4 6.4 48-48 76.8-48 76.8s80 41.6 147.2 0 134.4-134.4 38.4-195.2c-22.4-12.8-41.6-19.2-57.6-19.2C259.2 716.8 227.2 761.6 224 800zM560 675.2l-32 51.2c-51.2 51.2-83.2 32-83.2 32 25.6 67.2 0 112-12.8 128 25.6 6.4 51.2 9.6 80 9.6 54.4 0 102.4-9.6 150.4-32l0 0c3.2 0 3.2-3.2 3.2-3.2 22.4-16 12.8-35.2 6.4-44.8-9.6-12.8-12.8-25.6-12.8-41.6 0-54.4 60.8-99.2 137.6-99.2 6.4 0 12.8 0 22.4 0 12.8 0 38.4 9.6 48-25.6 0-3.2 0-3.2 3.2-6.4 0-3.2 3.2-6.4 3.2-6.4 6.4-16 6.4-16 6.4-19.2 9.6-35.2 16-73.6 16-115.2 0-105.6-41.6-198.4-108.8-268.8C704 396.8 560 675.2 560 675.2zM224 419.2c0-28.8 22.4-51.2 51.2-51.2 28.8 0 51.2 22.4 51.2 51.2 0 28.8-22.4 51.2-51.2 51.2C246.4 470.4 224 448 224 419.2zM320 284.8c0-22.4 19.2-41.6 41.6-41.6 22.4 0 41.6 19.2 41.6 41.6 0 22.4-19.2 41.6-41.6 41.6C339.2 326.4 320 307.2 320 284.8zM457.6 208c0-12.8 12.8-25.6 25.6-25.6 12.8 0 25.6 12.8 25.6 25.6 0 12.8-12.8 25.6-25.6 25.6C470.4 233.6 457.6 220.8 457.6 208zM128 505.6C128 592 153.6 672 201.6 736c28.8-60.8 112-60.8 124.8-60.8-16-51.2 16-99.2 16-99.2l316.8-422.4c-48-19.2-99.2-32-150.4-32C297.6 118.4 128 291.2 128 505.6zM764.8 86.4c-22.4 19.2-390.4 518.4-390.4 518.4-22.4 28.8-12.8 76.8 22.4 99.2l9.6 6.4c35.2 22.4 80 12.8 99.2-25.6 0 0 6.4-12.8 9.6-19.2 54.4-105.6 275.2-524.8 288-553.6 6.4-19.2-3.2-32-19.2-32C777.6 76.8 771.2 80 764.8 86.4z"></path></svg><div class="vp-appearance-dropdown"><!----></div></button></div><!--[--><button type="button" class="slimsearch-button" aria-label="搜索"><svg xmlns="http://www.w3.org/2000/svg" class="icon search-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="search icon"><path d="M192 480a256 256 0 1 1 512 0 256 256 0 0 1-512 0m631.776 362.496-143.2-143.168A318.464 318.464 0 0 0 768 480c0-176.736-143.264-320-320-320S128 303.264 128 480s143.264 320 320 320a318.016 318.016 0 0 0 184.16-58.592l146.336 146.368c12.512 12.48 32.768 12.48 45.28 0 12.48-12.512 12.48-32.768 0-45.28"></path></svg><div class="slimsearch-placeholder">搜索</div><div class="slimsearch-key-hints"><kbd class="slimsearch-key">Ctrl</kbd><kbd class="slimsearch-key">K</kbd></div></button><!--]--><!--]--><button type="button" class="vp-toggle-navbar-button" aria-label="Toggle Navbar" aria-expanded="false" aria-controls="nav-screen"><span><span class="vp-top"></span><span class="vp-middle"></span><span class="vp-bottom"></span></span></button></div></header><!----><!--]--><!----><div class="toggle-sidebar-wrapper"><span class="arrow start"></span></div><aside id="sidebar" class="vp-sidebar" vp-sidebar><!----><ul class="vp-sidebar-links"><li><a class="route-link auto-link vp-sidebar-link" href="/DailyRoutine.html" aria-label="每日仪式"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:check-to-slot" sizing="both" width="1em" height="1em"></iconify-icon><!--]-->每日仪式<!----></a></li><li><a class="route-link auto-link vp-sidebar-link" href="/Fitness.html" aria-label="健身计划"><!--[--><iconify-icon class="vp-icon" icon="fa6-solid:dumbbell" sizing="both" width="1em" height="1em"></iconify-icon><!--]-->健身计划<!----></a></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable active" type="button"><iconify-icon class="vp-icon" icon="fa6-brands:readme" sizing="both" width="1em" height="1em"></iconify-icon><span class="vp-sidebar-title">读书笔记</span><span class="vp-arrow down"></span></button><ul class="vp-sidebar-links"><li><a class="route-link route-link-active auto-link vp-sidebar-link active" href="/reading/" aria-label="读书笔记"><!---->读书笔记<!----></a></li><li><a class="route-link auto-link vp-sidebar-link" href="/reading/navbar.html" aria-label="/reading/navbar.html"><!---->/reading/navbar.html<!----></a></li><li><a class="route-link auto-link vp-sidebar-link" href="/reading/sidebar.html" aria-label="/reading/sidebar.html"><!---->/reading/sidebar.html<!----></a></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable" type="button"><!----><span class="vp-sidebar-title">0 自我提升</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable" type="button"><!----><span class="vp-sidebar-title">1 心理学</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable" type="button"><!----><span class="vp-sidebar-title">2 技能</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable" type="button"><!----><span class="vp-sidebar-title">3 管理</span><span class="vp-arrow end"></span></button><!----></section></li></ul></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable" type="button"><!----><span class="vp-sidebar-title">💎 AI学习</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable" type="button"><!----><span class="vp-sidebar-title">🧰 应用手册</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable" type="button"><!----><span class="vp-sidebar-title">🌐 页面开发</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable" type="button"><!----><span class="vp-sidebar-title">🏗️ 网站部署</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable" type="button"><!----><span class="vp-sidebar-title">🔡 代码编程</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable" type="button"><!----><span class="vp-sidebar-title">🏠 生活记录</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable" type="button"><iconify-icon class="vp-icon" icon="material-symbols:encrypted" sizing="both" width="1em" height="1em"></iconify-icon><span class="vp-sidebar-title">加密目录</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-header clickable" type="button"><iconify-icon class="vp-icon" icon="fa6-solid:feather-pointed" sizing="both" width="1em" height="1em"></iconify-icon><a class="route-link auto-link vp-sidebar-title no-external-link-icon" href="/blog.html" aria-label="博客文章"><!---->博客文章<!----></a><span class="vp-arrow end"></span></button><!----></section></li></ul><!----></aside><!--[--><main id="main-content" class="vp-page"><!--[--><!----><!----><nav class="vp-breadcrumb disable"></nav><div class="vp-page-title"><h1><!---->读书笔记</h1><div class="page-info"><!----><!----><span class="page-word-info" aria-label="字数🔠" data-balloon-pos="up"><svg xmlns="http://www.w3.org/2000/svg" class="icon word-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="word icon" name="word"><path d="M518.217 432.64V73.143A73.143 73.143 0 01603.43 1.097a512 512 0 01419.474 419.474 73.143 73.143 0 01-72.046 85.212H591.36a73.143 73.143 0 01-73.143-73.143z"></path><path d="M493.714 566.857h340.297a73.143 73.143 0 0173.143 85.577A457.143 457.143 0 11371.566 117.76a73.143 73.143 0 0185.577 73.143v339.383a36.571 36.571 0 0036.571 36.571z"></path></svg><span>约 956 字</span><meta property="wordCount" content="956"></span><span class="page-reading-time-info" aria-label="阅读时间⌛" data-balloon-pos="up"><svg xmlns="http://www.w3.org/2000/svg" class="icon timer-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="timer icon" name="timer"><path d="M799.387 122.15c4.402-2.978 7.38-7.897 7.38-13.463v-1.165c0-8.933-7.38-16.312-16.312-16.312H256.33c-8.933 0-16.311 7.38-16.311 16.312v1.165c0 5.825 2.977 10.874 7.637 13.592 4.143 194.44 97.22 354.963 220.201 392.763-122.204 37.542-214.893 196.511-220.2 389.397-4.661 5.049-7.638 11.651-7.638 19.03v5.825h566.49v-5.825c0-7.379-2.849-13.981-7.509-18.9-5.049-193.016-97.867-351.985-220.2-389.527 123.24-37.67 216.446-198.453 220.588-392.892zM531.16 450.445v352.632c117.674 1.553 211.787 40.778 211.787 88.676H304.097c0-48.286 95.149-87.382 213.728-88.676V450.445c-93.077-3.107-167.901-81.297-167.901-177.093 0-8.803 6.99-15.793 15.793-15.793 8.803 0 15.794 6.99 15.794 15.793 0 80.261 63.69 145.635 142.01 145.635s142.011-65.374 142.011-145.635c0-8.803 6.99-15.793 15.794-15.793s15.793 6.99 15.793 15.793c0 95.019-73.789 172.82-165.96 177.093z"></path></svg><span>大约 3 分钟</span><meta property="timeRequired" content="PT3M"></span><!----></div><hr></div><!----><div class="" vp-content><!----><div id="markdown-content"><h1 id="读书笔记" tabindex="-1"><a class="header-anchor" href="#读书笔记"><span>读书笔记</span></a></h1><p>曾经我尝试使用 Notion 来管理书单，用 Calibre、Logseq 来对电子书记读书笔记。然而，我渐渐发现自己几乎从不回头再看这些电子书的笔记。因此，我决定放弃电子书这种方式，而将我的注意力更多地集中在实体书籍上的摘要总结上。</p><p>现在，当我对某本书的知识点感兴趣时，我会重新翻开那本实体书，重新阅读其中的书签部分，将其变为工具书。这种方式使我能够更有针对性地利用我的阅读时间，确保我真正吸收并运用所学。</p><h2 id="阅读技巧" tabindex="-1"><a class="header-anchor" href="#阅读技巧"><span>阅读技巧</span></a></h2><p>当我们阅读书籍时，目标是理解其中的核心思想、论证逻辑、论据以及思考框架。我们应该能够<strong>用自己的话语向朋友简要解释书中的内容</strong>。将所读<strong>书籍与自己的经验和见解相结合</strong>，以建立深刻的理解。这种关联是真正理解书籍内容的关键。应<strong>将书籍视为工具</strong>，仅在需要时查看特定部分，以便将其应用到实际情境中，实现最大效益。</p><h2 id="阅读准备" tabindex="-1"><a class="header-anchor" href="#阅读准备"><span>阅读准备</span></a></h2><p>要明确一点，阅读是一项学习和工作活动，而非娱乐。在阅读时，应该尽量消除一切干扰，以确保大脑能够集中精力思考。可以<strong>采用番茄工作法，确保没有音乐或其他干扰，以保持 3 小时的专注阅读</strong>。</p><p>在开始阅读之前，进行一些准备工作。<strong>查看书籍的书评</strong>，以了解大致内容，翻阅目录，包括前言、后记和索引，以获取整体框架。</p><p>在阅读时，要<strong>不求甚解</strong>。不要在每一页都停下来查找或思考，而是尽量将整体理解。如果你坚持要了解每一页的意义，才肯往下读，那你一定读不了多少。努力了解细微的重点，反而会错过说得很清楚的大原则。</p><h3 id="读书笔记-1" tabindex="-1"><a class="header-anchor" href="#读书笔记-1"><span>读书笔记</span></a></h3><p>在阅读过程中，建立一个有效的笔记系统可以帮助你更好地理解和回顾所读内容。</p><p>使用书签标记关键信息和重点，同时进行自我思考，标记书中「<strong>有道理</strong>」和「<strong>有问题</strong>」的部分。这将有助于后续的复习，并将书籍转化为你的工具书。</p><p>阅读完成后，尝试用<strong>一句话总结</strong>书籍的主要内容，并将这个概括写在小卡片上，放入书中，以便以后回顾。</p><h2 id="其他阅读理论" tabindex="-1"><a class="header-anchor" href="#其他阅读理论"><span>其他阅读理论</span></a></h2><p>上述技巧参考了<a href="https://zhuanlan.zhihu.com/p/25858189" target="_blank" rel="noopener noreferrer">戴雨森阅读法</a>和雪球速读法。此外，还有<strong>费曼技巧</strong>，它包括以下步骤：</p><ol><li>Choose a Concept 选择一个概念；</li><li>Teach it to a Toddle 假装把它讲给小孩子听；</li><li>Identify Gaps and Go Back to The Source Material 发现理解不到位的地方，返回原始材料学习；</li><li>Review and Simplify (Optional) 回顾和简化信息（可选）。</li></ol><p>另一种方法是 <strong>3-2-1 训练法</strong>：</p><ol><li>随便找一本书，开始阅读，倒计时 3 分钟结束后合上书，找一张纸，画一张思维导图，把刚才你读到的关键点靠回忆记录下来。</li><li>重新阅读刚才阅读的内容，区别是倒计时降低到 2 分钟，也就是你需要用 2 分钟完成刚才 3 分钟读完的内容，并补充刚才的导图里的内容。</li><li>用 1 分钟再次重复上述过程。<sup class="footnote-ref"><a href="#footnote1">[1]</a><a class="footnote-anchor" id="footnote-ref1"></a></sup><sup class="footnote-ref"><a href="#footnote2">[2]</a><a class="footnote-anchor" id="footnote-ref2"></a></sup></li></ol><p>扩展：自动抓取字数与书单列表，功能参考 <a href="https://www.guofei.site/reading/#/" target="_blank" rel="noopener noreferrer">郭飞书单</a>。</p><hr class="footnotes-sep"><section class="footnotes"><ol class="footnotes-list"><li id="footnote1" class="footnote-item"><p><a href="https://sspai.com/post/53852" target="_blank" rel="noopener noreferrer">2.4 如何提升信息处理速度</a> <a href="#footnote-ref1" class="footnote-backref">↩︎</a></p></li><li id="footnote2" class="footnote-item"><p><a href="https://sspai.com/post/54065" target="_blank" rel="noopener noreferrer">3.5 创建你的信息数据库</a> <a href="#footnote-ref2" class="footnote-backref">↩︎</a></p></li></ol></section></div><!----><!----><!----></div><footer class="vp-page-meta"><!----><div class="vp-meta-item git-info"><div class="update-time"><span class="vp-meta-label">最近更新</span><time class="vp-meta-info" datetime="2025-10-18T04:12:54.000Z" data-allow-mismatch>2025/10/18 04:12</time></div><!----></div></footer><nav class="vp-page-nav"><a class="route-link auto-link prev" href="/Fitness.html" aria-label="健身计划"><div class="hint"><span class="arrow start"></span>上一页</div><div class="link"><iconify-icon class="vp-icon" icon="fa6-solid:dumbbell" sizing="height" height="1em"></iconify-icon>健身计划</div></a><a class="route-link auto-link next" href="/reading/navbar.html" aria-label="/reading/navbar.html"><div class="hint">下一页<span class="arrow end"></span></div><div class="link">/reading/navbar.html<!----></div></a></nav><!----><!----><!--]--></main><!--]--><footer class="vp-footer-wrapper" vp-footer><!----><div class="vp-copyright">
+  版权声明：自由转载 - 非商用 - 非衍生 - 保持署名<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hans" target="_blank" rel="noopener noreferrer">（创意共享 4.0 许可证）</a>|
+  Copyright © 2025-present LearnData</a>
+  </div></footer></div><!--]--><!--]--><!--[--><!----><!----><!--[--><!--]--><!--]--><!--]--></div>
+    <script src="/assets/js/runtime~app.7197fb08.js" defer></script><script src="/assets/js/6109.8f3ec41a.js" defer></script><script src="/assets/js/app.d18a8e25.js" defer></script>
+    <!-- 看板娘区块 -->
+    <script src="/live2d-widget/autoload.js"></script>
+    <!-- End 看板娘区块 -->
   </body>
 </html>
