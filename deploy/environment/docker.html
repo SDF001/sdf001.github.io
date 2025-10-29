@@ -53,14 +53,14 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* 主要内容区域 - 默认隐藏 */
+    /* 主要内容区域 - 只在密码验证时隐藏 */
+    body.password-verifying #app {
+      display: none !important;
+    }
+
+    /* 确保VuePress应用正常显示 */
     #app {
-      display: none;
       min-height: 100vh;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      box-sizing: border-box;
     }
 
     /* 密码输入容器样式 */
@@ -493,7 +493,7 @@
         document.documentElement.style.removeProperty('position');
 
         // 6. 清理body上的加密相关类名
-        document.body.classList.remove('password-verified', 'encrypted-page');
+        document.body.classList.remove('password-verified', 'encrypted-page', 'password-verifying');
 
         // 7. 移除加密页面相关的样式
         const allStyles = document.querySelectorAll('style');
@@ -608,6 +608,9 @@
         showError('系统初始化失败，请刷新页面重试');
         return;
       }
+
+      // 添加密码验证状态类名，隐藏VuePress应用
+      document.body.classList.add('password-verifying');
 
       // 等待页面完全加载
       if (document.readyState === 'loading') {
