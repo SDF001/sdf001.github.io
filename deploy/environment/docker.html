@@ -455,28 +455,29 @@
         </div>
       `;
 
-      // 使用解密后的HTML替换整个文档
+      // 使用完全刷新的方法来确保VuePress完全初始化
       setTimeout(() => {
         try {
-          // 创建一个新文档来加载VuePress内容
-          const newDoc = document.open('text/html', 'replace');
-          newDoc.write(decryptedStr);
-          newDoc.close();
+          // 将解密后的内容保存到sessionStorage
+          sessionStorage.setItem('vuepress_decrypted_content_' + window.location.pathname, decryptedStr);
+          sessionStorage.setItem('vuepress_decrypted_timestamp', Date.now().toString());
 
-          console.log('✅ VuePress页面已加载完成');
+          // 显示成功信息
+          passwordContainer.innerHTML = `
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔓</div>
+              <h3 style="color: #42b983; margin-bottom: 0.5rem;">解密成功</h3>
+              <p style="color: #666;">正在跳转...</p>
+            </div>
+          `;
 
-          // 等待VuePress完全加载后重新绑定事件
+          // 完全刷新页面，VuePress会自动加载解密后的内容
           setTimeout(() => {
-            try {
-              // 重新初始化VuePress交互功能
-              reinitializeVuePressInteractions();
-            } catch (e) {
-              console.warn('VuePress交互初始化失败:', e);
-            }
-          }, 1000);
+            window.location.reload();
+          }, 500);
 
         } catch (error) {
-          console.error('页面替换失败:', error);
+          console.error('页面加载失败:', error);
           // 备用方案：显示错误信息
           passwordContainer.innerHTML = `
             <div style="text-align: center; color: #ff4757;">
@@ -486,119 +487,6 @@
           `;
         }
       }, 500);
-    }
-
-    // 重新初始化VuePress交互功能
-    function reinitializeVuePressInteractions() {
-      try {
-        console.log('🔄 重新初始化VuePress交互功能...');
-
-        // 1. 重新绑定侧边栏下拉箭头事件
-        const sidebarHeaders = document.querySelectorAll('.vp-sidebar-header.clickable');
-        sidebarHeaders.forEach(header => {
-          // 移除旧的事件监听器并添加新的
-          header.addEventListener('click', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            const header = event.currentTarget;
-            const arrow = header.querySelector('.vp-arrow');
-            const subgroup = header.nextElementSibling;
-
-            if (subgroup && subgroup.classList.contains('vp-sidebar-links')) {
-              const isExpanded = header.classList.contains('active');
-
-              if (isExpanded) {
-                header.classList.remove('active');
-                arrow.classList.remove('down');
-                arrow.classList.add('end');
-                subgroup.style.display = 'none';
-              } else {
-                header.classList.add('active');
-                arrow.classList.remove('end');
-                arrow.classList.add('down');
-                subgroup.style.display = 'block';
-              }
-            }
-          });
-        });
-
-        // 2. 重新绑定搜索按钮事件
-        const searchButtons = document.querySelectorAll('.slimsearch-button');
-        searchButtons.forEach(button => {
-          button.addEventListener('click', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            // 尝试触发搜索功能
-            if (typeof window !== 'undefined' && window.slimsearch) {
-              window.slimsearch.open();
-            } else {
-              // 备用方案：触发键盘快捷键
-              const keyboardEvent = new KeyboardEvent('keydown', {
-                key: 'k',
-                ctrlKey: true,
-                metaKey: false
-              });
-              document.dispatchEvent(keyboardEvent);
-            }
-          });
-        });
-
-        // 3. 重新绑定主题切换按钮事件
-        const themeButtons = document.querySelectorAll('.vp-appearance-button');
-        themeButtons.forEach(button => {
-          button.addEventListener('click', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            const button = event.currentTarget;
-            const dropdown = button.querySelector('.vp-appearance-dropdown');
-
-            if (dropdown) {
-              const isVisible = dropdown.style.display !== 'none';
-              dropdown.style.display = isVisible ? 'none' : 'block';
-            }
-          });
-        });
-
-        // 4. 重新绑定移动端菜单按钮
-        const navbarToggles = document.querySelectorAll('.vp-toggle-navbar-button');
-        navbarToggles.forEach(button => {
-          button.addEventListener('click', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            const button = event.currentTarget;
-            const navScreen = document.getElementById('nav-screen');
-
-            if (navScreen) {
-              const isExpanded = button.getAttribute('aria-expanded') === 'true';
-              button.setAttribute('aria-expanded', !isExpanded);
-              navScreen.style.display = isExpanded ? 'none' : 'block';
-            }
-          });
-        });
-
-        // 5. 重新绑定侧边栏切换按钮
-        const sidebarToggles = document.querySelectorAll('.vp-toggle-sidebar-button');
-        sidebarToggles.forEach(button => {
-          button.addEventListener('click', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            // 切换侧边栏显示状态
-            const sidebar = document.getElementById('sidebar');
-            if (sidebar) {
-              const isVisible = sidebar.style.display !== 'none';
-              sidebar.style.display = isVisible ? 'none' : 'block';
-            }
-          });
-        });
-
-        // 6. 触发窗口调整大小事件
-        const resizeEvent = new Event('resize');
-        window.dispatchEvent(resizeEvent);
-
-        console.log('✅ VuePress交互功能重新初始化完成');
-      } catch (error) {
-        console.warn('⚠️ 重新初始化VuePress交互功能时出错:', error);
-      }
     }
 
     // 保存密码到 localStorage
@@ -618,8 +506,30 @@
       }
     }
 
-    // 尝试使用保存的密码
+    // 尝试使用保存的密码或检查是否有解密内容
     function trySavedPassword() {
+      // 首先检查sessionStorage中是否有解密内容
+      const decryptedContent = sessionStorage.getItem('vuepress_decrypted_content_' + window.location.pathname);
+      const decryptedTimestamp = sessionStorage.getItem('vuepress_decrypted_timestamp');
+
+      if (decryptedContent && decryptedTimestamp) {
+        // 检查解密内容是否还在有效期内（30分钟）
+        const now = Date.now();
+        const thirtyMinutesInMs = 30 * 60 * 1000;
+        if (now - parseInt(decryptedTimestamp) < thirtyMinutesInMs) {
+          console.log('✅ 使用缓存的解密内容');
+          document.open();
+          document.write(decryptedContent);
+          document.close();
+          return;
+        } else {
+          // 过期了，清除缓存
+          sessionStorage.removeItem('vuepress_decrypted_content_' + window.location.pathname);
+          sessionStorage.removeItem('vuepress_decrypted_timestamp');
+        }
+      }
+
+      // 没有有效的缓存内容，尝试使用保存的密码
       try {
         const savedPasswords = JSON.parse(localStorage.getItem('vuepress_encrypted_passwords_') || '{}');
         const savedData = savedPasswords['universal_aes_key'];
