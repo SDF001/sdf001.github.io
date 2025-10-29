@@ -510,6 +510,11 @@
         }
 
         console.log('加密内容已解密并显示');
+
+        // 7. 重新初始化VuePress交互功能
+        setTimeout(() => {
+          reinitializeVuePressInteractions();
+        }, 200);
       }, 100); // 增加延迟确保DOM完全渲染
     }
 
@@ -614,6 +619,125 @@
         });
       }
     });
+
+    // 重新初始化VuePress交互功能
+    function reinitializeVuePressInteractions() {
+      try {
+        console.log('🔄 重新初始化VuePress交互功能...');
+
+        // 1. 重新绑定侧边栏下拉箭头事件
+        const sidebarHeaders = document.querySelectorAll('.vp-sidebar-header.clickable');
+        sidebarHeaders.forEach(header => {
+          header.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const header = event.currentTarget;
+            const arrow = header.querySelector('.vp-arrow');
+            const subgroup = header.nextElementSibling;
+
+            if (subgroup && subgroup.classList.contains('vp-sidebar-links')) {
+              const isExpanded = header.classList.contains('active');
+
+              if (isExpanded) {
+                header.classList.remove('active');
+                arrow.classList.remove('down');
+                arrow.classList.add('end');
+                subgroup.style.display = 'none';
+              } else {
+                header.classList.add('active');
+                arrow.classList.remove('end');
+                arrow.classList.add('down');
+                subgroup.style.display = 'block';
+              }
+            }
+          });
+        });
+
+        // 2. 重新绑定搜索按钮事件
+        const searchButtons = document.querySelectorAll('.slimsearch-button');
+        searchButtons.forEach(button => {
+          button.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            // 尝试触发搜索功能
+            if (typeof window !== 'undefined' && window.slimsearch) {
+              window.slimsearch.open();
+            } else {
+              // 备用方案：触发键盘快捷键
+              const keyboardEvent = new KeyboardEvent('keydown', {
+                key: 'k',
+                ctrlKey: true,
+                metaKey: false
+              });
+              document.dispatchEvent(keyboardEvent);
+            }
+          });
+        });
+
+        // 3. 重新绑定主题切换按钮事件
+        const themeButtons = document.querySelectorAll('.vp-appearance-button');
+        themeButtons.forEach(button => {
+          button.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const button = event.currentTarget;
+            const dropdown = button.querySelector('.vp-appearance-dropdown');
+
+            if (dropdown) {
+              const isVisible = dropdown.style.display !== 'none';
+              dropdown.style.display = isVisible ? 'none' : 'block';
+            }
+          });
+        });
+
+        // 4. 重新绑定移动端菜单按钮
+        const navbarToggles = document.querySelectorAll('.vp-toggle-navbar-button');
+        navbarToggles.forEach(button => {
+          button.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const button = event.currentTarget;
+            const navScreen = document.getElementById('nav-screen');
+
+            if (navScreen) {
+              const isExpanded = button.getAttribute('aria-expanded') === 'true';
+              button.setAttribute('aria-expanded', !isExpanded);
+              navScreen.style.display = isExpanded ? 'none' : 'block';
+            }
+          });
+        });
+
+        // 5. 重新绑定侧边栏切换按钮
+        const sidebarToggles = document.querySelectorAll('.vp-toggle-sidebar-button');
+        sidebarToggles.forEach(button => {
+          button.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            // 切换侧边栏显示状态
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+              const isVisible = sidebar.style.display !== 'none';
+              sidebar.style.display = isVisible ? 'none' : 'block';
+            }
+          });
+        });
+
+        // 6. 如果有Vue实例，尝试重新挂载
+        if (typeof window !== 'undefined' && window.Vue && window.__VUE__) {
+          try {
+            // 触发Vue重新渲染
+            const event = new Event('resize');
+            window.dispatchEvent(event);
+          } catch (e) {
+            console.warn('Vue重新渲染失败:', e);
+          }
+        }
+
+        console.log('✅ VuePress交互功能重新初始化完成');
+      } catch (error) {
+        console.warn('⚠️ 重新初始化VuePress交互功能时出错:', error);
+      }
+    }
 
     // 立即执行初始化
     initialize();
