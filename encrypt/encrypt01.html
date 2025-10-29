@@ -53,16 +53,6 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* 主要内容区域 - 只在密码验证时隐藏 */
-    body.password-verifying #app {
-      display: none !important;
-    }
-
-    /* 确保VuePress应用正常显示 */
-    #app {
-      min-height: 100vh;
-    }
-
     /* 密码输入容器样式 */
     .password-container {
       width: 100%;
@@ -443,88 +433,57 @@
 
     // 显示解密后的内容
     function showDecryptedContent(decryptedStr) {
-      // 新方法：不替换DOM，直接显示隐藏的VuePress应用
-      console.log('🔓 显示已存在的VuePress应用，避免DOM替换');
+      console.log('🔓 解密成功，替换为原始VuePress内容');
 
-      // 由于我们使用的是原始VuePress页面，只是最初被隐藏了
-      // 现在只需要隐藏加密层，显示VuePress应用即可
+      // 显示成功信息
+      const passwordContainer = document.getElementById('passwordContainer');
+      passwordContainer.innerHTML = `
+        <div style="text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔓</div>
+          <h3 style="color: #42b983; margin-bottom: 0.5rem;">解密成功</h3>
+          <p style="color: #666;">正在加载页面...</p>
+        </div>
+      `;
 
-      // 清理加密页面相关元素，显示VuePress应用
+      // 使用解密后的HTML替换整个文档
       setTimeout(() => {
-        // 1. 隐藏初始加载遮罩
-        const initialLoading = document.getElementById('initial-loading');
-        if (initialLoading) {
-          initialLoading.style.opacity = '0';
-          setTimeout(() => {
-            initialLoading.style.display = 'none';
-          }, 300);
+        try {
+          // 直接替换整个文档内容
+          document.documentElement.innerHTML = decryptedStr;
+
+          // 重新执行VuePress的脚本
+          const scripts = document.querySelectorAll('script');
+          scripts.forEach(script => {
+            if (script.src) {
+              // 对于外部脚本，重新加载
+              const newScript = document.createElement('script');
+              newScript.src = script.src;
+              newScript.async = script.async;
+              newScript.defer = script.defer;
+              document.head.appendChild(newScript);
+            } else if (script.textContent && !script.textContent.includes('CONFIG')) {
+              // 对于内联脚本（除了加密相关的），重新执行
+              try {
+                eval(script.textContent);
+              } catch (e) {
+                console.warn('脚本执行失败:', e);
+              }
+            }
+          });
+
+          console.log('✅ VuePress页面已加载完成');
+
+          // 触发页面加载完成事件
+          window.dispatchEvent(new Event('load'));
+
+        } catch (error) {
+          console.error('页面替换失败:', error);
+          // 备用方案：在新窗口中打开
+          document.open();
+          document.write(decryptedStr);
+          document.close();
         }
-
-        // 2. 隐藏密码输入容器
-        const passwordContainer = document.getElementById('passwordContainer');
-        if (passwordContainer) {
-          passwordContainer.style.opacity = '0';
-          setTimeout(() => {
-            passwordContainer.style.display = 'none';
-          }, 300);
-        }
-
-        // 3. 显示VuePress应用
-        const app = document.getElementById('app');
-        if (app) {
-          app.style.display = '';
-          app.style.opacity = '0';
-          setTimeout(() => {
-            app.style.opacity = '1';
-            app.style.transition = 'opacity 0.3s ease-in';
-          }, 100);
-        }
-
-        // 4. 确保主题容器可见
-        const themeContainer = document.querySelector('.theme-container');
-        if (themeContainer) {
-          themeContainer.style.display = '';
-        }
-
-        // 5. 恢复body和html的正常样式
-        document.body.style.removeProperty('overflow');
-        document.body.style.removeProperty('position');
-        document.documentElement.style.removeProperty('overflow');
-        document.documentElement.style.removeProperty('position');
-
-        // 6. 清理body上的加密相关类名
-        document.body.classList.remove('password-verified', 'encrypted-page', 'password-verifying');
-
-        // 7. 移除加密页面相关的样式
-        const allStyles = document.querySelectorAll('style');
-        allStyles.forEach(style => {
-          const content = style.textContent;
-          // 只移除加密页面相关的样式
-          if (content.includes('#initial-loading') &&
-              (content.includes('overflow: hidden') || content.includes('z-index: 10000'))) {
-            style.remove();
-          }
-        });
-
-        console.log('🔓 VuePress应用已显示，无需重新初始化事件');
-
-        // 8. 触发VuePress重新渲染（如果需要）
-        setTimeout(() => {
-          try {
-            // 触发窗口调整大小事件，让VuePress重新计算布局
-            const resizeEvent = new Event('resize');
-            window.dispatchEvent(resizeEvent);
-
-            // 触发自定义事件通知VuePress应用已激活
-            const activateEvent = new CustomEvent('vuepress-activated');
-            document.dispatchEvent(activateEvent);
-
-            console.log('✅ VuePress应用重新激活完成');
-          } catch (error) {
-            console.warn('⚠️ VuePress重新激活时出错:', error);
-          }
-        }, 300);
-      }, 100); // 短暂延迟确保动画流畅
+      }, 500);
     }
 
     // 保存密码到 localStorage
@@ -608,9 +567,6 @@
         showError('系统初始化失败，请刷新页面重试');
         return;
       }
-
-      // 添加密码验证状态类名，隐藏VuePress应用
-      document.body.classList.add('password-verifying');
 
       // 等待页面完全加载
       if (document.readyState === 'loading') {
