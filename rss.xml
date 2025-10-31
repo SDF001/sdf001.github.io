@@ -708,6 +708,10 @@ This is another regular paragraph.
 &lt;strong&gt;No Work&lt;/strong&gt;
 &amp;lt;/div&amp;gt;&lt;/p&gt;
 &lt;hr /&gt;
+</content:encoded></item><item><title>git</title><link>https://mizuki.mysqil.com/posts/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/git/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/git/</guid><description>git相关命令</description><pubDate>Sat, 01 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;免密&lt;/h2&gt;
+&lt;p&gt;公钥和私钥生成到当前目录下，并指定文件名&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ssh-keygen -t ed25519 -C 1026619596@qq.com -f github-actions-deploy-key
+&lt;/code&gt;&lt;/pre&gt;
 </content:encoded></item><item><title>Markdown Extended Features</title><link>https://mizuki.mysqil.com/posts/markdown-extended/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/markdown-extended/</guid><description>Read more about Markdown features in Mizuki</description><pubDate>Wed, 01 May 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;GitHub Repository Cards&lt;/h2&gt;
 &lt;p&gt;You can add dynamic cards that link to GitHub repositories, on page load, the repository information is pulled from the GitHub API.&lt;/p&gt;
 &lt;p&gt;::github{repo=&quot;matsuzaka-yuki/Mizuki&quot;}&lt;/p&gt;
