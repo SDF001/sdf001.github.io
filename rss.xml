@@ -708,9 +708,81 @@ This is another regular paragraph.
 &lt;strong&gt;No Work&lt;/strong&gt;
 &amp;lt;/div&amp;gt;&lt;/p&gt;
 &lt;hr /&gt;
+</content:encoded></item><item><title>sso</title><link>https://mizuki.mysqil.com/posts/%E6%8A%80%E6%9C%AF%E7%82%B9/sso/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/%E6%8A%80%E6%9C%AF%E7%82%B9/sso/</guid><description>SSO（Single Sign-On，单点登录）</description><pubDate>Sun, 02 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;什么是 SSO&lt;/h2&gt;
+&lt;p&gt;SSO（Single Sign-On，单点登录）是计算机领域中一种&lt;strong&gt;身份认证机制&lt;/strong&gt;，允许用户&lt;strong&gt;只需登录一次&lt;/strong&gt;，即可&lt;strong&gt;访问多个相互信任的应
+用系统或服务&lt;/strong&gt;，而无需在每个系统中重复输入用户名和密码。&lt;/p&gt;
+&lt;h3&gt;核心思想：&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“一次登录，处处通行”（在授权范围内）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;举个例子：&lt;/h3&gt;
+&lt;p&gt;你登录了 Google 账号后，无需再次输入密码，就可以直接使用 Gmail、YouTube、Google Drive 等服务——这就是 SSO 的典型应用。&lt;/p&gt;
+&lt;h3&gt;技术原理简述（以 Web 为例）：&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;用户访问应用 A，未登录，被重定向到 &lt;strong&gt;统一的身份提供商（Identity Provider, IdP）&lt;/strong&gt;（如
+Okta、Auth0、Keycloak、Microsoft Entra ID 等）。&lt;/li&gt;
+&lt;li&gt;用户在 IdP 输入凭证完成认证。&lt;/li&gt;
+&lt;li&gt;IdP 向用户浏览器发放一个 &lt;strong&gt;全局会话令牌（如 SAML 断言、OAuth ID Token 或 Cookie）&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;浏览器携带该令牌访问其他受信任的应用（B、C……），这些应用信任 IdP，验证令牌后自动登录用户。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;常见协议/标准：&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;SAML&lt;/strong&gt;（Security Assertion Markup Language）：企业级常用，XML 格式。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;OAuth 2.0 + OpenID Connect (OIDC)&lt;/strong&gt;：现代 Web 和移动端主流，基于 JSON/REST。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Kerberos&lt;/strong&gt;：常用于 Windows 域环境（如企业内网）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;优点：&lt;/h3&gt;
+&lt;p&gt;✅ 提升用户体验（少记密码、少输密码）&lt;br /&gt;
+✅ 降低密码疲劳和弱密码风险&lt;br /&gt;
+✅ 集中管理账号与权限，便于安全审计和注销（如“全局登出”）&lt;/p&gt;
+&lt;h3&gt;注意事项：&lt;/h3&gt;
+&lt;p&gt;⚠️ IdP 成为关键安全节点——一旦被攻破，所有关联系统都可能沦陷。&lt;br /&gt;
+⚠️ 各系统必须建立&lt;strong&gt;信任关系&lt;/strong&gt;，通常通过证书、共享密钥或元数据交换实现。&lt;/p&gt;
 </content:encoded></item><item><title>git</title><link>https://mizuki.mysqil.com/posts/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/git/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/git/</guid><description>git相关命令</description><pubDate>Sat, 01 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;免密&lt;/h2&gt;
 &lt;p&gt;公钥和私钥生成到当前目录下，并指定文件名&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;ssh-keygen -t ed25519 -C 1026619596@qq.com -f github-actions-deploy-key
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;配置&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;git config --global user.name &quot;Your Name&quot;     # 设置用户名
+git config --global user.email &quot;you@example.com&quot;  # 设置邮箱
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;查看提交历史&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;git log                                       # 查看提交历史（简洁版）
+git log --oneline                             # 单行显示提交记录
+git log --graph --all --oneline               # 图形化查看所有分支历史
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;分支管理&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;git branch                                    # 列出本地分支
+git branch &amp;lt;branch-name&amp;gt;                      # 创建新分支
+git checkout &amp;lt;branch-name&amp;gt;                    # 切换分支
+git switch &amp;lt;branch-name&amp;gt;                      # （Git 2.23+）切换分支（推荐）
+git checkout -b &amp;lt;branch-name&amp;gt;                 # 创建并切换到新分支
+git switch -c &amp;lt;branch-name&amp;gt;                   # 同上（新命令）
+git merge &amp;lt;branch-name&amp;gt;                       # 合并指定分支到当前分支
+git branch -d &amp;lt;branch-name&amp;gt;                   # 删除已合并的分支
+git branch -D &amp;lt;branch-name&amp;gt;                   # 强制删除分支
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;撤销与回退&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;git restore &amp;lt;file&amp;gt;                            # 撤销工作区修改（丢弃更改）
+git restore --staged &amp;lt;file&amp;gt;                   # 从暂存区撤回（取消 add）
+git reset HEAD~1                              # 回退最近一次提交（保留更改在工作区）
+git reset --hard HEAD~1                       # 彻底回退（丢弃提交和更改！慎用）
+git revert &amp;lt;commit-hash&amp;gt;                      # 新增一个反向提交来撤销某次更改（安全，用于共享历史）
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;标签&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;git tag v1.0                                  # 创建轻量标签
+git tag -a v1.0 -m &quot;Release version 1.0&quot;      # 创建带注释的标签
+git push origin v1.0                          # 推送单个标签
+git push origin --tags                        # 推送所有标签
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;其他实用命令&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;git diff                                      # 查看工作区与暂存区的差异
+git diff --staged                             # 查看暂存区与上次提交的差异
+git remote -v                                 # 查看远程仓库地址
+git stash                                     # 临时保存当前工作进度
+git stash pop                                 # 恢复最近一次 stash 的内容
+git clean -fd                                 # 删除未跟踪的文件和目录（谨慎！）
+git help &amp;lt;command&amp;gt;                            # 查看具体命令
 &lt;/code&gt;&lt;/pre&gt;
 </content:encoded></item><item><title>Markdown Extended Features</title><link>https://mizuki.mysqil.com/posts/markdown-extended/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/markdown-extended/</guid><description>Read more about Markdown features in Mizuki</description><pubDate>Wed, 01 May 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;GitHub Repository Cards&lt;/h2&gt;
 &lt;p&gt;You can add dynamic cards that link to GitHub repositories, on page load, the repository information is pulled from the GitHub API.&lt;/p&gt;
