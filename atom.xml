@@ -5,7 +5,7 @@
   <link href="https://mizuki.mysqil.com/" rel="alternate" type="text/html"/>
   <link href="https://mizuki.mysqil.com/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mizuki.mysqil.com/</id>
-  <updated>2025-11-08T02:19:54.361Z</updated>
+  <updated>2025-11-08T03:16:18.560Z</updated>
   <language>en</language>
   <entry>
     <title>Markdown Tutorial</title>
@@ -787,6 +787,7 @@ Okta、Auth0、Keycloak、Microsoft Entra ID 等）。</li>
 <h2>配置</h2>
 <pre><code>git config --global user.name "Your Name"     # 设置用户名
 git config --global user.email "you@example.com"  # 设置邮箱
+git config core.quotepath false # 解决git命令行显示中文乱码
 </code></pre>
 <h2>查看提交历史</h2>
 <pre><code>git log                                       # 查看提交历史（简洁版）

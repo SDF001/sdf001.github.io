@@ -745,6 +745,7 @@ Okta、Auth0、Keycloak、Microsoft Entra ID 等）。&lt;/li&gt;
 &lt;h2&gt;配置&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;git config --global user.name &quot;Your Name&quot;     # 设置用户名
 git config --global user.email &quot;you@example.com&quot;  # 设置邮箱
+git config core.quotepath false # 解决git命令行显示中文乱码
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;查看提交历史&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;git log                                       # 查看提交历史（简洁版）
