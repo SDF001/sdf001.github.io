@@ -1,0 +1,1462 @@
+<!DOCTYPE html><html lang="zh-CN" class="bg-[var(--page-bg)] text-[14px] md:text-[16px]" data-overlayscrollbars-initialize data-astro-cid-sckkx6r4 style="--bannerOffset: 15vh;--banner-height-home: 65vh;--banner-height: 35vh;--configHue: 280;--page-width: 90rem;"> <head><script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.oZ-FulgN.js"></script><script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "tjr3vkhj8i");</script><title>后端高级工程师面试专题07 - 编程学习笔记</title><meta charset="UTF-8"><meta name="description" content="第七章 攻克必考知识点 并发编程进阶系列"><meta name="author" content="黄雷"><meta property="og:site_name" content="编程学习笔记"><meta property="og:url" content="https://huanglei.work/posts/%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%90%8E%E7%AB%AF%E9%AB%98%E7%BA%A7%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E4%B8%93%E9%A2%98/%E5%90%8E%E7%AB%AF%E9%AB%98%E7%BA%A7%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E4%B8%93%E9%A2%9807/"><meta property="og:title" content="后端高级工程师面试专题07 - 编程学习笔记"><meta property="og:description" content="第七章 攻克必考知识点 并发编程进阶系列"><meta property="og:type" content="article"><meta name="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://huanglei.work/posts/%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%90%8E%E7%AB%AF%E9%AB%98%E7%BA%A7%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E4%B8%93%E9%A2%98/%E5%90%8E%E7%AB%AF%E9%AB%98%E7%BA%A7%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E4%B8%93%E9%A2%9807/"><meta name="twitter:title" content="后端高级工程师面试专题07 - 编程学习笔记"><meta name="twitter:description" content="第七章 攻克必考知识点 并发编程进阶系列"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v5.15.3"><link rel="icon" href="/favicon/favicon-light-32.png" sizes="32x32" media="(prefers-color-scheme: light)"><link rel="icon" href="/favicon/favicon-light-128.png" sizes="128x128" media="(prefers-color-scheme: light)"><link rel="icon" href="/favicon/favicon-light-180.png" sizes="180x180" media="(prefers-color-scheme: light)"><link rel="icon" href="/favicon/favicon-light-192.png" sizes="192x192" media="(prefers-color-scheme: light)"><link rel="icon" href="/favicon/favicon-dark-32.png" sizes="32x32" media="(prefers-color-scheme: dark)"><link rel="icon" href="/favicon/favicon-dark-128.png" sizes="128x128" media="(prefers-color-scheme: dark)"><link rel="icon" href="/favicon/favicon-dark-180.png" sizes="180x180" media="(prefers-color-scheme: dark)"><link rel="icon" href="/favicon/favicon-dark-192.png" sizes="192x192" media="(prefers-color-scheme: dark)"><!-- Set the theme before the page is rendered to avoid a flash --><script>(function(){const DEFAULT_THEME = "light";
+const LIGHT_MODE = "light";
+const DARK_MODE = "dark";
+const BANNER_HEIGHT_EXTEND = 30;
+const PAGE_WIDTH = 90;
+const configHue = 280;
+
+			// Load the theme from local storage
+			const theme = localStorage.getItem('theme') || DEFAULT_THEME;
+			let isDark = false;
+			switch (theme) {
+				case LIGHT_MODE:
+					document.documentElement.classList.remove('dark');
+					isDark = false;
+					break
+				case DARK_MODE:
+					document.documentElement.classList.add('dark');
+					isDark = true;
+					break
+			}
+			
+			// Set the theme for Expressive Code based on current mode
+			const expressiveTheme = isDark ? "github-dark" : "github-light";
+			document.documentElement.setAttribute("data-theme", expressiveTheme);
+			
+			// 确保主题正确应用 - 解决代码块渲染问题
+			// 使用 requestAnimationFrame 确保在下一帧检查主题状态
+			requestAnimationFrame(() => {
+				const currentTheme = document.documentElement.getAttribute('data-theme');
+				if (currentTheme !== expressiveTheme) {
+					document.documentElement.setAttribute('data-theme', expressiveTheme);
+				}
+			});
+
+			// Load the hue from local storage
+			const hue = localStorage.getItem('hue') || configHue;
+			document.documentElement.style.setProperty('--hue', hue);
+
+			// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
+			let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
+			offset = offset - offset % 4;
+			document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
+		})();</script><!-- defines global css variables. This will be applied to <html> <body> and some other elements idk why --><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"后端高级工程师面试专题07","description":"第七章 攻克必考知识点 并发编程进阶系列","keywords":["后端高级工程师面试专题"],"author":{"@type":"Person","name":"黄雷","url":"https://huanglei.work/"},"datePublished":"2025-11-16","inLanguage":"zh-CN"}</script><!-- Pio 看板娘样式 --><link rel="stylesheet" href="/pio/static/pio.css"><link rel="alternate" type="application/rss+xml" title="黄雷" href="https://huanglei.work/rss.xml"><!-- Umami Analytics --><!-- 引入全局处理脚本 --><script src="/js/timeline-scroll-handler.js" defer></script><script src="/js/skills-progress-handler.js" defer></script><link rel="stylesheet" href="/_astro/Layout.BadYjOap.css">
+<link rel="stylesheet" href="/_astro/Layout.y4KPJ9hc.css">
+<style>.password-protection[data-astro-cid-732embm3]{display:flex;justify-content:center;align-items:center;min-height:60vh;padding:2rem}.password-container[data-astro-cid-732embm3]{text-align:center;max-width:400px;width:100%;padding:2rem;border-radius:12px;background:var(--card-bg);border:1px solid var(--line-divider);box-shadow:0 4px 12px #0000001a}.lock-icon[data-astro-cid-732embm3]{margin-bottom:1rem;color:var(--primary)}.password-container[data-astro-cid-732embm3] h2[data-astro-cid-732embm3]{margin-bottom:.5rem;color:#000000d9;font-size:1.5rem}.dark .password-container[data-astro-cid-732embm3] h2[data-astro-cid-732embm3]{color:#ffffffd9}.password-container[data-astro-cid-732embm3] p[data-astro-cid-732embm3]{margin-bottom:1.5rem;color:#000000bf;opacity:.8}.dark .password-container[data-astro-cid-732embm3] p[data-astro-cid-732embm3]{color:#ffffffbf}.password-input-group[data-astro-cid-732embm3]{display:flex;gap:.5rem;margin-bottom:1rem}.password-input[data-astro-cid-732embm3]{flex:1;padding:.75rem 1rem;border:1px solid var(--line-divider);border-radius:8px;background:var(--card-bg);color:#000000d9;font-size:1rem;transition:border-color .2s ease}.dark .password-input[data-astro-cid-732embm3]{color:#ffffffd9}.password-input[data-astro-cid-732embm3]::-moz-placeholder{color:#00000080}.password-input[data-astro-cid-732embm3]::placeholder{color:#00000080}.dark .password-input[data-astro-cid-732embm3]::-moz-placeholder{color:#ffffff80}.dark .password-input[data-astro-cid-732embm3]::placeholder{color:#ffffff80}.password-input[data-astro-cid-732embm3]:focus{outline:none;border-color:var(--primary)}.unlock-button[data-astro-cid-732embm3]{padding:.75rem 1.5rem;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:1rem;cursor:pointer;transition:background-color .2s ease}.unlock-button[data-astro-cid-732embm3]:hover{background:var(--primary-hover, var(--primary));opacity:.9}.unlock-button[data-astro-cid-732embm3]:disabled{opacity:.6;cursor:not-allowed}.error-message[data-astro-cid-732embm3]{color:#ef4444;font-size:.875rem;margin-top:.5rem}.decrypted-content[data-astro-cid-732embm3]{animation:fadeIn .3s ease-in-out}@keyframes fadeIn{0%{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}@media(max-width:768px){.password-protection[data-astro-cid-732embm3]{padding:1rem;min-height:50vh}.password-container[data-astro-cid-732embm3]{max-width:none;width:100%;padding:1.5rem;margin:0 .5rem}.password-container[data-astro-cid-732embm3] h2[data-astro-cid-732embm3]{font-size:1.25rem;margin-bottom:.75rem}.password-container[data-astro-cid-732embm3] p[data-astro-cid-732embm3]{font-size:.9rem;margin-bottom:1.25rem}.password-input-group[data-astro-cid-732embm3]{flex-direction:column;gap:.75rem}.password-input[data-astro-cid-732embm3]{padding:.875rem 1rem;font-size:1rem;width:100%}.unlock-button[data-astro-cid-732embm3]{padding:.875rem 1rem;font-size:1rem;width:100%;white-space:nowrap}.error-message[data-astro-cid-732embm3]{font-size:.8rem;text-align:center}}@media(max-width:480px){.password-protection[data-astro-cid-732embm3]{padding:.75rem}.password-container[data-astro-cid-732embm3]{padding:1.25rem;margin:0 .25rem}.password-container[data-astro-cid-732embm3] h2[data-astro-cid-732embm3]{font-size:1.125rem}.password-container[data-astro-cid-732embm3] p[data-astro-cid-732embm3]{font-size:.85rem}.password-input[data-astro-cid-732embm3],.unlock-button[data-astro-cid-732embm3]{padding:.75rem .875rem;font-size:.95rem}}
+</style>
+<link rel="stylesheet" href="/_astro/_page_.CTDg9CIV.css">
+<link rel="stylesheet" href="/_astro/_page_.Br-qZ2H9.css">
+<link rel="stylesheet" href="/_astro/_page_.CCbE_fnF.css">
+<link rel="stylesheet" href="/_astro/about.CLMvY_Mt.css">
+<style>.card-base[data-astro-cid-zetdm5md]{animation:fadeInUp .6s ease-out}@keyframes fadeInUp{0%{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}a[data-astro-cid-zetdm5md]:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(var(--primary-rgb),.3)}
+.line-clamp-2[data-astro-cid-b6yaaygw]{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.album-card[data-astro-cid-b6yaaygw]:hover{transform:translateY(-2px)}@keyframes fadeInUp{0%{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.album-card[data-astro-cid-b6yaaygw]{animation:fadeInUp .3s ease-out}
+.grid-layout[data-astro-cid-rgidg7mq]{display:grid;gap:1rem}.grid-layout[data-astro-cid-rgidg7mq][data-columns="2"]{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}.grid-layout[data-astro-cid-rgidg7mq][data-columns="3"]{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}.grid-layout[data-astro-cid-rgidg7mq][data-columns="4"]{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.masonry-layout[data-astro-cid-rgidg7mq]{-moz-columns:2;columns:2;-moz-column-gap:1rem;column-gap:1rem}@media(min-width:768px){.masonry-layout[data-astro-cid-rgidg7mq]{-moz-columns:3;columns:3}}@media(min-width:1024px){.masonry-layout[data-astro-cid-rgidg7mq][data-columns="4"]{-moz-columns:4;columns:4}}.masonry-layout[data-astro-cid-rgidg7mq] .photo-item[data-astro-cid-rgidg7mq]{-moz-column-break-inside:avoid;break-inside:avoid;margin-bottom:1rem}.grid-layout[data-astro-cid-rgidg7mq] .photo-container[data-astro-cid-rgidg7mq]{aspect-ratio:1}
+.filter-container[data-astro-cid-fepk5tcl]{display:flex;flex-wrap:wrap;gap:.5rem}.filter-tag[data-astro-cid-fepk5tcl]{padding:.5rem 1rem;border:1px solid var(--line-divider);border-radius:var(--radius-large);background:var(--btn-regular-bg);color:var(--btn-content);font-size:.875rem;font-weight:500;cursor:pointer;transition:all .2s ease;white-space:nowrap}.filter-tag[data-astro-cid-fepk5tcl]:hover:not(.active){background:var(--btn-hover-bg);border-color:var(--primary);transform:translateY(-1px)}.filter-tag[data-astro-cid-fepk5tcl].active{background:var(--primary);color:#fff;border-color:var(--primary)}.filter-tag[data-astro-cid-fepk5tcl].active:hover{background:var(--primary)!important;color:#fff!important;border-color:var(--primary)!important;transform:translateY(-1px)}.anime-item[data-astro-cid-fepk5tcl]{transition:all .3s ease}.anime-item[data-astro-cid-fepk5tcl].hidden{opacity:0;transform:scale(.95);pointer-events:none}
+.card-base[data-astro-cid-pyfuvgrx]{background:var(--card-bg);border:1px solid var(--line-divider);transition:all .3s ease}.moments-header[data-astro-cid-pyfuvgrx]{padding:1rem;border-radius:8px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark, var(--primary)) 100%);color:#fff;position:relative;overflow:hidden}.header-content[data-astro-cid-pyfuvgrx]{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}.moments-title[data-astro-cid-pyfuvgrx]{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.1)}.moments-subtitle[data-astro-cid-pyfuvgrx]{color:#ffffffe6}.stat-number[data-astro-cid-pyfuvgrx]{color:#fff}.stat-label[data-astro-cid-pyfuvgrx]{color:#fffc}.image-item[data-astro-cid-pyfuvgrx] img[data-astro-cid-pyfuvgrx]{transition:transform .3s ease}.image-item[data-astro-cid-pyfuvgrx]:hover img[data-astro-cid-pyfuvgrx]{transform:scale(1.05)}.action-btn[data-astro-cid-pyfuvgrx]{background:none;border:none;cursor:pointer;color:var(--text-muted)}.action-btn[data-astro-cid-pyfuvgrx]:hover{color:var(--primary)}@media(max-width:640px){.moments-header[data-astro-cid-pyfuvgrx]{padding:.75rem}.header-content[data-astro-cid-pyfuvgrx]{flex-direction:column;text-align:center;gap:.75rem}.moment-images[data-astro-cid-pyfuvgrx]{grid-template-columns:repeat(2,1fr)}.moment-footer[data-astro-cid-pyfuvgrx]{flex-direction:column;align-items:flex-start;gap:.5rem}}@media(min-width:641px)and (max-width:900px){.moments-header[data-astro-cid-pyfuvgrx]{padding:1.25rem}.header-content[data-astro-cid-pyfuvgrx]{display:flex;justify-content:space-between;align-items:center}.moment-item[data-astro-cid-pyfuvgrx]{padding:1.5rem}.moment-images[data-astro-cid-pyfuvgrx]{grid-template-columns:repeat(3,1fr);gap:.75rem;max-width:500px}.moment-text[data-astro-cid-pyfuvgrx]{font-size:1rem;line-height:1.7}.moment-footer[data-astro-cid-pyfuvgrx]{margin-top:1rem}}@media(min-width:901px){.moments-header[data-astro-cid-pyfuvgrx]{padding:1.5rem}.moment-item[data-astro-cid-pyfuvgrx]{padding:2rem}.moment-images[data-astro-cid-pyfuvgrx]{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));max-width:600px;gap:1rem}.moment-text[data-astro-cid-pyfuvgrx]{font-size:1.1rem;line-height:1.8}}@media(max-width:480px){.card-base[data-astro-cid-pyfuvgrx]{margin:0 -.5rem}.moment-item[data-astro-cid-pyfuvgrx]{border-radius:8px}.moments-header[data-astro-cid-pyfuvgrx]{border-radius:6px}}
+.line-clamp-1[data-astro-cid-aid3sr62]{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}.line-clamp-2[data-astro-cid-aid3sr62]{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.skill-progress-bar-animate[data-astro-cid-oqng3ykc],.category-progress-bar-animate[data-astro-cid-oqng3ykc]{animation:skillProgressBarLoad 1s ease-out forwards}.skill-progress-bar-animate[data-astro-cid-xahix5fp],.category-progress-bar-animate[data-astro-cid-xahix5fp]{animation:skillProgressBarLoad 1s ease-out forwards}@keyframes skillProgressBarLoad{0%{width:0%}to{width:var(--final-width)}}
+.line-clamp-2[data-astro-cid-qlh7ngej]{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}@keyframes pulse{0%{transform:scale(1);box-shadow:0 0 #6366f166}70%{transform:scale(1.05);box-shadow:0 0 0 10px #6366f100}to{transform:scale(1);box-shadow:0 0 #6366f100}}.timeline-node[data-astro-cid-qlh7ngej]{animation:pulse 2s infinite}.timeline-horizontal-scroll[data-astro-cid-qlh7ngej]::-webkit-scrollbar{height:8px}.timeline-horizontal-scroll[data-astro-cid-qlh7ngej]::-webkit-scrollbar-track{background:#e5e7eb;border-radius:4px}.timeline-horizontal-scroll[data-astro-cid-qlh7ngej]::-webkit-scrollbar-thumb{background:hsl(var(--hue),70%,60%);border-radius:4px}
+</style>
+<link rel="stylesheet" href="/_astro/_page_.DXbRjXOw.css"><script type="module" src="/_astro/page.D-_mptAA.js"></script></head> <body class=" min-h-screen  enable-banner l-x-g-w-wen-kai-enabled" data-overlayscrollbars-initialize data-astro-cid-sckkx6r4 style="--bannerOffset: 15vh;--banner-height-home: 65vh;--banner-height: 35vh;--configHue: 280;--page-width: 90rem;"> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KRX3XGVH" height="0" width="0" style="display:none;visibility:hidden; --bannerOffset: 15vh;--banner-height-home: 65vh;--banner-height: 35vh;--configHue: 280;--page-width: 90rem;" data-astro-cid-sckkx6r4></iframe></noscript> <!-- 页面顶部渐变高光效果 - 只在full和semifull模式下显示 --> <div class="top-gradient-highlight" data-astro-cid-sckkx6r4 style="--bannerOffset: 15vh;--banner-height-home: 65vh;--banner-height: 35vh;--configHue: 280;--page-width: 90rem;"></div> <!-- 全局配置载体 --><div id="config-carrier" data-hue="280"></div> <!-- 引入Umami Share工具脚本 --> <script src="/js/umami-share.js"></script>  <script>(function(){const navbarTransparentMode = "semifull";
+
+	// 立即执行，在页面渲染前应用壁纸模式，避免闪烁
+	(function() {
+		const wallpaperMode = localStorage.getItem('wallpaperMode') || 'banner';
+		const body = document.body;
+		
+		// 立即应用 body 类，确保首次渲染就是正确的状态
+		switch(wallpaperMode) {
+			case 'banner':
+				body.classList.add('enable-banner');
+				body.classList.remove('wallpaper-transparent', 'no-banner-mode');
+				break;
+			case 'fullscreen':
+				body.classList.remove('enable-banner');
+				body.classList.add('wallpaper-transparent', 'no-banner-mode');
+				break;
+			case 'none':
+				body.classList.remove('enable-banner', 'wallpaper-transparent');
+				body.classList.add('no-banner-mode');
+				break;
+		}
+	})();
+	
+	// 根据壁纸模式动态设置 banner 和全屏壁纸的显示
+	const wallpaperMode = localStorage.getItem('wallpaperMode') || 'banner';
+	
+	// 在 DOM 加载后执行
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', applyWallpaperMode);
+	} else {
+		applyWallpaperMode();
+	}
+	
+	function applyWallpaperMode() {
+		const wallpaperMode = localStorage.getItem('wallpaperMode') || 'banner';
+		const bannerWrapper = document.getElementById('banner-wrapper');
+		const fullscreenWallpaper = document.querySelector('[data-fullscreen-wallpaper]');
+		const navbar = document.getElementById('navbar');
+		const body = document.body;
+		
+		switch(wallpaperMode) {
+			case 'banner':
+				// 显示 banner，隐藏全屏壁纸
+				if (bannerWrapper) {
+					bannerWrapper.style.display = 'block';
+				}
+				if (fullscreenWallpaper) {
+					fullscreenWallpaper.style.display = 'none';
+				}
+				// navbar 恢复原始透明模式（从 config 读取）
+				if (navbar) {
+					navbar.removeAttribute('data-dynamic-transparent');
+					// 恢复 config 中设置的 data-transparent-mode
+					navbar.setAttribute('data-transparent-mode', navbarTransparentMode);
+					// 如果是 semifull 模式，重新初始化滚动检测
+					if (navbarTransparentMode === 'semifull' && window.initSemifullScrollDetection) {
+						window.initSemifullScrollDetection();
+					}
+				}
+				body.classList.add('enable-banner');
+				body.classList.remove('wallpaper-transparent');
+				body.classList.remove('no-banner-mode');
+				break;
+				
+			case 'fullscreen':
+				// 隐藏 banner，显示全屏壁纸
+				if (bannerWrapper) {
+					bannerWrapper.style.display = 'none';
+				}
+				if (fullscreenWallpaper) {
+					fullscreenWallpaper.style.display = 'block';
+				}
+				// navbar 强制设置为 semi 透明模式（忽略 config 配置）
+				if (navbar) {
+					navbar.setAttribute('data-dynamic-transparent', 'semi');
+					// 强制移除 config 中的 data-transparent-mode 影响
+					navbar.removeAttribute('data-transparent-mode');
+				}
+				body.classList.remove('enable-banner');
+				body.classList.add('wallpaper-transparent');
+				body.classList.add('no-banner-mode');
+				break;
+				
+			case 'none':
+				// 隐藏所有壁纸
+				if (bannerWrapper) {
+					bannerWrapper.style.display = 'none';
+				}
+				if (fullscreenWallpaper) {
+					fullscreenWallpaper.style.display = 'none';
+				}
+				// navbar 强制设置为不透明（忽略 config 配置）
+				if (navbar) {
+					navbar.setAttribute('data-dynamic-transparent', 'none');
+					// 强制移除 config 中的 data-transparent-mode 影响
+					navbar.removeAttribute('data-transparent-mode');
+				}
+				body.classList.remove('enable-banner');
+				body.classList.remove('wallpaper-transparent');
+				body.classList.add('no-banner-mode');
+				break;
+		}
+	}
+	
+	// 监听壁纸模式变化，立即应用（不重载页面）
+	window.addEventListener('wallpaper-mode-change', function(event) {
+		applyWallpaperMode();
+	});
+	
+	// 支持 Swup 页面过渡
+	document.addEventListener('swup:page:view', function() {
+		applyWallpaperMode();
+	});
+})();</script>  <div class="fixed inset-0 w-full h-full overflow-hidden pointer-events-none" style="z-index: -1; opacity: 0.8;" data-fullscreen-wallpaper> <script>
+// 根据 localStorage 立即设置全屏壁纸初始显示状态，避免闪烁
+(function() {
+	const wallpaperMode = localStorage.getItem('wallpaperMode') || 'banner';
+	const fullscreenWallpaper = document.currentScript.parentElement;
+	if (wallpaperMode !== 'fullscreen') {
+		fullscreenWallpaper.style.display = 'none';
+	}
+})();
+</script> <!-- 桌面端壁纸 --> <div class="hidden lg:block w-full h-full relative"> <img src="/assets/desktop-banner/d1.png" alt="Desktop wallpaper 1" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="0" style="filter: blur(1px);"><img src="/assets/desktop-banner/d2.png" alt="Desktop wallpaper 2" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="1" style="filter: blur(1px);"><img src="/assets/desktop-banner/d3.png" alt="Desktop wallpaper 3" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="2" style="filter: blur(1px);"><img src="/assets/desktop-banner/d4.png" alt="Desktop wallpaper 4" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="3" style="filter: blur(1px);"><img src="/assets/desktop-banner/d5.png" alt="Desktop wallpaper 5" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="4" style="filter: blur(1px);"><img src="/assets/desktop-banner/d6.png" alt="Desktop wallpaper 6" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="5" style="filter: blur(1px);"><img src="/assets/desktop-banner/d7.png" alt="Desktop wallpaper 7" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="6" style="filter: blur(1px);"><img src="/assets/desktop-banner/d8.png" alt="Desktop wallpaper 8" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="7" style="filter: blur(1px);"> </div> <!-- 移动端壁纸 --> <div class="block lg:hidden w-full h-full relative"> <img src="/assets/mobile-banner/m1.webp" alt="Mobile wallpaper 1" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="0" style="filter: blur(1px);"><img src="/assets/mobile-banner/m2.webp" alt="Mobile wallpaper 2" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="1" style="filter: blur(1px);"><img src="/assets/mobile-banner/m3.webp" alt="Mobile wallpaper 3" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="2" style="filter: blur(1px);"><img src="/assets/mobile-banner/m4.webp" alt="Mobile wallpaper 4" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="3" style="filter: blur(1px);"><img src="/assets/mobile-banner/m5.webp" alt="Mobile wallpaper 5" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="4" style="filter: blur(1px);"><img src="/assets/mobile-banner/m6.webp" alt="Mobile wallpaper 6" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="5" style="filter: blur(1px);"><img src="/assets/mobile-banner/m7.webp" alt="Mobile wallpaper 7" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="6" style="filter: blur(1px);"><img src="/assets/mobile-banner/m8.webp" alt="Mobile wallpaper 8" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 object-center" data-carousel-item="7" style="filter: blur(1px);"> </div> </div> <script>(function(){const carouselInterval = 2;
+
+		// 全屏壁纸轮播逻辑
+		function initFullscreenWallpaperCarousel() {
+			const wallpaperContainer = document.querySelector('[data-fullscreen-wallpaper]');
+			if (!wallpaperContainer) return;
+
+			const desktopItems = wallpaperContainer.querySelectorAll('.hidden.lg\\:block [data-carousel-item]');
+			const mobileItems = wallpaperContainer.querySelectorAll('.block.lg\\:hidden [data-carousel-item]');
+
+			function startCarousel(items) {
+				if (items.length <= 1) return;
+
+				let currentIndex = 0;
+				
+				// 初始化：显示第一张，隐藏其他
+				items.forEach((item, index) => {
+					item.style.opacity = index === 0 ? '1' : '0';
+				});
+
+				// 开始轮播
+				setInterval(() => {
+					// 隐藏当前图片
+					items[currentIndex].style.opacity = '0';
+					
+					// 切换到下一张
+					currentIndex = (currentIndex + 1) % items.length;
+					
+					// 显示下一张图片
+					items[currentIndex].style.opacity = '1';
+				}, carouselInterval * 1000);
+			}
+
+			// 分别为桌面端和移动端启动轮播
+			if (desktopItems.length > 0) {
+				startCarousel(desktopItems);
+			}
+			if (mobileItems.length > 0) {
+				startCarousel(mobileItems);
+			}
+		}
+
+		// 页面加载完成后初始化轮播
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initFullscreenWallpaperCarousel);
+		} else {
+			initFullscreenWallpaperCarousel();
+		}
+	})();</script> <!-- Iconify图标库加载器 --><script>(function(){const preloadIcons = [];
+const timeout = 10000;
+const retryCount = 3;
+
+  // 全局图标加载逻辑
+  (function() {
+    'use strict';
+    
+    // 避免重复加载
+    if (window.__iconifyLoaderInitialized) {
+      return;
+    }
+    window.__iconifyLoaderInitialized = true;
+
+    // 图标加载器类
+    class IconifyLoader {
+      constructor() {
+        this.isLoaded = false;
+        this.isLoading = false;
+        this.loadPromise = null;
+        this.observers = new Set();
+        this.preloadQueue = new Set();
+      }
+
+      async load(options = {}) {
+        const { timeout: loadTimeout = timeout, retryCount: maxRetries = retryCount } = options;
+        
+        if (this.isLoaded) {
+          return Promise.resolve();
+        }
+
+        if (this.isLoading && this.loadPromise) {
+          return this.loadPromise;
+        }
+
+        this.isLoading = true;
+        this.loadPromise = this.loadWithRetry(loadTimeout, maxRetries);
+
+        try {
+          await this.loadPromise;
+          this.isLoaded = true;
+          this.notifyObservers();
+          await this.processPreloadQueue();
+        } catch (error) {
+          console.error('Failed to load Iconify:', error);
+          throw error;
+        } finally {
+          this.isLoading = false;
+        }
+      }
+
+      async loadWithRetry(timeout, retryCount) {
+        for (let attempt = 1; attempt <= retryCount; attempt++) {
+          try {
+            await this.loadScript(timeout);
+            return;
+          } catch (error) {
+            console.warn(`Iconify load attempt ${attempt} failed:`, error);
+            
+            if (attempt === retryCount) {
+              throw new Error(`Failed to load Iconify after ${retryCount} attempts`);
+            }
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+        }
+      }
+
+      loadScript(timeout) {
+        return new Promise((resolve, reject) => {
+          // 检查是否已经存在
+          if (this.isIconifyReady()) {
+            resolve();
+            return;
+          }
+
+          const existingScript = document.querySelector('script[src*="iconify-icon"]');
+          if (existingScript) {
+            this.waitForIconifyReady().then(resolve).catch(reject);
+            return;
+          }
+
+          const script = document.createElement('script');
+          script.src = 'https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js';
+          script.async = true;
+          script.crossOrigin = 'anonymous';
+
+          const timeoutId = setTimeout(() => {
+            script.remove();
+            reject(new Error('Script load timeout'));
+          }, timeout);
+
+          script.onload = () => {
+            clearTimeout(timeoutId);
+            this.waitForIconifyReady().then(resolve).catch(reject);
+          };
+
+          script.onerror = () => {
+            clearTimeout(timeoutId);
+            script.remove();
+            reject(new Error('Script load error'));
+          };
+
+          document.head.appendChild(script);
+        });
+      }
+
+      waitForIconifyReady(maxWait = 5000) {
+        return new Promise((resolve, reject) => {
+          const startTime = Date.now();
+          
+          const checkReady = () => {
+            if (this.isIconifyReady()) {
+              resolve();
+              return;
+            }
+            
+            if (Date.now() - startTime > maxWait) {
+              reject(new Error('Iconify initialization timeout'));
+              return;
+            }
+            
+            setTimeout(checkReady, 50);
+          };
+          
+          checkReady();
+        });
+      }
+
+      isIconifyReady() {
+        return typeof window !== 'undefined' && 
+               'customElements' in window && 
+               customElements.get('iconify-icon') !== undefined;
+      }
+
+      onLoad(callback) {
+        if (this.isLoaded) {
+          callback();
+        } else {
+          this.observers.add(callback);
+        }
+      }
+
+      notifyObservers() {
+        this.observers.forEach(callback => {
+          try {
+            callback();
+          } catch (error) {
+            console.error('Error in icon load observer:', error);
+          }
+        });
+        this.observers.clear();
+      }
+
+      addToPreloadQueue(icons) {
+        if (Array.isArray(icons)) {
+          icons.forEach(icon => this.preloadQueue.add(icon));
+        } else {
+          this.preloadQueue.add(icons);
+        }
+        
+        if (this.isLoaded) {
+          this.processPreloadQueue();
+        }
+      }
+
+      async processPreloadQueue() {
+        if (this.preloadQueue.size === 0) return;
+        
+        const iconsToLoad = Array.from(this.preloadQueue);
+        this.preloadQueue.clear();
+        
+        await this.preloadIcons(iconsToLoad);
+      }
+
+      async preloadIcons(icons) {
+        if (!this.isLoaded || icons.length === 0) return;
+
+        return new Promise((resolve) => {
+          let loadedCount = 0;
+          const totalIcons = icons.length;
+          const tempElements = [];
+
+          const cleanup = () => {
+            tempElements.forEach(el => {
+              if (el.parentNode) {
+                el.parentNode.removeChild(el);
+              }
+            });
+          };
+
+          const checkComplete = () => {
+            loadedCount++;
+            if (loadedCount >= totalIcons) {
+              cleanup();
+              resolve();
+            }
+          };
+
+          icons.forEach(icon => {
+            const tempIcon = document.createElement('iconify-icon');
+            tempIcon.setAttribute('icon', icon);
+            tempIcon.style.cssText = 'position:absolute;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;';
+            
+            tempIcon.addEventListener('load', checkComplete);
+            tempIcon.addEventListener('error', checkComplete);
+            
+            tempElements.push(tempIcon);
+            document.body.appendChild(tempIcon);
+          });
+
+          // 设置超时清理
+          setTimeout(() => {
+            cleanup();
+            resolve();
+          }, 3000);
+        });
+      }
+    }
+
+    // 创建全局实例
+    window.__iconifyLoader = new IconifyLoader();
+
+    // 立即开始加载
+    window.__iconifyLoader.load().catch(error => {
+      console.error('Failed to initialize Iconify:', error);
+    });
+
+    // 如果有预加载图标，添加到队列
+    if (preloadIcons && preloadIcons.length > 0) {
+      window.__iconifyLoader.addToPreloadQueue(preloadIcons);
+    }
+
+    // 导出便捷函数到全局
+    window.loadIconify = () => window.__iconifyLoader.load();
+    window.preloadIcons = (icons) => window.__iconifyLoader.addToPreloadQueue(icons);
+    window.onIconifyReady = (callback) => window.__iconifyLoader.onLoad(callback);
+
+    // 页面可见性变化时重新检查
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && !window.__iconifyLoader.isLoaded) {
+        window.__iconifyLoader.load().catch(console.error);
+      }
+    });
+
+  })();
+})();</script> <!-- 为不支持JavaScript的情况提供备用方案 --><noscript><style>
+    iconify-icon {
+      display: none;
+    }
+    .icon-fallback {
+      display: inline-block;
+    }
+  </style></noscript>   <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto" data-astro-cid-haiuh7kc> <div id="navbar-wrapper" class="pointer-events-auto sticky top-0 transition-all" data-astro-cid-haiuh7kc> <div id="navbar" class="z-50 onload-animation" data-transparent-mode="semifull" data-is-home="false"> <div class="absolute h-8 left-0 right-0 -top-8 bg-[var(--card-bg)] transition"></div> <!-- used for onload animation --> <div class="!overflow-visible max-w-[var(--page-width)] h-[4.5rem] mx-auto flex items-center justify-between px-4"> <a href="/" class="btn-plain scale-animation rounded-lg h-[3.25rem] px-5 font-bold active:scale-95"> <div class="flex flex-row items-center text-md">   <img src="/assets/home/1731498949746.png" alt="个人学习笔记" class="h-[1.75rem] w-[1.75rem] mb-1 mr-2 object-contain" loading="lazy"> <span class="dark:text-white text-black">个人学习笔记</span>  </div> </a> <div class="hidden md:flex items-center space-x-1"> <div class="dropdown-container" data-dropdown data-astro-cid-qou34bit> <a aria-label="主页" href="/" class="btn-plain scale-animation rounded-lg h-11 font-bold px-5 active:scale-95" data-astro-cid-qou34bit> <div class="flex items-center" data-astro-cid-qou34bit> <svg width="1em" height="1em" class="text-[1.1rem] mr-2" data-astro-cid-qou34bit="true" data-icon="material-symbols:home">   <symbol id="ai:material-symbols:home" viewBox="0 0 24 24"><path fill="currentColor" d="M4 21V9l8-6l8 6v12h-6v-7h-4v7z"/></symbol><use href="#ai:material-symbols:home"></use>  </svg> 主页  </div> </a> </div>  <script type="module">document.addEventListener("DOMContentLoaded",function(){const i=document.querySelectorAll("[data-dropdown]");i.forEach(t=>{const e=t.querySelector("[data-dropdown-trigger]"),o=t.querySelector("[data-dropdown-menu]"),n=t.querySelectorAll(".dropdown-item");!e||!o||(e.addEventListener("keydown",function(r){r.key==="Enter"||r.key===" "?(r.preventDefault(),d(t,e,o)):r.key==="ArrowDown"?(r.preventDefault(),u(t,e,o),n.length>0&&n[0].focus()):r.key==="Escape"&&a(t,e,o)}),n.forEach((r,l)=>{r.addEventListener("keydown",function(s){if(s.key==="ArrowDown"){s.preventDefault();const c=(l+1)%n.length;n[c].focus()}else if(s.key==="ArrowUp"){s.preventDefault();const c=(l-1+n.length)%n.length;n[c].focus()}else s.key==="Escape"&&(a(t,e,o),e.focus())})}))}),document.addEventListener("click",function(t){i.forEach(e=>{if(!e.contains(t.target)){const o=e.querySelector("[data-dropdown-trigger]"),n=e.querySelector("[data-dropdown-menu]");o&&n&&a(e,o,n)}})})});function d(i,t,e){t.getAttribute("aria-expanded")==="true"?a(i,t,e):u(i,t,e)}function u(i,t,e){t.setAttribute("aria-expanded","true"),e.classList.remove("opacity-0","invisible","pointer-events-none","translate-y-[-8px]"),e.classList.add("opacity-100","visible","pointer-events-auto","translate-y-0")}function a(i,t,e){t.setAttribute("aria-expanded","false"),e.classList.add("opacity-0","invisible","pointer-events-none","translate-y-[-8px]"),e.classList.remove("opacity-100","visible","pointer-events-auto","translate-y-0")}</script><div class="dropdown-container" data-dropdown data-astro-cid-qou34bit> <a aria-label="归档" href="/archive/" class="btn-plain scale-animation rounded-lg h-11 font-bold px-5 active:scale-95" data-astro-cid-qou34bit> <div class="flex items-center" data-astro-cid-qou34bit> <svg width="1em" height="1em" class="text-[1.1rem] mr-2" data-astro-cid-qou34bit="true" data-icon="material-symbols:archive">   <symbol id="ai:material-symbols:archive" viewBox="0 0 24 24"><path fill="currentColor" d="m12 18l4-4l-1.4-1.4l-1.6 1.6V10h-2v4.2l-1.6-1.6L8 14zm-7 3q-.825 0-1.412-.587T3 19V6.525q0-.35.113-.675t.337-.6L4.7 3.725q.275-.35.687-.538T6.25 3h11.5q.45 0 .863.188t.687.537l1.25 1.525q.225.275.338.6t.112.675V19q0 .825-.587 1.413T19 21zm.4-15h13.2l-.85-1H6.25z"/></symbol><use href="#ai:material-symbols:archive"></use>  </svg> 归档  </div> </a> </div>  <div class="dropdown-container" data-dropdown data-astro-cid-qou34bit> <button class="btn-plain scale-animation rounded-lg h-11 font-bold px-5 active:scale-95 dropdown-trigger" aria-expanded="false" aria-haspopup="true" data-dropdown-trigger data-astro-cid-qou34bit> <div class="flex items-center" data-astro-cid-qou34bit> <svg width="1em" height="1em" class="text-[1.1rem] mr-2" data-astro-cid-qou34bit="true" data-icon="material-symbols:link">   <symbol id="ai:material-symbols:link" viewBox="0 0 24 24"><path fill="currentColor" d="M11 17H7q-2.075 0-3.537-1.463T2 12t1.463-3.537T7 7h4v2H7q-1.25 0-2.125.875T4 12t.875 2.125T7 15h4zm-3-4v-2h8v2zm5 4v-2h4q1.25 0 2.125-.875T20 12t-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.463T22 12t-1.463 3.538T17 17z"/></symbol><use href="#ai:material-symbols:link"></use>  </svg> 链接 <svg width="1em" height="1em" class="text-[1.25rem] transition-transform duration-200 dropdown-arrow ml-1" data-astro-cid-qou34bit="true" data-icon="material-symbols:keyboard-arrow-down-rounded">   <symbol id="ai:material-symbols:keyboard-arrow-down-rounded" viewBox="0 0 24 24"><path fill="currentColor" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275t.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062"/></symbol><use href="#ai:material-symbols:keyboard-arrow-down-rounded"></use>  </svg> </div> </button>
+		<div class="dropdown-menu" data-dropdown-menu data-astro-cid-qou34bit> <div class="dropdown-content" data-astro-cid-qou34bit> <a href="https://javaguide.cn/home.html" target="_blank" class="dropdown-item" aria-label="JavaGuide" data-astro-cid-qou34bit> <div class="flex items-center" data-astro-cid-qou34bit> <svg width="0.75em" height="1em" class="text-[1rem] mr-2" data-astro-cid-qou34bit="true" data-icon="fa6-brands:java">   <symbol id="ai:fa6-brands:java" viewBox="0 0 384 512"><path fill="currentColor" d="M277.74 312.9c9.8-6.7 23.4-12.5 23.4-12.5s-38.7 7-77.2 10.2c-47.1 3.9-97.7 4.7-123.1 1.3c-60.1-8 33-30.1 33-30.1s-36.1-2.4-80.6 19c-52.5 25.4 130 37 224.5 12.1m-85.4-32.1c-19-42.7-83.1-80.2 0-145.8C296 53.2 242.84 0 242.84 0c21.5 84.5-75.6 110.1-110.7 162.6c-23.9 35.9 11.7 74.4 60.2 118.2m114.6-176.2c.1 0-175.2 43.8-91.5 140.2c24.7 28.4-6.5 54-6.5 54s62.7-32.4 33.9-72.9c-26.9-37.8-47.5-56.6 64.1-121.3m-6.1 270.5a12.2 12.2 0 0 1-2 2.6c128.3-33.7 81.1-118.9 19.8-97.3a17.33 17.33 0 0 0-8.2 6.3a70.5 70.5 0 0 1 11-3c31-6.5 75.5 41.5-20.6 91.4M348 437.4s14.5 11.9-15.9 21.2c-57.9 17.5-240.8 22.8-291.6.7c-18.3-7.9 16-19 26.8-21.3c11.2-2.4 17.7-2 17.7-2c-20.3-14.3-131.3 28.1-56.4 40.2C232.84 509.4 401 461.3 348 437.4M124.44 396c-78.7 22 47.9 67.4 148.1 24.5a186 186 0 0 1-28.2-13.8c-44.7 8.5-65.4 9.1-106 4.5c-33.5-3.8-13.9-15.2-13.9-15.2m179.8 97.2c-78.7 14.8-175.8 13.1-233.3 3.6c0-.1 11.8 9.7 72.4 13.6c92.2 5.9 233.8-3.3 237.1-46.9c0 0-6.4 16.5-76.2 29.7M260.64 353c-59.2 11.4-93.5 11.1-136.8 6.6c-33.5-3.5-11.6-19.7-11.6-19.7c-86.8 28.8 48.2 61.4 169.5 25.9a60.4 60.4 0 0 1-21.1-12.8"/></symbol><use href="#ai:fa6-brands:java"></use>  </svg> <span data-astro-cid-qou34bit>JavaGuide</span> </div> <svg width="1em" height="1em" class="text-[0.75rem] text-black/25 dark:text-white/25" data-astro-cid-qou34bit="true" data-icon="fa6-solid:arrow-up-right-from-square">   <symbol id="ai:fa6-solid:arrow-up-right-from-square" viewBox="0 0 512 512"><path fill="currentColor" d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32zM80 32C35.8 32 0 67.8 0 112v320c0 44.2 35.8 80 80 80h320c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v112c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16h112c17.7 0 32-14.3 32-32s-14.3-32-32-32z"/></symbol><use href="#ai:fa6-solid:arrow-up-right-from-square"></use>  </svg> </a><a href="https://time.geekbang.org" target="_blank" class="dropdown-item" aria-label="极客时间" data-astro-cid-qou34bit> <div class="flex items-center" data-astro-cid-qou34bit> <svg width="1em" height="1em" class="text-[1rem] mr-2" data-astro-cid-qou34bit="true" data-icon="simple-icons:lightning">   <symbol id="ai:simple-icons:lightning" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0L1.75 6v12L12 24l10.25-6V6zm-1.775 18l1.08-4.657l-2.428-2.397L13.79 6l-1.082 4.665l2.414 2.384z"/></symbol><use href="#ai:simple-icons:lightning"></use>  </svg> <span data-astro-cid-qou34bit>极客时间</span> </div> <svg width="1em" height="1em" viewBox="0 0 512 512" class="text-[0.75rem] text-black/25 dark:text-white/25" data-astro-cid-qou34bit="true" data-icon="fa6-solid:arrow-up-right-from-square">   <use href="#ai:fa6-solid:arrow-up-right-from-square"></use>  </svg> </a><a href="https://www.programmercarl.com/" target="_blank" class="dropdown-item" aria-label="代码随想录" data-astro-cid-qou34bit> <div class="flex items-center" data-astro-cid-qou34bit> <svg width="1em" height="1em" class="text-[1rem] mr-2" data-astro-cid-qou34bit="true" data-icon="simple-icons:devpost">   <symbol id="ai:simple-icons:devpost" viewBox="0 0 24 24"><path fill="currentColor" d="M6.002 1.61L0 12.004L6.002 22.39h11.996L24 12.004L17.998 1.61zm1.593 4.084h3.947c3.605 0 6.276 1.695 6.276 6.31c0 4.436-3.21 6.302-6.456 6.302H7.595zm2.517 2.449v7.714h1.241c2.646 0 3.862-1.55 3.862-3.861c.009-2.569-1.096-3.853-3.767-3.853Z"/></symbol><use href="#ai:simple-icons:devpost"></use>  </svg> <span data-astro-cid-qou34bit>代码随想录</span> </div> <svg width="1em" height="1em" viewBox="0 0 512 512" class="text-[0.75rem] text-black/25 dark:text-white/25" data-astro-cid-qou34bit="true" data-icon="fa6-solid:arrow-up-right-from-square">   <use href="#ai:fa6-solid:arrow-up-right-from-square"></use>  </svg> </a><a href="https://bilibili.com" target="_blank" class="dropdown-item" aria-label="Bilibili" data-astro-cid-qou34bit> <div class="flex items-center" data-astro-cid-qou34bit> <svg width="1em" height="1em" viewBox="0 0 512 512" class="text-[1rem] mr-2" data-astro-cid-qou34bit="true" data-icon="fa6-brands:bilibili">   <use href="#ai:fa6-brands:bilibili"></use>  </svg> <span data-astro-cid-qou34bit>Bilibili</span> </div> <svg width="1em" height="1em" viewBox="0 0 512 512" class="text-[0.75rem] text-black/25 dark:text-white/25" data-astro-cid-qou34bit="true" data-icon="fa6-solid:arrow-up-right-from-square">   <use href="#ai:fa6-solid:arrow-up-right-from-square"></use>  </svg> </a><a href="https://icon-sets.iconify.design" target="_blank" class="dropdown-item" aria-label="iconify" data-astro-cid-qou34bit> <div class="flex items-center" data-astro-cid-qou34bit> <svg width="1em" height="1em" class="text-[1rem] mr-2" data-astro-cid-qou34bit="true" data-icon="simple-icons:iconify">   <symbol id="ai:simple-icons:iconify" viewBox="0 0 24 24"><path fill="currentColor" d="M2.857 19.429V9.642q.35-.089.67-.295l1.616-1.045v9.984h4.571v2.285H4c-.63 0-1.143-.512-1.143-1.142m7.429-8.572a1.715 1.715 0 1 1 3.43.001a1.715 1.715 0 0 1-3.43 0m-5.143-8V1.143a1.143 1.143 0 0 1 2.286 0v.235zm9.143 15.429h4.571V8.302l1.616 1.045q.32.206.67.295v9.787c0 .63-.512 1.143-1.143 1.143h-5.714Zm-.004-17.028l8.053 5.211a1.144 1.144 0 0 1-1.242 1.919l-8.041-5.203l.19-.123a2.28 2.28 0 0 0 1.04-1.804M11.38.183a1.144 1.144 0 0 1 1.242 1.92L2.907 8.387a1.144 1.144 0 0 1-1.242-1.919Zm2.6 22.103H22c.473 0 .857.384.857.857A.86.86 0 0 1 22 24H2a.86.86 0 0 1-.857-.857c0-.473.384-.857.857-.857h8.02a2.286 2.286 0 0 0 3.96 0m-.836-8.81v7.667a1.143 1.143 0 0 1-2.286 0v-7.667a2.85 2.85 0 0 0 1.143.238c.406 0 .793-.085 1.143-.238"/></symbol><use href="#ai:simple-icons:iconify"></use>  </svg> <span data-astro-cid-qou34bit>iconify</span> </div> <svg width="1em" height="1em" viewBox="0 0 512 512" class="text-[0.75rem] text-black/25 dark:text-white/25" data-astro-cid-qou34bit="true" data-icon="fa6-solid:arrow-up-right-from-square">   <use href="#ai:fa6-solid:arrow-up-right-from-square"></use>  </svg> </a> </div> </div> </div>  <div class="dropdown-container" data-dropdown data-astro-cid-qou34bit> <button class="btn-plain scale-animation rounded-lg h-11 font-bold px-5 active:scale-95 dropdown-trigger" aria-expanded="false" aria-haspopup="true" data-dropdown-trigger data-astro-cid-qou34bit> <div class="flex items-center" data-astro-cid-qou34bit> <svg width="1em" height="1em" class="text-[1.1rem] mr-2" data-astro-cid-qou34bit="true" data-icon="material-symbols:info">   <symbol id="ai:material-symbols:info" viewBox="0 0 24 24"><path fill="currentColor" d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8t-.288-.712T12 7t-.712.288T11 8t.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></symbol><use href="#ai:material-symbols:info"></use>  </svg> 关于 <svg width="1em" height="1em" viewBox="0 0 24 24" class="text-[1.25rem] transition-transform duration-200 dropdown-arrow ml-1" data-astro-cid-qou34bit="true" data-icon="material-symbols:keyboard-arrow-down-rounded">   <use href="#ai:material-symbols:keyboard-arrow-down-rounded"></use>  </svg> </div> </button>
+		<div class="dropdown-menu" data-dropdown-menu data-astro-cid-qou34bit> <div class="dropdown-content" data-astro-cid-qou34bit> <a href="/friends/" class="dropdown-item" aria-label="友情链接" data-astro-cid-qou34bit> <div class="flex items-center" data-astro-cid-qou34bit> <svg width="1em" height="1em" class="text-[1rem] mr-2" data-astro-cid-qou34bit="true" data-icon="material-symbols:group">   <symbol id="ai:material-symbols:group" viewBox="0 0 24 24"><path fill="currentColor" d="M1 20v-2.8q0-.85.438-1.562T2.6 14.55q1.55-.775 3.15-1.162T9 13t3.25.388t3.15 1.162q.725.375 1.163 1.088T17 17.2V20zm18 0v-3q0-1.1-.612-2.113T16.65 13.15q1.275.15 2.4.513t2.1.887q.9.5 1.375 1.112T23 17v3zM9 12q-1.65 0-2.825-1.175T5 8t1.175-2.825T9 4t2.825 1.175T13 8t-1.175 2.825T9 12m10-4q0 1.65-1.175 2.825T15 12q-.275 0-.7-.062t-.7-.138q.675-.8 1.038-1.775T15 8t-.362-2.025T13.6 4.2q.35-.125.7-.163T15 4q1.65 0 2.825 1.175T19 8"/></symbol><use href="#ai:material-symbols:group"></use>  </svg> <span data-astro-cid-qou34bit>友情链接</span> </div>  </a> </div> </div> </div>   </div> <div class="flex"> <!--<SearchPanel client:load>--> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="2sEHt9" component-url="/_astro/Search.GBQy6kz5.js" component-export="default" renderer-url="/_astro/client.svelte.OvdBSOKf.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;Search&quot;,&quot;value&quot;:&quot;svelte&quot;}"></astro-island> <astro-island uid="AB7P6" component-url="/_astro/MobileTOC.CMKp-Usw.js" component-export="default" renderer-url="/_astro/client.svelte.OvdBSOKf.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;MobileTOC&quot;,&quot;value&quot;:&quot;svelte&quot;}"></astro-island> <button aria-label="Display Settings" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="display-settings-switch"> <svg width="1em" height="1em" class="text-[1.25rem]" data-icon="material-symbols:palette-outline">   <symbol id="ai:material-symbols:palette-outline" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22q-2.05 0-3.875-.788t-3.187-2.15t-2.15-3.187T2 12q0-2.075.813-3.9t2.2-3.175T8.25 2.788T12.2 2q2 0 3.775.688t3.113 1.9t2.125 2.875T22 11.05q0 2.875-1.75 4.413T16 17h-1.85q-.225 0-.312.125t-.088.275q0 .3.375.863t.375 1.287q0 1.25-.687 1.85T12 22m-5.5-9q.65 0 1.075-.425T8 11.5t-.425-1.075T6.5 10t-1.075.425T5 11.5t.425 1.075T6.5 13m3-4q.65 0 1.075-.425T11 7.5t-.425-1.075T9.5 6t-1.075.425T8 7.5t.425 1.075T9.5 9m5 0q.65 0 1.075-.425T16 7.5t-.425-1.075T14.5 6t-1.075.425T13 7.5t.425 1.075T14.5 9m3 4q.65 0 1.075-.425T19 11.5t-.425-1.075T17.5 10t-1.075.425T16 11.5t.425 1.075T17.5 13M12 20q.225 0 .363-.125t.137-.325q0-.35-.375-.825T11.75 17.3q0-1.05.725-1.675T14.25 15H16q1.65 0 2.825-.962T20 11.05q0-3.025-2.312-5.038T12.2 4Q8.8 4 6.4 6.325T4 12q0 3.325 2.338 5.663T12 20"/></symbol><use href="#ai:material-symbols:palette-outline"></use>  </svg> </button> <astro-island uid="Z1HJ9ym" component-url="/_astro/LayoutSwitchButton.DL9Z1-4c.js" component-export="default" renderer-url="/_astro/client.svelte.OvdBSOKf.js" props="{&quot;currentLayout&quot;:[0,&quot;grid&quot;]}" ssr client="only" opts="{&quot;name&quot;:&quot;LayoutSwitchButton&quot;,&quot;value&quot;:&quot;svelte&quot;}"></astro-island> <!-- 整体布局方案切换按钮：根据配置决定在哪些设备上显示 --> <div class="hidden md:block"> <astro-island uid="1p8jpX" component-url="/_astro/WallpaperSwitch.BaR-FrQv.js" component-export="default" renderer-url="/_astro/client.svelte.OvdBSOKf.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;WallpaperSwitch&quot;,&quot;value&quot;:&quot;svelte&quot;}"></astro-island> </div> <astro-island uid="Z2lAPgf" component-url="/_astro/LightDarkSwitch.C5kKzj8i.js" component-export="default" renderer-url="/_astro/client.svelte.OvdBSOKf.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;LightDarkSwitch&quot;,&quot;value&quot;:&quot;svelte&quot;}"></astro-island> <button aria-label="Menu" name="Nav Menu" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 md:!hidden" id="nav-menu-switch"> <svg width="1em" height="1em" class="text-[1.25rem]" data-icon="material-symbols:menu-rounded">   <symbol id="ai:material-symbols:menu-rounded" viewBox="0 0 24 24"><path fill="currentColor" d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h16q.425 0 .713.288T21 17t-.288.713T20 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h16q.425 0 .713.288T21 12t-.288.713T20 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z"/></symbol><use href="#ai:material-symbols:menu-rounded"></use>  </svg> </button> </div> <div id="nav-menu-panel" class="float-panel float-panel-closed absolute transition-all fixed right-4 px-2 py-2 max-h-[80vh] overflow-y-auto" data-astro-cid-h5lvqo6o> <div class="mobile-menu-item" data-astro-cid-h5lvqo6o> <!-- 普通链接项目 -->
+                <a href="/" class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8
+                    hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition
+                " data-astro-cid-h5lvqo6o> <div class="flex items-center transition text-black/75 dark:text-white/75 font-bold group-hover:text-[var(--primary)] group-active:text-[var(--primary)]" data-astro-cid-h5lvqo6o> <svg width="1em" height="1em" viewBox="0 0 24 24" class="text-[1.1rem] mr-2" data-astro-cid-h5lvqo6o="true" data-icon="material-symbols:home">   <use href="#ai:material-symbols:home"></use>  </svg> 主页 </div> <svg width="1em" height="1em" class="transition text-[1.25rem] text-[var(--primary)]" data-astro-cid-h5lvqo6o="true" data-icon="material-symbols:chevron-right-rounded">   <symbol id="ai:material-symbols:chevron-right-rounded" viewBox="0 0 24 24"><path fill="currentColor" d="M12.6 12L8.7 8.1q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l4.6 4.6q.15.15.213.325t.062.375t-.062.375t-.213.325l-4.6 4.6q-.275.275-.7.275t-.7-.275t-.275-.7t.275-.7z"/></symbol><use href="#ai:material-symbols:chevron-right-rounded"></use>  </svg>  </a> </div><div class="mobile-menu-item" data-astro-cid-h5lvqo6o> <!-- 普通链接项目 -->
+                <a href="/archive/" class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8
+                    hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition
+                " data-astro-cid-h5lvqo6o> <div class="flex items-center transition text-black/75 dark:text-white/75 font-bold group-hover:text-[var(--primary)] group-active:text-[var(--primary)]" data-astro-cid-h5lvqo6o> <svg width="1em" height="1em" viewBox="0 0 24 24" class="text-[1.1rem] mr-2" data-astro-cid-h5lvqo6o="true" data-icon="material-symbols:archive">   <use href="#ai:material-symbols:archive"></use>  </svg> 归档 </div> <svg width="1em" height="1em" viewBox="0 0 24 24" class="transition text-[1.25rem] text-[var(--primary)]" data-astro-cid-h5lvqo6o="true" data-icon="material-symbols:chevron-right-rounded">   <use href="#ai:material-symbols:chevron-right-rounded"></use>  </svg>  </a> </div><div class="mobile-menu-item" data-astro-cid-h5lvqo6o> <!-- 有子菜单的项目 -->
+                <div class="mobile-dropdown" data-mobile-dropdown data-astro-cid-h5lvqo6o> <button class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8 w-full text-left
+                            hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition" data-mobile-dropdown-trigger aria-expanded="false" data-astro-cid-h5lvqo6o> <div class="flex items-center transition text-black/75 dark:text-white/75 font-bold group-hover:text-[var(--primary)] group-active:text-[var(--primary)]" data-astro-cid-h5lvqo6o> <svg width="1em" height="1em" viewBox="0 0 24 24" class="text-[1.1rem] mr-2" data-astro-cid-h5lvqo6o="true" data-icon="material-symbols:link">   <use href="#ai:material-symbols:link"></use>  </svg> 链接 </div> <svg width="1em" height="1em" viewBox="0 0 24 24" class="transition text-[1.25rem] text-[var(--primary)] mobile-dropdown-arrow duration-200" data-astro-cid-h5lvqo6o="true" data-icon="material-symbols:keyboard-arrow-down-rounded">   <use href="#ai:material-symbols:keyboard-arrow-down-rounded"></use>  </svg> </button> <div class="mobile-submenu" data-mobile-submenu data-astro-cid-h5lvqo6o> <a href="https://javaguide.cn/home.html" class="group flex justify-between items-center py-2 pl-6 pr-1 rounded-lg gap-8
+                                   hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition" target="_blank" data-astro-cid-h5lvqo6o> <div class="flex items-center transition text-black/60 dark:text-white/60 font-medium group-hover:text-[var(--primary)] group-active:text-[var(--primary)]" data-astro-cid-h5lvqo6o> <svg width="0.75em" height="1em" viewBox="0 0 384 512" class="text-[1.1rem] mr-2" data-astro-cid-h5lvqo6o="true" data-icon="fa6-brands:java">   <use href="#ai:fa6-brands:java"></use>  </svg> JavaGuide </div> <svg width="1em" height="1em" viewBox="0 0 512 512" class="transition text-[0.75rem] text-black/25 dark:text-white/25 -translate-x-1" data-astro-cid-h5lvqo6o="true" data-icon="fa6-solid:arrow-up-right-from-square">   <use href="#ai:fa6-solid:arrow-up-right-from-square"></use>  </svg> </a><a href="https://time.geekbang.org" class="group flex justify-between items-center py-2 pl-6 pr-1 rounded-lg gap-8
+                                   hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition" target="_blank" data-astro-cid-h5lvqo6o> <div class="flex items-center transition text-black/60 dark:text-white/60 font-medium group-hover:text-[var(--primary)] group-active:text-[var(--primary)]" data-astro-cid-h5lvqo6o> <svg width="1em" height="1em" viewBox="0 0 24 24" class="text-[1.1rem] mr-2" data-astro-cid-h5lvqo6o="true" data-icon="simple-icons:lightning">   <use href="#ai:simple-icons:lightning"></use>  </svg> 极客时间 </div> <svg width="1em" height="1em" viewBox="0 0 512 512" class="transition text-[0.75rem] text-black/25 dark:text-white/25 -translate-x-1" data-astro-cid-h5lvqo6o="true" data-icon="fa6-solid:arrow-up-right-from-square">   <use href="#ai:fa6-solid:arrow-up-right-from-square"></use>  </svg> </a><a href="https://www.programmercarl.com/" class="group flex justify-between items-center py-2 pl-6 pr-1 rounded-lg gap-8
+                                   hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition" target="_blank" data-astro-cid-h5lvqo6o> <div class="flex items-center transition text-black/60 dark:text-white/60 font-medium group-hover:text-[var(--primary)] group-active:text-[var(--primary)]" data-astro-cid-h5lvqo6o> <svg width="1em" height="1em" viewBox="0 0 24 24" class="text-[1.1rem] mr-2" data-astro-cid-h5lvqo6o="true" data-icon="simple-icons:devpost">   <use href="#ai:simple-icons:devpost"></use>  </svg> 代码随想录 </div> <svg width="1em" height="1em" viewBox="0 0 512 512" class="transition text-[0.75rem] text-black/25 dark:text-white/25 -translate-x-1" data-astro-cid-h5lvqo6o="true" data-icon="fa6-solid:arrow-up-right-from-square">   <use href="#ai:fa6-solid:arrow-up-right-from-square"></use>  </svg> </a><a href="https://bilibili.com" class="group flex justify-between items-center py-2 pl-6 pr-1 rounded-lg gap-8
+                                   hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition" target="_blank" data-astro-cid-h5lvqo6o> <div class="flex items-center transition text-black/60 dark:text-white/60 font-medium group-hover:text-[var(--primary)] group-active:text-[var(--primary)]" data-astro-cid-h5lvqo6o> <svg width="1em" height="1em" viewBox="0 0 512 512" class="text-[1.1rem] mr-2" data-astro-cid-h5lvqo6o="true" data-icon="fa6-brands:bilibili">   <use href="#ai:fa6-brands:bilibili"></use>  </svg> Bilibili </div> <svg width="1em" height="1em" viewBox="0 0 512 512" class="transition text-[0.75rem] text-black/25 dark:text-white/25 -translate-x-1" data-astro-cid-h5lvqo6o="true" data-icon="fa6-solid:arrow-up-right-from-square">   <use href="#ai:fa6-solid:arrow-up-right-from-square"></use>  </svg> </a><a href="https://icon-sets.iconify.design" class="group flex justify-between items-center py-2 pl-6 pr-1 rounded-lg gap-8
+                                   hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition" target="_blank" data-astro-cid-h5lvqo6o> <div class="flex items-center transition text-black/60 dark:text-white/60 font-medium group-hover:text-[var(--primary)] group-active:text-[var(--primary)]" data-astro-cid-h5lvqo6o> <svg width="1em" height="1em" viewBox="0 0 24 24" class="text-[1.1rem] mr-2" data-astro-cid-h5lvqo6o="true" data-icon="simple-icons:iconify">   <use href="#ai:simple-icons:iconify"></use>  </svg> iconify </div> <svg width="1em" height="1em" viewBox="0 0 512 512" class="transition text-[0.75rem] text-black/25 dark:text-white/25 -translate-x-1" data-astro-cid-h5lvqo6o="true" data-icon="fa6-solid:arrow-up-right-from-square">   <use href="#ai:fa6-solid:arrow-up-right-from-square"></use>  </svg> </a> </div> </div> </div><div class="mobile-menu-item" data-astro-cid-h5lvqo6o> <!-- 有子菜单的项目 -->
+                <div class="mobile-dropdown" data-mobile-dropdown data-astro-cid-h5lvqo6o> <button class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8 w-full text-left
+                            hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition" data-mobile-dropdown-trigger aria-expanded="false" data-astro-cid-h5lvqo6o> <div class="flex items-center transition text-black/75 dark:text-white/75 font-bold group-hover:text-[var(--primary)] group-active:text-[var(--primary)]" data-astro-cid-h5lvqo6o> <svg width="1em" height="1em" viewBox="0 0 24 24" class="text-[1.1rem] mr-2" data-astro-cid-h5lvqo6o="true" data-icon="material-symbols:info">   <use href="#ai:material-symbols:info"></use>  </svg> 关于 </div> <svg width="1em" height="1em" viewBox="0 0 24 24" class="transition text-[1.25rem] text-[var(--primary)] mobile-dropdown-arrow duration-200" data-astro-cid-h5lvqo6o="true" data-icon="material-symbols:keyboard-arrow-down-rounded">   <use href="#ai:material-symbols:keyboard-arrow-down-rounded"></use>  </svg> </button> <div class="mobile-submenu" data-mobile-submenu data-astro-cid-h5lvqo6o> <a href="/friends/" class="group flex justify-between items-center py-2 pl-6 pr-1 rounded-lg gap-8
+                                   hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition" data-astro-cid-h5lvqo6o> <div class="flex items-center transition text-black/60 dark:text-white/60 font-medium group-hover:text-[var(--primary)] group-active:text-[var(--primary)]" data-astro-cid-h5lvqo6o> <svg width="1em" height="1em" viewBox="0 0 24 24" class="text-[1.1rem] mr-2" data-astro-cid-h5lvqo6o="true" data-icon="material-symbols:group">   <use href="#ai:material-symbols:group"></use>  </svg> 友情链接 </div>  </a> </div> </div> </div> </div>  <script type="module">document.addEventListener("DOMContentLoaded",function(){const r=document.querySelectorAll("[data-mobile-dropdown]");r.forEach(e=>{const t=e.querySelector("[data-mobile-dropdown-trigger]"),d=e.querySelector("[data-mobile-submenu]");!t||!d||t.addEventListener("click",function(o){o.preventDefault();const u=e.getAttribute("data-expanded")==="true";r.forEach(a=>{if(a!==e){a.setAttribute("data-expanded","false");const i=a.querySelector("[data-mobile-dropdown-trigger]");i&&i.setAttribute("aria-expanded","false")}});const n=!u;e.setAttribute("data-expanded",n.toString()),t.setAttribute("aria-expanded",n.toString())})})});</script> <astro-island uid="Z2umX4K" component-url="/_astro/DisplaySettings.CRQ9464I.js" component-export="default" renderer-url="/_astro/client.svelte.OvdBSOKf.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;DisplaySettings&quot;,&quot;value&quot;:&quot;svelte&quot;}"></astro-island> </div> </div> <script type="module">function a(){let e=document.getElementById("display-settings-switch");e&&(e.onclick=function(){let t=document.getElementById("display-setting");t&&t.classList.toggle("float-panel-closed")});let l=document.getElementById("nav-menu-switch");l&&(l.onclick=function(){let t=document.getElementById("nav-menu-panel");t&&t.classList.toggle("float-panel-closed")})}a();function i(){const e=document.getElementById("navbar");if(!e||e.getAttribute("data-transparent-mode")!=="semifull")return;if(!(e.getAttribute("data-is-home")==="true")){window.semifullScrollHandler&&(window.removeEventListener("scroll",window.semifullScrollHandler),window.semifullScrollHandler=null),e.classList.add("scrolled");return}e.classList.remove("scrolled");let n=!1;function o(){const d=window.pageYOffset||document.documentElement.scrollTop;e&&d>50?e.classList.add("scrolled"):e&&e.classList.remove("scrolled"),n=!1}function s(){n||(requestAnimationFrame(o),n=!0)}window.semifullScrollHandler&&window.removeEventListener("scroll",window.semifullScrollHandler),window.semifullScrollHandler=s,window.addEventListener("scroll",s,{passive:!0}),o()}window.initSemifullScrollDetection=i;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",i):i();</script> <script>(function(){const scriptUrl = "/pagefind/pagefind.js";
+
+async function loadPagefind() {
+    try {
+        const response = await fetch(scriptUrl, { method: 'HEAD' });
+        if (!response.ok) {
+            throw new Error(`Pagefind script not found: ${response.status}`);
+        }
+
+        const pagefind = await import(scriptUrl);
+
+        await pagefind.options({
+            excerptLength: 20
+        });
+
+        window.pagefind = pagefind;
+
+        document.dispatchEvent(new CustomEvent('pagefindready'));
+        console.log('Pagefind loaded and initialized successfully, event dispatched.');
+    } catch (error) {
+        console.error('Failed to load Pagefind:', error);
+        window.pagefind = {
+            search: () => Promise.resolve({ results: [] }),
+            options: () => Promise.resolve(),
+        };
+        document.dispatchEvent(new CustomEvent('pagefindloaderror'));
+        console.log('Pagefind load error, event dispatched.');
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadPagefind);
+} else {
+    loadPagefind();
+}
+})();</script> </div> </div>  <div id="banner-wrapper" class="absolute z-10 w-full transition duration-700 overflow-hidden mobile-hide-banner" style="top: -30vh" data-astro-cid-haiuh7kc> <script>
+// 根据 localStorage 立即设置 banner 初始显示状态，避免闪烁
+(function() {
+	const wallpaperMode = localStorage.getItem('wallpaperMode') || 'banner';
+	const bannerWrapper = document.currentScript.parentElement;
+	if (wallpaperMode === 'fullscreen' || wallpaperMode === 'none') {
+		bannerWrapper.style.display = 'none';
+	}
+})();
+</script> <!-- Carousel mode for multiple images -->
+        <div id="banner-carousel" class="relative h-full w-full" data-astro-cid-haiuh7kc> <ul class="carousel-list h-full w-full" data-astro-cid-haiuh7kc> <li class="carousel-item absolute inset-0 transition-all duration-500 opacity-100 scale-100" data-astro-cid-haiuh7kc> <!-- Mobile: use mobile-specific images with same logic as desktop --> <div class="block lg:hidden object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/mobile-banner/m1.webp" alt="Mobile banner image 1" class="w-full h-full object-cover" style="object-position: center"> </div> <!-- Desktop: use desktop-specific images --> <div class="hidden lg:block object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/desktop-banner/d1.png" alt="Desktop banner image 1" class="w-full h-full object-cover" style="object-position: center"> </div> </li><li class="carousel-item absolute inset-0 transition-all duration-500 opacity-0 scale-110" data-astro-cid-haiuh7kc> <!-- Mobile: use mobile-specific images with same logic as desktop --> <div class="block lg:hidden object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/mobile-banner/m2.webp" alt="Mobile banner image 2" class="w-full h-full object-cover" style="object-position: center"> </div> <!-- Desktop: use desktop-specific images --> <div class="hidden lg:block object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/desktop-banner/d2.png" alt="Desktop banner image 2" class="w-full h-full object-cover" style="object-position: center"> </div> </li><li class="carousel-item absolute inset-0 transition-all duration-500 opacity-0 scale-110" data-astro-cid-haiuh7kc> <!-- Mobile: use mobile-specific images with same logic as desktop --> <div class="block lg:hidden object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/mobile-banner/m3.webp" alt="Mobile banner image 3" class="w-full h-full object-cover" style="object-position: center"> </div> <!-- Desktop: use desktop-specific images --> <div class="hidden lg:block object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/desktop-banner/d3.png" alt="Desktop banner image 3" class="w-full h-full object-cover" style="object-position: center"> </div> </li><li class="carousel-item absolute inset-0 transition-all duration-500 opacity-0 scale-110" data-astro-cid-haiuh7kc> <!-- Mobile: use mobile-specific images with same logic as desktop --> <div class="block lg:hidden object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/mobile-banner/m4.webp" alt="Mobile banner image 4" class="w-full h-full object-cover" style="object-position: center"> </div> <!-- Desktop: use desktop-specific images --> <div class="hidden lg:block object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/desktop-banner/d4.png" alt="Desktop banner image 4" class="w-full h-full object-cover" style="object-position: center"> </div> </li><li class="carousel-item absolute inset-0 transition-all duration-500 opacity-0 scale-110" data-astro-cid-haiuh7kc> <!-- Mobile: use mobile-specific images with same logic as desktop --> <div class="block lg:hidden object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/mobile-banner/m5.webp" alt="Mobile banner image 5" class="w-full h-full object-cover" style="object-position: center"> </div> <!-- Desktop: use desktop-specific images --> <div class="hidden lg:block object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/desktop-banner/d5.png" alt="Desktop banner image 5" class="w-full h-full object-cover" style="object-position: center"> </div> </li><li class="carousel-item absolute inset-0 transition-all duration-500 opacity-0 scale-110" data-astro-cid-haiuh7kc> <!-- Mobile: use mobile-specific images with same logic as desktop --> <div class="block lg:hidden object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/mobile-banner/m6.webp" alt="Mobile banner image 6" class="w-full h-full object-cover" style="object-position: center"> </div> <!-- Desktop: use desktop-specific images --> <div class="hidden lg:block object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/desktop-banner/d6.png" alt="Desktop banner image 6" class="w-full h-full object-cover" style="object-position: center"> </div> </li><li class="carousel-item absolute inset-0 transition-all duration-500 opacity-0 scale-110" data-astro-cid-haiuh7kc> <!-- Mobile: use mobile-specific images with same logic as desktop --> <div class="block lg:hidden object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/mobile-banner/m7.webp" alt="Mobile banner image 7" class="w-full h-full object-cover" style="object-position: center"> </div> <!-- Desktop: use desktop-specific images --> <div class="hidden lg:block object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/desktop-banner/d7.png" alt="Desktop banner image 7" class="w-full h-full object-cover" style="object-position: center"> </div> </li><li class="carousel-item absolute inset-0 transition-all duration-500 opacity-0 scale-110" data-astro-cid-haiuh7kc> <!-- Mobile: use mobile-specific images with same logic as desktop --> <div class="block lg:hidden object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/mobile-banner/m8.webp" alt="Mobile banner image 8" class="w-full h-full object-cover" style="object-position: center"> </div> <!-- Desktop: use desktop-specific images --> <div class="hidden lg:block object-cover h-full w-full transition-transform duration-500 ease-out overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>  <img src="/assets/desktop-banner/d8.png" alt="Desktop banner image 8" class="w-full h-full object-cover" style="object-position: center"> </div> </li> </ul> </div> <!-- Home page text overlay --> <div class="banner-text-overlay absolute inset-0 z-20 flex items-center justify-center hidden" data-astro-cid-haiuh7kc> <div class="w-4/5 lg:w-3/4 text-center mb-0" data-astro-cid-haiuh7kc> <div class="flex flex-col" data-astro-cid-haiuh7kc> <h1 class="banner-title text-6xl lg:text-8xl text-white drop-shadow-lg mb-2 lg:mb-4" data-astro-cid-haiuh7kc> Beautiful Mizuki! </h1> <h2 class="banner-subtitle text-xl lg:text-3xl text-white/90 drop-shadow-md" data-astro-cid-haiuh7kc> <span class="inline-block min-h-[1.2em]" data-astro-cid-haiuh7kc> <span class="typewriter " data-text="[&#34;A Showcase Demo Site&#34;,&#34;Carousel Highlight: Innovation&#34;,&#34;Carousel Focus: User Experience&#34;,&#34;Carousel Spot: Core Advantages&#34;]" data-speed="100" data-delete-speed="50" data-pause-time="2000" data-astro-cid-4iv2rnoh></span> <script type="module">class n{element;texts;currentTextIndex=0;speed;deleteSpeed;pauseTime;currentIndex=0;isDeleting=!1;timeoutId=null;constructor(t){this.element=t;const e=t.dataset.text||"";try{const i=JSON.parse(e);this.texts=Array.isArray(i)?i:[e]}catch{this.texts=[e]}this.speed=parseInt(t.dataset.speed||"100"),this.deleteSpeed=parseInt(t.dataset.deleteSpeed||"50"),this.pauseTime=parseInt(t.dataset.pauseTime||"2000"),this.texts.length>1&&!this.isTypewriterEnabled()?this.showRandomText():this.start()}isTypewriterEnabled(){return this.element.dataset.speed!==void 0||this.element.dataset.deleteSpeed!==void 0||this.element.dataset.pauseTime!==void 0}showRandomText(){const t=Math.floor(Math.random()*this.texts.length);this.element.textContent=this.texts[t]}start(){this.texts.length!==0&&this.type()}getCurrentText(){return this.texts[this.currentTextIndex]||""}type(){const t=this.getCurrentText();this.isDeleting?this.currentIndex>0?(this.currentIndex--,this.element.textContent=t.substring(0,this.currentIndex),this.timeoutId=window.setTimeout(()=>this.type(),this.deleteSpeed)):(this.isDeleting=!1,this.currentTextIndex=(this.currentTextIndex+1)%this.texts.length,this.timeoutId=window.setTimeout(()=>this.type(),this.speed)):this.currentIndex<t.length?(this.currentIndex++,this.element.textContent=t.substring(0,this.currentIndex),this.timeoutId=window.setTimeout(()=>this.type(),this.speed)):this.texts.length>1?(this.isDeleting=!0,this.timeoutId=window.setTimeout(()=>this.type(),this.pauseTime)):this.texts.length===1&&this.texts[0]===""&&(this.element.innerHTML="&nbsp;")}destroy(){this.timeoutId&&clearTimeout(this.timeoutId)}}document.addEventListener("DOMContentLoaded",()=>{document.querySelectorAll(".typewriter").forEach(t=>{new n(t)})});document.addEventListener("swup:contentReplaced",()=>{document.querySelectorAll(".typewriter").forEach(t=>{new n(t)})});</script>  </span> </h2> </div> </div> </div> <!-- Water waves effect --> <div class="waves absolute -bottom-[1px] h-[10vh] max-h-[9.375rem] min-h-[3.125rem] w-full md:h-[15vh]" id="header-waves" style="transform: translateZ(0); will-change: fill;" data-astro-cid-haiuh7kc> <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 20 150 32" preserveAspectRatio="none" shape-rendering="auto" style="transform: translateZ(0); backface-visibility: hidden;" data-astro-cid-haiuh7kc> <defs data-astro-cid-haiuh7kc> <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v48h-352z" data-astro-cid-haiuh7kc></path> </defs> <g class="parallax" style="transform: translateZ(0);" data-astro-cid-haiuh7kc> <use xlink:href="#gentle-wave" x="48" y="0" class="opacity-25 fill-[var(--page-bg)]" style="animation-delay: -2s; animation-duration: 7s; will-change: transform;" data-astro-cid-haiuh7kc></use> <use xlink:href="#gentle-wave" x="48" y="3" class="opacity-50 fill-[var(--page-bg)]" style="animation-delay: -3s; animation-duration: 10s; will-change: transform;" data-astro-cid-haiuh7kc></use> <use xlink:href="#gentle-wave" x="48" y="5" class="opacity-75 fill-[var(--page-bg)]" style="animation-delay: -4s; animation-duration: 13s; will-change: transform;" data-astro-cid-haiuh7kc></use> <use xlink:href="#gentle-wave" x="48" y="7" class="fill-[var(--page-bg)]" style="animation-delay: -5s; animation-duration: 20s; will-change: transform;" data-astro-cid-haiuh7kc></use> </g> </svg> </div> </div> <div class="absolute w-full z-30 pointer-events-none mobile-main-no-banner  " style="top: calc(35vh - 3.5rem)" data-astro-cid-haiuh7kc> <!-- The pointer-events-none here prevent blocking the click event of the TOC --> <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto" data-astro-cid-haiuh7kc> <div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-1 md:grid-cols-[17.5rem_1fr] lg:grid-cols-[17.5rem_1fr] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-2 md:px-4 " data-astro-cid-haiuh7kc> <!-- Banner image credit -->  <div id="sidebar" class="mb-4 row-start-2 row-end-3 col-span-2 onload-animation block md:block md:row-start-1 md:row-end-2 md:max-w-[17.5rem] md:col-start-1 md:col-end-2 lg:block lg:row-start-1 lg:row-end-2 lg:max-w-[17.5rem] lg:col-start-1 lg:col-end-2  w-full" data-astro-cid-gfmxq3pg> <!-- 顶部固定组件区域 --> <div class="flex flex-col w-full gap-4 mb-4" data-astro-cid-gfmxq3pg> <div class="card-base p-3"> <a aria-label="Go to About Page" href="/about/" class="group block relative mx-auto mt-1 lg:mx-0 lg:mt-0 mb-3
+       max-w-[12rem] lg:max-w-none overflow-hidden rounded-xl active:scale-95"> <div class="absolute transition pointer-events-none group-hover:bg-black/30 group-active:bg-black/50
+        w-full h-full z-50 flex items-center justify-center"> <svg width="1.13em" height="1em" class="transition opacity-0 scale-90 group-hover:scale-100 group-hover:opacity-100 text-white text-5xl" data-icon="fa6-regular:address-card">   <symbol id="ai:fa6-regular:address-card" viewBox="0 0 576 512"><path fill="currentColor" d="M512 80c8.8 0 16 7.2 16 16v320c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V96c0-8.8 7.2-16 16-16zM64 32C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64h448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64zm144 224a64 64 0 1 0 0-128a64 64 0 1 0 0 128m-32 32c-44.2 0-80 35.8-80 80c0 8.8 7.2 16 16 16h192c8.8 0 16-7.2 16-16c0-44.2-35.8-80-80-80zm200-144c-13.3 0-24 10.7-24 24s10.7 24 24 24h80c13.3 0 24-10.7 24-24s-10.7-24-24-24zm0 96c-13.3 0-24 10.7-24 24s10.7 24 24 24h80c13.3 0 24-10.7 24-24s-10.7-24-24-24z"/></symbol><use href="#ai:fa6-regular:address-card"></use>  </svg> </div> <div class="mx-auto lg:w-full h-full lg:mt-0  overflow-hidden relative"> <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div> <img src="/_astro/avatar.cDMEfbtr_Zm7kId.webp" alt="Profile Image of the Author" style="object-position: center" loading="lazy" decoding="async" fetchpriority="auto" width="1260" height="1260" class="w-full h-full object-cover">  </div> </a> <div class="px-2"> <div class="font-bold text-xl text-center mb-1 dark:text-neutral-50 transition">黄雷</div> <div class="h-1 w-5 bg-[var(--primary)] mx-auto rounded-full mb-2 transition"></div> <div class="text-center text-neutral-400 mb-2.5 transition"> <span class="typewriter inline-block" data-text="Java &#38; AI开发者 | Python达人 | 前端小白 | 热爱创新与学习" data-speed="80" data-delete-speed="50" data-pause-time="2000" data-astro-cid-4iv2rnoh></span>   </div> <div class="flex gap-2 justify-center mb-1"> <a rel="me" aria-label="Bilibli" href="https://www.bilibili.com" target="_blank" class="btn-regular rounded-lg h-10 w-10 active:scale-90"> <svg width="1em" height="1em" class="text-[1.5rem]" data-icon="fa6-brands:bilibili">   <symbol id="ai:fa6-brands:bilibili" viewBox="0 0 512 512"><path fill="currentColor" d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1c-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79c0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0q13.2 0 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0q13.2 0 21.9 8.603c5.7 5.737 8.6 12.997 8.6 21.797c0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1m-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5c-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8c-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8s9.7-14.3 10.1-23.5zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2c-6.2 6.3-14 9.5-23.6 9.5s-17.5-3.2-23.6-9.5s-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2s13.2-9.6 23.3-10c9.2.4 17 3.7 23.3 10m191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2s-14 9.5-23.6 9.5s-17.4-3.2-23.6-9.5c-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2s14.1-9.6 23.3-10c9.2.4 17 3.7 23.3 10"/></symbol><use href="#ai:fa6-brands:bilibili"></use>  </svg> </a><a rel="me" aria-label="GitHub" href="https://github.com" target="_blank" class="btn-regular rounded-lg h-10 w-10 active:scale-90"> <svg width="0.97em" height="1em" class="text-[1.5rem]" data-icon="fa6-brands:github">   <symbol id="ai:fa6-brands:github" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6c-3.3.3-5.6-1.3-5.6-3.6c0-2 2.3-3.6 5.2-3.6c3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9c2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9c.3 2 2.9 3.3 5.9 2.6c2.9-.7 4.9-2.6 4.6-4.6c-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2c12.8 2.3 17.3-5.6 17.3-12.1c0-6.2-.3-40.4-.3-61.4c0 0-70 15-84.7-29.8c0 0-11.4-29.1-27.8-36.6c0 0-22.9-15.7 1.6-15.4c0 0 24.9 2 38.6 25.8c21.9 38.6 58.6 27.5 72.9 20.9c2.3-16 8.8-27.1 16-33.7c-55.9-6.2-112.3-14.3-112.3-110.5c0-27.5 7.6-41.3 23.6-58.9c-2.6-6.5-11.1-33.3 2.6-67.9c20.9-6.5 69 27 69 27c20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27c13.7 34.7 5.2 61.4 2.6 67.9c16 17.7 25.8 31.5 25.8 58.9c0 96.5-58.9 104.2-114.8 110.5c9.2 7.9 17 22.9 17 46.4c0 33.7-.3 75.4-.3 83.6c0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252C496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2c1.6 1.6 3.9 2.3 5.2 1c1.3-1 1-3.3-.7-5.2c-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9c1.6 1 3.6.7 4.3-.7c.7-1.3-.3-2.9-2.3-3.9c-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2c2.3 2.3 5.2 2.6 6.5 1c1.3-1.3.7-4.3-1.3-6.2c-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2c-1.4-2.3-4-3.3-5.6-2"/></symbol><use href="#ai:fa6-brands:github"></use>  </svg> </a>  </div>  </div> </div> <!-- 组件显示现在由sidebarLayoutConfig统一控制，无需检查config.enable --><widget-layout data-id="announcement" data-is-collapsed="undefined" class="pb-4 card-base onload-animation" style="animation-delay: 50ms; " data-astro-cid-ucso7hve="true"> <div class="font-bold transition text-lg text-neutral-900 dark:text-neutral-100 relative ml-8 mt-4 mb-2
+        before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
+        before:absolute before:left-[-16px] before:top-[5.5px]" data-astro-cid-ucso7hve style="">公告栏</div> <div id="announcement" class="collapse-wrapper px-4 overflow-hidden" data-astro-cid-ucso7hve style="">  <div> <!-- 公告栏内容 --> <div class="text-neutral-600 dark:text-neutral-300 leading-relaxed mb-3"> 你的到来，让这个安静的角落有了回响 </div> <!-- 可选链接和关闭按钮 --> <div class="flex items-center justify-between gap-3"> <div>  </div> <button class="btn-regular rounded-lg h-8 w-8 text-sm hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors" onclick="closeAnnouncement()" aria-label="关闭"> <svg width="0.75em" height="1em" class="text-sm" data-icon="fa6-solid:xmark">   <symbol id="ai:fa6-solid:xmark" viewBox="0 0 384 512"><path fill="currentColor" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7L86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256L41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3l105.4 105.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256z"/></symbol><use href="#ai:fa6-solid:xmark"></use>  </svg> </button> </div> </div>  </div>  </widget-layout>  <script type="module">class d extends HTMLElement{constructor(){if(super(),this.dataset.isCollapsed!=="true")return;const e=this.dataset.id,t=this.querySelector(".expand-btn"),s=this.querySelector(`#${e}`);t.addEventListener("click",()=>{s.classList.remove("collapsed"),t.classList.add("hidden")})}}customElements.get("widget-layout")||customElements.define("widget-layout",d);</script> <script type="module">function n(){const e=document.querySelector('widget-layout[data-id="announcement"]');e&&(e.style.display="none",localStorage.setItem("announcementClosed","true"))}document.addEventListener("DOMContentLoaded",function(){const e=document.querySelector('widget-layout[data-id="announcement"]');e&&localStorage.getItem("announcementClosed")==="true"&&(e.style.display="none")});window.closeAnnouncement=n;</script> </div> <!-- 粘性组件区域 --> <div id="sidebar-sticky" class="transition-all duration-700 flex flex-col w-full gap-4 top-4 sticky top-4" data-astro-cid-gfmxq3pg> <widget-layout data-id="categories" data-is-collapsed="true" class="pb-4 card-base onload-animation" style="animation-delay: 150ms; --collapsedHeight: 7.5rem;" data-astro-cid-ucso7hve="true"> <div class="font-bold transition text-lg text-neutral-900 dark:text-neutral-100 relative ml-8 mt-4 mb-2
+        before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
+        before:absolute before:left-[-16px] before:top-[5.5px]" data-astro-cid-ucso7hve style="--collapsedHeight: 7.5rem;">分类</div> <div id="categories" class="collapse-wrapper px-4 overflow-hidden collapsed" data-astro-cid-ucso7hve style="--collapsedHeight: 7.5rem;"> <a href="/archive/?category=%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4" aria-label="View all posts in the 常用命令 category"> <button class="
+            w-full
+            h-10
+            rounded-lg
+            bg-none
+            hover:bg-[var(--btn-plain-bg-hover)]
+            active:bg-[var(--btn-plain-bg-active)]
+            transition-all
+            pl-2
+            hover:pl-3
+            
+            text-neutral-700
+            hover:text-[var(--primary)]
+            dark:text-neutral-300
+            dark:hover:text-[var(--primary)]
+        "> <div class="flex items-center justify-between relative mr-2"> <div class="overflow-hidden text-left whitespace-nowrap overflow-ellipsis  "> 常用命令 </div> <div class="transition px-2 h-7 ml-4 min-w-[2rem] rounded-lg text-sm font-bold
+                    text-[var(--btn-content)] dark:text-[var(--deep-text)]
+                    bg-[oklch(0.95_0.025_var(--hue))] dark:bg-[var(--primary)]
+                    flex items-center justify-center"> 1 </div> </div> </button> </a><a href="/archive/?category=%E6%8A%80%E6%9C%AF%E7%82%B9" aria-label="View all posts in the 技术点 category"> <button class="
+            w-full
+            h-10
+            rounded-lg
+            bg-none
+            hover:bg-[var(--btn-plain-bg-hover)]
+            active:bg-[var(--btn-plain-bg-active)]
+            transition-all
+            pl-2
+            hover:pl-3
+            
+            text-neutral-700
+            hover:text-[var(--primary)]
+            dark:text-neutral-300
+            dark:hover:text-[var(--primary)]
+        "> <div class="flex items-center justify-between relative mr-2"> <div class="overflow-hidden text-left whitespace-nowrap overflow-ellipsis  "> 技术点 </div> <div class="transition px-2 h-7 ml-4 min-w-[2rem] rounded-lg text-sm font-bold
+                    text-[var(--btn-content)] dark:text-[var(--deep-text)]
+                    bg-[oklch(0.95_0.025_var(--hue))] dark:bg-[var(--primary)]
+                    flex items-center justify-center"> 1 </div> </div> </button> </a><a href="/archive/?category=%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2" aria-label="View all posts in the 环境部署 category"> <button class="
+            w-full
+            h-10
+            rounded-lg
+            bg-none
+            hover:bg-[var(--btn-plain-bg-hover)]
+            active:bg-[var(--btn-plain-bg-active)]
+            transition-all
+            pl-2
+            hover:pl-3
+            
+            text-neutral-700
+            hover:text-[var(--primary)]
+            dark:text-neutral-300
+            dark:hover:text-[var(--primary)]
+        "> <div class="flex items-center justify-between relative mr-2"> <div class="overflow-hidden text-left whitespace-nowrap overflow-ellipsis  "> 环境部署 </div> <div class="transition px-2 h-7 ml-4 min-w-[2rem] rounded-lg text-sm font-bold
+                    text-[var(--btn-content)] dark:text-[var(--deep-text)]
+                    bg-[oklch(0.95_0.025_var(--hue))] dark:bg-[var(--primary)]
+                    flex items-center justify-center"> 1 </div> </div> </button> </a><a href="/archive/?category=%E7%94%9F%E6%B4%BB" aria-label="View all posts in the 生活 category"> <button class="
+            w-full
+            h-10
+            rounded-lg
+            bg-none
+            hover:bg-[var(--btn-plain-bg-hover)]
+            active:bg-[var(--btn-plain-bg-active)]
+            transition-all
+            pl-2
+            hover:pl-3
+            
+            text-neutral-700
+            hover:text-[var(--primary)]
+            dark:text-neutral-300
+            dark:hover:text-[var(--primary)]
+        "> <div class="flex items-center justify-between relative mr-2"> <div class="overflow-hidden text-left whitespace-nowrap overflow-ellipsis  "> 生活 </div> <div class="transition px-2 h-7 ml-4 min-w-[2rem] rounded-lg text-sm font-bold
+                    text-[var(--btn-content)] dark:text-[var(--deep-text)]
+                    bg-[oklch(0.95_0.025_var(--hue))] dark:bg-[var(--primary)]
+                    flex items-center justify-center"> 2 </div> </div> </button> </a><a href="/archive/?category=%E7%A4%BA%E4%BE%8B" aria-label="View all posts in the 示例 category"> <button class="
+            w-full
+            h-10
+            rounded-lg
+            bg-none
+            hover:bg-[var(--btn-plain-bg-hover)]
+            active:bg-[var(--btn-plain-bg-active)]
+            transition-all
+            pl-2
+            hover:pl-3
+            
+            text-neutral-700
+            hover:text-[var(--primary)]
+            dark:text-neutral-300
+            dark:hover:text-[var(--primary)]
+        "> <div class="flex items-center justify-between relative mr-2"> <div class="overflow-hidden text-left whitespace-nowrap overflow-ellipsis  "> 示例 </div> <div class="transition px-2 h-7 ml-4 min-w-[2rem] rounded-lg text-sm font-bold
+                    text-[var(--btn-content)] dark:text-[var(--deep-text)]
+                    bg-[oklch(0.95_0.025_var(--hue))] dark:bg-[var(--primary)]
+                    flex items-center justify-center"> 4 </div> </div> </button> </a><a href="/archive/?category=%E9%9D%A2%E8%AF%95%E9%A2%98" aria-label="View all posts in the 面试题 category"> <button class="
+            w-full
+            h-10
+            rounded-lg
+            bg-none
+            hover:bg-[var(--btn-plain-bg-hover)]
+            active:bg-[var(--btn-plain-bg-active)]
+            transition-all
+            pl-2
+            hover:pl-3
+            
+            text-neutral-700
+            hover:text-[var(--primary)]
+            dark:text-neutral-300
+            dark:hover:text-[var(--primary)]
+        "> <div class="flex items-center justify-between relative mr-2"> <div class="overflow-hidden text-left whitespace-nowrap overflow-ellipsis  "> 面试题 </div> <div class="transition px-2 h-7 ml-4 min-w-[2rem] rounded-lg text-sm font-bold
+                    text-[var(--btn-content)] dark:text-[var(--deep-text)]
+                    bg-[oklch(0.95_0.025_var(--hue))] dark:bg-[var(--primary)]
+                    flex items-center justify-center"> 17 </div> </div> </button> </a><a href="/archive/?category=%E9%A1%B9%E7%9B%AE%E5%A4%A7%E8%AF%BE" aria-label="View all posts in the 项目大课 category"> <button class="
+            w-full
+            h-10
+            rounded-lg
+            bg-none
+            hover:bg-[var(--btn-plain-bg-hover)]
+            active:bg-[var(--btn-plain-bg-active)]
+            transition-all
+            pl-2
+            hover:pl-3
+            
+            text-neutral-700
+            hover:text-[var(--primary)]
+            dark:text-neutral-300
+            dark:hover:text-[var(--primary)]
+        "> <div class="flex items-center justify-between relative mr-2"> <div class="overflow-hidden text-left whitespace-nowrap overflow-ellipsis  "> 项目大课 </div> <div class="transition px-2 h-7 ml-4 min-w-[2rem] rounded-lg text-sm font-bold
+                    text-[var(--btn-content)] dark:text-[var(--deep-text)]
+                    bg-[oklch(0.95_0.025_var(--hue))] dark:bg-[var(--primary)]
+                    flex items-center justify-center"> 1 </div> </div> </button> </a> </div> <div class="expand-btn px-4 -mb-2" data-astro-cid-ucso7hve style="--collapsedHeight: 7.5rem;"> <button class="btn-plain rounded-lg w-full h-9" data-astro-cid-ucso7hve style="--collapsedHeight: 7.5rem;"> <div class="text-[var(--primary)] flex items-center justify-center gap-2 -translate-x-2" data-astro-cid-ucso7hve style="--collapsedHeight: 7.5rem;"> <svg width="1em" height="1em" class="text-[1.75rem]" data-astro-cid-ucso7hve="true" data-icon="material-symbols:more-horiz">   <symbol id="ai:material-symbols:more-horiz" viewBox="0 0 24 24"><path fill="currentColor" d="M6 14q-.825 0-1.412-.587T4 12t.588-1.412T6 10t1.413.588T8 12t-.587 1.413T6 14m6 0q-.825 0-1.412-.587T10 12t.588-1.412T12 10t1.413.588T14 12t-.587 1.413T12 14m6 0q-.825 0-1.412-.587T16 12t.588-1.412T18 10t1.413.588T20 12t-.587 1.413T18 14"/></symbol><use href="#ai:material-symbols:more-horiz"></use>  </svg> 更多 </div> </button> </div> </widget-layout>  <widget-layout data-id="tags" data-is-collapsed="false" class="pb-4 card-base onload-animation" style="animation-delay: 250ms; --collapsedHeight: 7.5rem;" data-astro-cid-ucso7hve="true"> <div class="font-bold transition text-lg text-neutral-900 dark:text-neutral-100 relative ml-8 mt-4 mb-2
+        before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
+        before:absolute before:left-[-16px] before:top-[5.5px]" data-astro-cid-ucso7hve style="--collapsedHeight: 7.5rem;">标签</div> <div id="tags" class="collapse-wrapper px-4 overflow-hidden" data-astro-cid-ucso7hve style="--collapsedHeight: 7.5rem;">  <div class="flex gap-2 flex-wrap"> <a href="/archive/?tag=AI%E6%99%BA%E8%83%BD%E5%8C%96%E4%BA%91%E7%9B%98" aria-label="View all posts with the AI智能化云盘 tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  AI智能化云盘 </a><a href="/archive/?tag=git" aria-label="View all posts with the git tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  git </a><a href="/archive/?tag=gitea" aria-label="View all posts with the gitea tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  gitea </a><a href="/archive/?tag=github" aria-label="View all posts with the github tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  github </a><a href="/archive/?tag=Markdown" aria-label="View all posts with the Markdown tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  Markdown </a><a href="/archive/?tag=Mermaid" aria-label="View all posts with the Mermaid tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  Mermaid </a><a href="/archive/?tag=mizuki" aria-label="View all posts with the mizuki tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  mizuki </a><a href="/archive/?tag=sso" aria-label="View all posts with the sso tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  sso </a><a href="/archive/?tag=webhook" aria-label="View all posts with the webhook tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  webhook </a><a href="/archive/?tag=%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95" aria-label="View all posts with the 单点登录 tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  单点登录 </a><a href="/archive/?tag=%E5%90%8E%E7%AB%AF%E9%AB%98%E7%BA%A7%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E4%B8%93%E9%A2%98" aria-label="View all posts with the 后端高级工程师面试专题 tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  后端高级工程师面试专题 </a><a href="/archive/?tag=%E5%A4%8D%E7%9B%98" aria-label="View all posts with the 复盘 tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  复盘 </a><a href="/archive/?tag=%E5%B8%B8%E7%94%A8%E7%BD%91%E5%9D%80" aria-label="View all posts with the 常用网址 tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  常用网址 </a><a href="/archive/?tag=%E7%A4%BA%E4%BE%8B" aria-label="View all posts with the 示例 tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  示例 </a><a href="/archive/?tag=%E8%A7%86%E9%A2%91" aria-label="View all posts with the 视频 tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  视频 </a><a href="/archive/?tag=%E7%BD%91%E7%AB%99%E9%83%A8%E7%BD%B2" aria-label="View all posts with the 网站部署 tag" class="btn-regular h-8 text-sm px-3 rounded-lg">  网站部署 </a> </div>  </div>  </widget-layout>   </div> </div> <!-- 响应式样式和JavaScript -->  <script>
+	import { widgetManager } from "../../utils/widget-manager";
+	
+	// 响应式布局管理
+	class SidebarManager {
+		constructor() {
+			this.init();
+		}
+		
+		init() {
+			this.updateResponsiveDisplay();
+			window.addEventListener('resize', () => this.updateResponsiveDisplay());
+			
+			// 监听SWUP内容替换事件
+			if (typeof window !== 'undefined' && window.swup) {
+				window.swup.hooks.on('content:replace', () => {
+					// 延迟执行以确保DOM已更新
+					setTimeout(() => {
+						this.updateResponsiveDisplay();
+					}, 100);
+				});
+			}
+		}
+		
+		updateResponsiveDisplay() {
+			const breakpoints = widgetManager.getBreakpoints();
+			const width = window.innerWidth;
+			
+			let deviceType: 'mobile' | 'tablet' | 'desktop';
+			if (width < breakpoints.mobile) {
+				deviceType = 'mobile';
+			} else if (width < breakpoints.tablet) {
+				deviceType = 'tablet';
+			} else {
+				deviceType = 'desktop';
+			}
+			
+			const shouldShow = widgetManager.shouldShowSidebar(deviceType);
+			const sidebar = document.getElementById('sidebar');
+			
+			if (sidebar) {
+				sidebar.style.setProperty(
+					`--sidebar-${deviceType}-display`, 
+					shouldShow ? 'block' : 'none'
+				);
+			}
+		}
+	}
+	
+	// 初始化侧边栏管理器
+	new SidebarManager();
+</script> <main id="swup-container" class="transition-swup-fade overflow-hidden w-full col-span-2 md:col-start-2 md:col-end-3 lg:col-start-2 lg:col-end-3 transition-main" data-astro-cid-haiuh7kc> <div id="content-wrapper" class="onload-animation transition-leaving" data-astro-cid-haiuh7kc> <!-- the overflow-hidden here prevent long text break the layout--> <!-- make id different from windows.swup global property -->   <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4"> <div id="post-container" class="card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full "> <!-- word count and reading time --> <div class="flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation"> <div class="flex flex-row items-center"> <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2"> <svg width="1em" height="1em" data-icon="material-symbols:notes-rounded">   <symbol id="ai:material-symbols:notes-rounded" viewBox="0 0 24 24"><path fill="currentColor" d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h10q.425 0 .713.288T15 17t-.288.713T14 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h16q.425 0 .713.288T21 12t-.288.713T20 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z"/></symbol><use href="#ai:material-symbols:notes-rounded"></use>  </svg> </div> <div class="text-sm"> 5841  字 </div> </div> <div class="flex flex-row items-center"> <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2"> <svg width="1em" height="1em" data-icon="material-symbols:schedule-outline-rounded">   <symbol id="ai:material-symbols:schedule-outline-rounded" viewBox="0 0 24 24"><path fill="currentColor" d="M13 11.6V8q0-.425-.288-.712T12 7t-.712.288T11 8v3.975q0 .2.075.388t.225.337l3.3 3.3q.275.275.7.275T16 16t.275-.7t-.275-.7zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.325 0 5.663-2.337T20 12t-2.337-5.663T12 4T6.337 6.338T4 12t2.338 5.663T12 20"/></symbol><use href="#ai:material-symbols:schedule-outline-rounded"></use>  </svg> </div> <div class="text-sm"> 29  分钟 </div> </div> </div> <!-- title --> <div class="relative onload-animation"> <div data-pagefind-body data-pagefind-weight="10" data-pagefind-meta="title" class="transition w-full block font-bold mb-3
+                    text-3xl md:text-[2.25rem]/[2.75rem]
+                    text-black/90 dark:text-white/90
+                    md:before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+                    before:absolute before:top-[0.75rem] before:left-[-1.125rem]"> 后端高级工程师面试专题07 </div> </div> <!-- metadata --> <div class="onload-animation"> <div class="flex flex-wrap text-neutral-500 dark:text-neutral-400 items-center gap-4 gap-x-4 gap-y-2"> <!-- publish date --> <div class="flex items-center"> <div class="meta-icon"> <svg width="1em" height="1em" class="text-xl" data-icon="material-symbols:calendar-today-outline-rounded">   <symbol id="ai:material-symbols:calendar-today-outline-rounded" viewBox="0 0 24 24"><path fill="currentColor" d="M5 22q-.825 0-1.412-.587T3 20V6q0-.825.588-1.412T5 4h1V3q0-.425.288-.712T7 2t.713.288T8 3v1h8V3q0-.425.288-.712T17 2t.713.288T18 3v1h1q.825 0 1.413.588T21 6v14q0 .825-.587 1.413T19 22zm0-2h14V10H5zM5 8h14V6H5zm0 0V6z"/></symbol><use href="#ai:material-symbols:calendar-today-outline-rounded"></use>  </svg> </div> <span class="text-50 text-sm font-medium">2025-11-16</span> </div> <!-- update date -->  <!-- categories --> <div class="flex items-center"> <div class="meta-icon"> <svg width="1em" height="1em" class="text-xl" data-icon="material-symbols:book-2-outline-rounded">   <symbol id="ai:material-symbols:book-2-outline-rounded" viewBox="0 0 24 24"><path fill="currentColor" d="M6 15.325q.35-.175.725-.25T7.5 15H8V4h-.5q-.625 0-1.062.438T6 5.5zM10 15h8V4h-8zm-4 .325V4zM7.5 22q-1.45 0-2.475-1.025T4 18.5v-13q0-1.45 1.025-2.475T7.5 2H18q.825 0 1.413.587T20 4v12.525q0 .2-.162.363t-.588.362q-.35.175-.55.5t-.2.75t.2.763t.55.487t.55.413t.2.562v.25q0 .425-.288.725T19 22zm0-2h9.325q-.15-.35-.237-.712T16.5 18.5q0-.4.075-.775t.25-.725H7.5q-.65 0-1.075.438T6 18.5q0 .65.425 1.075T7.5 20"/></symbol><use href="#ai:material-symbols:book-2-outline-rounded"></use>  </svg> </div> <div class="flex flex-row flex-nowrap items-center"> <a href="/archive/?category=%E9%9D%A2%E8%AF%95%E9%A2%98" aria-label="View all posts in the 面试题 category" class="link-lg transition text-50 text-sm font-medium
+                            hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap"> 面试题 </a> </div> </div> <!-- word count -->  <!-- tags (只有在不显示基本元数据时才显示) --> <div class="items-center flex"> <div class="meta-icon"> <svg width="1em" height="1em" class="text-xl" data-icon="material-symbols:tag-rounded">   <symbol id="ai:material-symbols:tag-rounded" viewBox="0 0 24 24"><path fill="currentColor" d="m9 16l-.825 3.275q-.075.325-.325.525t-.6.2q-.475 0-.775-.375T6.3 18.8L7 16H4.275q-.5 0-.8-.387T3.3 14.75q.075-.35.35-.55t.625-.2H7.5l1-4H5.775q-.5 0-.8-.387T4.8 8.75q.075-.35.35-.55t.625-.2H9l.825-3.275Q9.9 4.4 10.15 4.2t.6-.2q.475 0 .775.375t.175.825L11 8h4l.825-3.275q.075-.325.325-.525t.6-.2q.475 0 .775.375t.175.825L17 8h2.725q.5 0 .8.387t.175.863q-.075.35-.35.55t-.625.2H16.5l-1 4h2.725q.5 0 .8.388t.175.862q-.075.35-.35.55t-.625.2H15l-.825 3.275q-.075.325-.325.525t-.6.2q-.475 0-.775-.375T12.3 18.8L13 16zm.5-2h4l1-4h-4z"/></symbol><use href="#ai:material-symbols:tag-rounded"></use>  </svg> </div> <div class="flex flex-row flex-nowrap items-center">  <div class="hidden mx-1.5 text-[var(--meta-divider)] text-sm">/</div> <a href="/archive/?tag=%E5%90%8E%E7%AB%AF%E9%AB%98%E7%BA%A7%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E4%B8%93%E9%A2%98" aria-label="View all posts with the 后端高级工程师面试专题 tag" class="link-lg transition text-50 text-sm font-medium
+                                        hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap"> 后端高级工程师面试专题 </a>   </div> </div> <!-- 访问量（首页不显示，且umami.enabled为true时显示） -->  </div> <!-- 只有在非首页且启用umami且有slug时才加载脚本 -->  <div class="mt-4 border-[var(--line-divider)] border-dashed border-b-[1px] mb-5"></div> </div> <!-- always show cover as long as it has one -->  <div id="password-protection" class="password-protection" data-astro-cid-732embm3> <div class="password-container" data-astro-cid-732embm3> <div class="lock-icon" data-astro-cid-732embm3> <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-astro-cid-732embm3> <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6z" fill="currentColor" data-astro-cid-732embm3></path> </svg> </div> <h2 data-astro-cid-732embm3>此内容受密码保护</h2> <p data-astro-cid-732embm3>请输入密码以查看受保护的内容</p> <div class="password-input-group" data-astro-cid-732embm3> <input type="password" id="password-input" placeholder="请输入密码" class="password-input" data-astro-cid-732embm3> <button id="unlock-btn" class="unlock-button" data-astro-cid-732embm3>解锁</button> </div> <div id="error-message" class="error-message" style="display: none;" data-astro-cid-732embm3>密码错误，请重试</div> </div> </div> <div id="decrypted-content" class="decrypted-content" style="display: none;" data-astro-cid-732embm3></div>  <script>(function(){const encryptedContent = "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";
+const passwordHash = "$2b$10$m1fptfCfRSKne2Cq44wakelCW61lSB5h1uh9NMfmt.8Ah3jGGk93e";
+const i18nUnlocking = "解锁中...";
+const i18nIncorrect = "密码错误，请重试";
+const i18nDecryptError = "解密失败，请检查密码是否正确";
+const i18nUnlock = "解锁";
+
+  // 导入加密库 - 使用本地文件
+  async function loadCryptoLibraries() {
+    if (typeof CryptoJS === 'undefined') {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = '/assets/js/crypto-js.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+    
+    if (typeof bcrypt === 'undefined') {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = '/assets/js/bcrypt.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+  }
+
+  // 加载语法高亮库 - 使用本地文件
+  async function loadSyntaxHighlighter() {
+    if (typeof hljs === 'undefined') {
+      // 加载 highlight.js 核心
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = '/assets/js/highlight.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+      
+      // 加载 highlight.js 样式 - 使用本地文件
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = '/assets/css/highlight-github-dark.min.css';
+      document.head.appendChild(link);
+      
+      // 等待hljs加载完成
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+  }
+
+  // 为代码块添加样式和功能的函数
+  async function enhanceCodeBlocks(container) {
+    // 先加载语法高亮库
+    await loadSyntaxHighlighter();
+    
+    const codeBlocks = container.querySelectorAll('pre code');
+    
+    codeBlocks.forEach(codeElement => {
+      const preElement = codeElement.parentElement;
+      if (!preElement) return;
+      
+      // 获取语言信息
+      const className = codeElement.className || '';
+      const langMatch = className.match(/language-(\w+)/);
+      const language = langMatch ? langMatch[1] : '';
+      
+      // 创建与真正expressive-code完全一致的结构
+      const expressiveCodeContainer = document.createElement('div');
+      expressiveCodeContainer.className = 'expressive-code';
+      
+      // 不添加语言标题栏，直接隐藏
+      // 加密文章解密后不显示语言标题栏
+      
+      const frame = document.createElement('div');
+      frame.className = 'frame';
+      
+      // 创建新的pre元素，使用与expressive-code相同的结构
+      const newPre = document.createElement('pre');
+      newPre.className = 'astro-code';
+      newPre.setAttribute('data-language', language || 'text');
+      newPre.setAttribute('tabindex', '0');
+      newPre.style.backgroundColor = 'var(--codeblock-bg)';
+      
+      // 加密文章始终显示语言标识（因为没有title栏）
+      if (language) {
+        frame.classList.add('has-language-badge');
+      }
+      
+      const newCode = document.createElement('code');
+      newCode.className = `language-${language || 'text'}`;
+      
+      // 获取原始代码文本
+      const codeText = codeElement.textContent || '';
+      
+      // 使用 highlight.js 进行语法高亮
+      let highlightedCode = codeText;
+      if (typeof hljs !== 'undefined') {
+        try {
+          if (language) {
+            // 尝试使用指定语言高亮
+            const result = hljs.highlight(codeText, { language: language });
+            highlightedCode = result.value;
+          } else {
+            // 自动检测语言
+            const result = hljs.highlightAuto(codeText);
+            highlightedCode = result.value;
+          }
+        } catch (e) {
+          console.warn(i18n(I18nKey.syntaxHighlightFailed), e);
+          // 如果指定语言失败，尝试自动检测
+          try {
+            const result = hljs.highlightAuto(codeText);
+            highlightedCode = result.value;
+          } catch (e2) {
+            console.warn(i18n(I18nKey.autoSyntaxHighlightFailed), e2);
+            highlightedCode = codeText;
+          }
+        }
+      }
+      
+      // 将高亮后的代码按行分割并添加行号结构
+      const lines = highlightedCode.split('\n');
+      
+      // 清空原有内容
+      newCode.innerHTML = '';
+      
+      // 设置counter-reset用于行号
+      newCode.style.counterReset = 'line';
+      
+      lines.forEach((line, index) => {
+        const lineSpan = document.createElement('span');
+        lineSpan.className = 'line';
+        lineSpan.innerHTML = line; // 使用innerHTML以保持语法高亮的HTML标签
+        
+        newCode.appendChild(lineSpan);
+        
+        // 除了最后一行，都添加换行符
+        if (index < lines.length - 1) {
+          newCode.appendChild(document.createTextNode('\n'));
+        }
+      });
+      
+      newPre.appendChild(newCode);
+      
+      // 添加复制按钮（使用与expressive-code相同的结构）
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'copy-btn';
+      copyBtn.setAttribute('aria-label', 'Copy code');
+      copyBtn.setAttribute('type', 'button');
+      
+      const copyBtnIcon = document.createElement('div');
+      copyBtnIcon.className = 'copy-btn-icon';
+      
+      // 复制图标SVG
+      const copyIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      copyIcon.setAttribute('viewBox', '0 -960 960 960');
+      copyIcon.setAttribute('class', 'copy-btn-icon copy-icon');
+      const copyPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      copyPath.setAttribute('d', 'M368.37-237.37q-34.48 0-58.74-24.26-24.26-24.26-24.26-58.74v-474.26q0-34.48 24.26-58.74 24.26-24.26 58.74-24.26h378.26q34.48 0 58.74 24.26 24.26 24.26 24.26 58.74v474.26q0 34.48-24.26 58.74-24.26 24.26-58.74 24.26H368.37Zm0-83h378.26v-474.26H368.37v474.26Zm-155 238q-34.48 0-58.74-24.26-24.26-24.26-24.26-58.74v-557.26h83v557.26h461.26v83H213.37Z');
+      copyIcon.appendChild(copyPath);
+      
+      // 成功图标SVG
+      const successIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      successIcon.setAttribute('viewBox', '0 -960 960 960');
+      successIcon.setAttribute('class', 'copy-btn-icon success-icon');
+      const successPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      successPath.setAttribute('d', 'm389-377.13 294.7-294.7q12.58-12.67 29.52-12.67 16.93 0 29.61 12.67 12.67 12.68 12.67 29.53 0 16.86-12.28 29.14L419.07-288.41q-12.59 12.67-29.52 12.67-16.94 0-29.62-12.67L217.41-430.93q-12.67-12.68-12.79-29.45-.12-16.77 12.55-29.45 12.68-12.67 29.62-12.67 16.93 0 29.28 12.67L389-377.13Z');
+      successIcon.appendChild(successPath);
+      
+      copyBtnIcon.appendChild(copyIcon);
+      copyBtnIcon.appendChild(successIcon);
+      copyBtn.appendChild(copyBtnIcon);
+      
+      // 复制功能 - 使用与Markdown.astro相同的逻辑
+      copyBtn.addEventListener('click', async () => {
+        try {
+          // 获取所有.line元素的文本内容（不包括行号）
+          const codeElements = newCode.querySelectorAll('.line');
+          const code = Array.from(codeElements)
+            .map(el => el.textContent)
+            .map(t => t === '\n' ? '' : t)
+            .join('\n');
+          
+          await navigator.clipboard.writeText(code);
+          copyBtn.classList.add('success');
+          
+          // 清除之前的timeout
+          const timeoutId = copyBtn.getAttribute('data-timeout-id');
+          if (timeoutId) {
+            clearTimeout(parseInt(timeoutId));
+          }
+          
+          // 设置新的timeout
+          const newTimeoutId = setTimeout(() => {
+            copyBtn.classList.remove('success');
+          }, 1000);
+          
+          copyBtn.setAttribute('data-timeout-id', newTimeoutId.toString());
+        } catch (err) {
+          console.error(i18n(I18nKey.copyFailed), err);
+        }
+      });
+      
+      frame.appendChild(newPre);
+      frame.appendChild(copyBtn);
+      expressiveCodeContainer.appendChild(frame);
+      
+      // 替换原始pre元素
+      preElement.parentNode.replaceChild(expressiveCodeContainer, preElement);
+    });
+  }
+
+  // 为标题添加id和锚点链接的函数
+  function addHeadingAnchors(container) {
+    const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    const usedIds = new Set();
+    
+    headings.forEach(heading => {
+      // 生成slug id（模拟rehype-slug功能）
+      let slug = heading.textContent
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '') // 移除特殊字符
+        .replace(/[\s_-]+/g, '-') // 替换空格和下划线为连字符
+        .replace(/^-+|-+$/g, ''); // 移除开头和结尾的连字符
+      
+      // 确保id唯一
+      let uniqueSlug = slug;
+      let counter = 1;
+      while (usedIds.has(uniqueSlug)) {
+        uniqueSlug = `${slug}-${counter}`;
+        counter++;
+      }
+      usedIds.add(uniqueSlug);
+      
+      // 设置id
+      heading.id = uniqueSlug;
+      
+      // 添加锚点链接（模拟rehype-autolink-headings功能）
+      const anchor = document.createElement('span');
+      anchor.className = 'anchor-icon';
+      anchor.setAttribute('data-pagefind-ignore', 'true');
+      anchor.textContent = '#';
+      
+      const anchorWrapper = document.createElement('a');
+      anchorWrapper.className = 'anchor';
+      anchorWrapper.href = `#${uniqueSlug}`;
+      anchorWrapper.appendChild(anchor);
+      
+      // 将锚点添加到标题末尾
+      heading.appendChild(anchorWrapper);
+    });
+  }
+
+  async function renderMarkdownContent(markdownText) {
+    // 加载marked库用于markdown渲染 - 使用本地文件
+    if (typeof marked === 'undefined') {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = '/assets/js/marked.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+    
+    // 预处理：将 :::note 等警告框语法转换为临时占位符
+    // 这样 marked 就不会错误地解析它们
+    let processedMarkdown = markdownText.replace(
+      /^:::(note|tip|important|warning|caution)(\[[^\]]*\])?\n([\s\S]*?)^:::/gm,
+      (match, type, title, content) => {
+        // 创建一个唯一的占位符，并存储实际内容
+        const placeholderId = 'ADMONITION_' + Math.random().toString(36).substr(2, 9);
+        if (!window.tempAdmonitions) {
+          window.tempAdmonitions = {};
+        }
+        window.tempAdmonitions[placeholderId] = {
+          type: type,
+          title: title ? title.slice(1, -1) : null, // 移除方括号
+          content: content.trim()
+        };
+        return placeholderId;
+      }
+    );
+
+    // 配置marked的基本选项
+    marked.setOptions({
+      breaks: true,
+      gfm: true
+    });
+    
+    const contentDiv = document.getElementById('decrypted-content');
+    const htmlContent = marked.parse(processedMarkdown);
+    
+    // 创建与正常文章完全相同的结构
+    const markdownWrapper = document.createElement('div');
+    markdownWrapper.className = 'prose dark:prose-invert prose-base !max-w-none custom-md mb-6 markdown-content onload-animation';
+    markdownWrapper.setAttribute('data-pagefind-body', '');
+    markdownWrapper.innerHTML = htmlContent;
+
+    // 处理警告框占位符：将占位符替换为实际的警告框HTML结构
+    if (window.tempAdmonitions) {
+      // 使用 marked 解析警告框内容中的 Markdown
+      for (const [placeholderId, admonition] of Object.entries(window.tempAdmonitions)) {
+        // 解析警告框内容中的 Markdown，获取原始的HTML内容
+        const contentHtml = marked.parse(admonition.content);
+
+        // 创建与 rehype-component-admonition.mjs 完全相同的HTML结构
+        const admonitionElement = document.createElement('blockquote');
+        admonitionElement.className = `admonition bdm-${admonition.type}`;
+
+        const titleElement = document.createElement('span');
+        titleElement.className = 'bdm-title';
+
+        if (admonition.title) {
+          // 自定义标题需要包装在div中
+          const titleDiv = document.createElement('div');
+          titleDiv.textContent = admonition.title;
+          titleElement.appendChild(titleDiv);
+        } else {
+          // 默认标题直接显示文本
+          titleElement.textContent = admonition.type.toUpperCase();
+        }
+
+        // 将解析后的HTML内容转换为DOM元素并添加到admonition中
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = contentHtml;
+
+        // 获取所有子节点（包括文本节点、元素节点等）
+        while (tempDiv.firstChild) {
+          admonitionElement.appendChild(tempDiv.firstChild);
+        }
+
+        // 将标题插入到最前面
+        admonitionElement.insertBefore(titleElement, admonitionElement.firstChild);
+
+        // 替换占位符
+        const placeholderText = document.createTextNode(placeholderId);
+        const walker = document.createTreeWalker(
+          markdownWrapper,
+          NodeFilter.SHOW_TEXT,
+          null,
+          false
+        );
+
+        let textNode;
+        while (textNode = walker.nextNode()) {
+          if (textNode.textContent === placeholderId) {
+            textNode.parentNode.replaceChild(admonitionElement, textNode);
+            break;
+          }
+        }
+      }
+
+      // 清理临时存储
+      delete window.tempAdmonitions;
+    }
+
+    // 为标题添加id和锚点链接（模拟rehype-slug和rehype-autolink-headings插件功能）
+    addHeadingAnchors(markdownWrapper);
+    
+    // 为代码块添加样式和功能（异步）
+    await enhanceCodeBlocks(markdownWrapper);
+    
+    // 清空容器并添加新内容
+    contentDiv.innerHTML = '';
+    contentDiv.appendChild(markdownWrapper);
+    
+    // 重置contentDiv的样式，让它作为普通容器
+    contentDiv.className = '';
+    contentDiv.style.cssText = '';
+    
+    // 触发TOC更新
+    const tocElement = document.querySelector('table-of-contents');
+    if (tocElement && typeof tocElement.regenerateTOC === 'function') {
+      // 等待DOM更新后重新生成TOC
+      setTimeout(() => {
+        tocElement.regenerateTOC();
+        tocElement.init();
+      }, 100);
+    }
+    
+    // 触发移动端TOC更新
+    if (typeof window.mobileTOCInit === 'function') {
+      setTimeout(() => {
+        window.mobileTOCInit();
+      }, 150);
+    }
+    
+    // 触发动画结束事件，让TOC知道动画完成
+    const animationEndEvent = new Event('animationend');
+    markdownWrapper.dispatchEvent(animationEndEvent);
+  }
+
+  async function initPasswordProtection() {
+    await loadCryptoLibraries();
+    
+    const passwordInput = document.getElementById('password-input');
+    const unlockBtn = document.getElementById('unlock-btn');
+    const errorMessage = document.getElementById('error-message');
+    const protectionDiv = document.getElementById('password-protection');
+    const contentDiv = document.getElementById('decrypted-content');
+
+    async function attemptUnlock() {
+      const inputPassword = passwordInput.value.trim();
+      
+      if (!inputPassword) {
+        showError(i18n(I18nKey.passwordRequired));
+        return;
+      }
+
+      unlockBtn.disabled = true;
+      unlockBtn.textContent = i18nUnlocking;
+      errorMessage.style.display = 'none';
+
+      try {
+        // 验证密码
+        const isPasswordCorrect = bcrypt.compareSync(inputPassword, passwordHash);
+        
+        if (!isPasswordCorrect) {
+          showError(i18nIncorrect);
+          return;
+        }
+
+        // 解密内容
+        const decryptedBytes = CryptoJS.AES.decrypt(encryptedContent, inputPassword);
+        const decryptedContent = decryptedBytes.toString(CryptoJS.enc.Utf8);
+        
+        if (!decryptedContent) {
+          showError(i18nDecryptError);
+          return;
+        }
+
+        // 渲染markdown内容
+        await renderMarkdownContent(decryptedContent);
+        protectionDiv.style.display = 'none';
+        contentDiv.style.display = 'block';
+        
+        // 保存解锁状态到sessionStorage（可选）
+        sessionStorage.setItem('page-unlocked-' + window.location.pathname, 'true');
+        
+      } catch (error) {
+        console.error(i18n(I18nKey.decryptionError), error);
+        showError(i18n(I18nKey.passwordDecryptRetry));
+      } finally {
+        unlockBtn.disabled = false;
+        unlockBtn.textContent = i18nUnlock;
+      }
+    }
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+      passwordInput.focus();
+    }
+
+    // 事件监听
+    unlockBtn.addEventListener('click', attemptUnlock);
+    passwordInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        attemptUnlock();
+      }
+    });
+
+    // 检查是否已经解锁过（可选功能）
+    if (sessionStorage.getItem('page-unlocked-' + window.location.pathname) === 'true') {
+      passwordInput.value = 'auto-unlock';
+      // 这里可以添加自动解锁逻辑，但需要存储密码，不太安全
+    }
+
+    // 聚焦到密码输入框
+    passwordInput.focus();
+  }
+
+  // 页面加载完成后初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPasswordProtection);
+  } else {
+    initPasswordProtection();
+  }
+})();</script> </div> </div>    <div id="last-modified" data-last-modified="2025-11-16T00:00:00" data-prefix="距离上次编辑: " data-year="年" data-month="月" data-day="天" data-hour="小时" data-minute="分" data-second="秒" style="display: none;"></div> <div class="card-base p-6 mb-4"> <script>
+                    function runtime() {
+                        const lastModifiedElement = document.getElementById('last-modified');
+                        const startDate = new Date(lastModifiedElement.dataset.lastModified);
+                        const currentDate = new Date();
+                        const diff = currentDate - startDate;
+
+                        const seconds = Math.floor(diff / 1000);
+                        const days = Math.floor(seconds / 86400);
+                        const hours = Math.floor((seconds % 86400) / 3600);
+                        const minutes = Math.floor((seconds % 3600) / 60);
+                        const secs = seconds % 60;
+
+                        const years = Math.floor(days / 365);
+                        const months = Math.floor((days % 365) / 30);
+                        const remainingDays = days % 30;
+
+                        const prefix = lastModifiedElement.dataset.prefix;
+                        const yearKey = lastModifiedElement.dataset.year;
+                        const monthKey = lastModifiedElement.dataset.month;
+                        const dayKey = lastModifiedElement.dataset.day;
+                        const hourKey = lastModifiedElement.dataset.hour;
+                        const minuteKey = lastModifiedElement.dataset.minute;
+                        const secondKey = lastModifiedElement.dataset.second;
+
+                        let runtimeString = prefix + ' ';
+                        
+                        if (years > 0) {
+                            runtimeString += `${years} ${yearKey} `;
+                        }
+                        if (months > 0) {
+                            runtimeString += `${months} ${monthKey} `;
+                        }
+                        if (remainingDays > 0) {
+                            runtimeString += `${remainingDays} ${dayKey} `;
+                        }
+                        runtimeString += `${hours} ${hourKey} `;
+                        if (minutes < 10) {
+                            runtimeString += `0${minutes} ${minuteKey} `;
+                        } else {
+                            runtimeString += `${minutes} ${minuteKey} `;
+                        }
+                        if (secs < 10) {
+                            runtimeString += `0${secs} ${secondKey}`;
+                        } else {
+                            runtimeString += `${secs} ${secondKey}`;
+                        }
+
+                        document.getElementById("modifiedtime").innerHTML = runtimeString;
+                    }
+                    setInterval(runtime, 1000);
+                </script> <div class="card-base p-1 mb-0.1"> <div class="flex items-center gap-2"> <div class="transition h-9 w-9 rounded-lg overflow-hidden relative flex items-center justify-center mr-0"> <svg width="1em" height="1em" class="text-4xl text-[var(--primary)] transition-transform group-hover:translate-x-0.5 bg-[var(--enter-btn-bg)] p-2 rounded-md" data-icon="material-symbols:history-rounded">   <symbol id="ai:material-symbols:history-rounded" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21q-3.15 0-5.575-1.912T3.275 14.2q-.1-.375.15-.687t.675-.363q.4-.05.725.15t.45.6q.6 2.25 2.475 3.675T12 19q2.925 0 4.963-2.037T19 12t-2.037-4.962T12 5q-1.725 0-3.225.8T6.25 8H8q.425 0 .713.288T9 9t-.288.713T8 10H4q-.425 0-.712-.288T3 9V5q0-.425.288-.712T4 4t.713.288T5 5v1.35q1.275-1.6 3.113-2.475T12 3q1.875 0 3.513.713t2.85 1.924t1.925 2.85T21 12t-.712 3.513t-1.925 2.85t-2.85 1.925T12 21m1-9.4l2.5 2.5q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-2.8-2.8q-.15-.15-.225-.337T11 11.975V8q0-.425.288-.712T12 7t.713.288T13 8z"/></symbol><use href="#ai:material-symbols:history-rounded"></use>  </svg> </div> <div class="flex flex-col gap-0.1"> <div id="modifiedtime" class="text-[1.0rem] leading-tight text-black/75 dark:text-white/75"></div> <p class="text-[0.8rem] leading-tight text-black/75 dark:text-white/75"> 部分信息可能已经过时 </p> </div> </div> </div> </div> <div class="flex flex-col md:flex-row justify-between mb-4 gap-4 overflow-hidden w-full"> <a href="/posts/面试题/后端高级工程师面试专题/后端高级工程师面试专题08/" class="w-full font-bold overflow-hidden active:scale-95"> <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-start gap-4"> <svg width="1em" height="1em" class="text-[2rem] text-[var(--primary)]" data-icon="material-symbols:chevron-left-rounded">   <symbol id="ai:material-symbols:chevron-left-rounded" viewBox="0 0 24 24"><path fill="currentColor" d="m10.8 12l3.9 3.9q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-4.6-4.6q-.15-.15-.212-.325T8.425 12t.063-.375t.212-.325l4.6-4.6q.275-.275.7-.275t.7.275t.275.7t-.275.7z"/></symbol><use href="#ai:material-symbols:chevron-left-rounded"></use>  </svg> <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75"> 后端高级工程师面试专题08 </div> </div> </a> <a href="/posts/面试题/后端高级工程师面试专题/后端高级工程师面试专题09/" class="w-full font-bold overflow-hidden active:scale-95"> <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-end gap-4"> <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75"> 后端高级工程师面试专题09 </div> <svg width="1em" height="1em" viewBox="0 0 24 24" class="text-[2rem] text-[var(--primary)]" data-icon="material-symbols:chevron-right-rounded">   <use href="#ai:material-symbols:chevron-right-rounded"></use>  </svg> </div> </a> </div>  <div class="footer col-span-2 onload-animation hidden lg:block" data-astro-cid-haiuh7kc> <!--<div class="border-t border-[var(&#45;&#45;primary)] mx-16 border-dashed py-8 max-w-[var(&#45;&#45;page-width)] flex flex-col items-center justify-center px-6">--><div class="transition border-t border-black/10 dark:border-white/15 my-10 border-dashed mx-32"></div> <!--<div class="transition bg-[oklch(92%_0.01_var(&#45;&#45;hue))] dark:bg-black rounded-2xl py-8 mt-4 mb-8 flex flex-col items-center justify-center px-6">--> <div class="transition border-dashed border-[oklch(85%_0.01_var(--hue))] dark:border-white/15 rounded-2xl mb-12 flex flex-col items-center justify-center px-6"> <div class="transition text-50 text-sm text-center"> 
+&copy; <span id="copyright-year">2025</span> 黄雷. All Rights Reserved. |
+<a class="transition link text-[var(--primary)] font-medium" href="https://beian.miit.gov.cn">鄂ICP备2024076193号</a> <!--<a class="transition link text-[var(--primary)] font-medium" href={url('rss/')} onclick={`event.preventDefault(); navigateToPage('${url('rss/')}')`}>RSS</a> /--> <!--<a class="transition link text-[var(--primary)] font-medium" href={url('atom/')} onclick={`event.preventDefault(); navigateToPage('${url('atom/')}')`}>Atom</a> /--> <!--<a class="transition link text-[var(--primary)] font-medium" target="_blank" href={url('sitemap-index.xml')}>Sitemap</a><br>-->
+Powered by
+<a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://astro.build">Astro</a> &
+<a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://github.com/matsuzaka-yuki/mizuki">Mizuki</a>&nbsp; Version <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://github.com/matsuzaka-yuki/mizuki">6.1</a><br> </div> </div> </div> </div> </main> <div class="footer col-span-2 onload-animation block lg:hidden" data-astro-cid-haiuh7kc> <!--<div class="border-t border-[var(&#45;&#45;primary)] mx-16 border-dashed py-8 max-w-[var(&#45;&#45;page-width)] flex flex-col items-center justify-center px-6">--><div class="transition border-t border-black/10 dark:border-white/15 my-10 border-dashed mx-32"></div> <!--<div class="transition bg-[oklch(92%_0.01_var(&#45;&#45;hue))] dark:bg-black rounded-2xl py-8 mt-4 mb-8 flex flex-col items-center justify-center px-6">--> <div class="transition border-dashed border-[oklch(85%_0.01_var(--hue))] dark:border-white/15 rounded-2xl mb-12 flex flex-col items-center justify-center px-6"> <div class="transition text-50 text-sm text-center"> 
+&copy; <span id="copyright-year">2025</span> 黄雷. All Rights Reserved. |
+<a class="transition link text-[var(--primary)] font-medium" href="https://beian.miit.gov.cn">鄂ICP备2024076193号</a> <!--<a class="transition link text-[var(--primary)] font-medium" href={url('rss/')} onclick={`event.preventDefault(); navigateToPage('${url('rss/')}')`}>RSS</a> /--> <!--<a class="transition link text-[var(--primary)] font-medium" href={url('atom/')} onclick={`event.preventDefault(); navigateToPage('${url('atom/')}')`}>Atom</a> /--> <!--<a class="transition link text-[var(--primary)] font-medium" target="_blank" href={url('sitemap-index.xml')}>Sitemap</a><br>-->
+Powered by
+<a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://astro.build">Astro</a> &
+<a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://github.com/matsuzaka-yuki/mizuki">Mizuki</a>&nbsp; Version <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://github.com/matsuzaka-yuki/mizuki">6.1</a><br> </div> </div> </div> </div> <!-- There can't be a filter on parent element, or it will break `fixed` --><div class="back-to-top-wrapper block" data-astro-cid-eymb5ayk> <div id="back-to-top-btn" class="back-to-top-btn hide flex items-center rounded-2xl overflow-hidden transition" onclick="backToTop()" data-astro-cid-eymb5ayk> <button aria-label="Back to Top" class="btn-card h-[3.75rem] w-[3.75rem]" data-astro-cid-eymb5ayk> <svg width="1em" height="1em" class="mx-auto" data-astro-cid-eymb5ayk="true" data-icon="material-symbols:keyboard-arrow-up-rounded">   <symbol id="ai:material-symbols:keyboard-arrow-up-rounded" viewBox="0 0 24 24"><path fill="currentColor" d="m12 10.8l-3.9 3.9q-.275.275-.7.275t-.7-.275t-.275-.7t.275-.7l4.6-4.6q.3-.3.7-.3t.7.3l4.6 4.6q.275.275.275.7t-.275.7t-.7.275t-.7-.275z"/></symbol><use href="#ai:material-symbols:keyboard-arrow-up-rounded"></use>  </svg> </button> </div> </div>  <script>
+    function backToTop() {
+        // 直接使用原生滚动，避免OverlayScrollbars冲突
+        window.scroll({top: 0, behavior: 'smooth'});
+    }
+</script> </div> </div>  <div class="absolute w-full z-0 hidden 2xl:block" data-astro-cid-haiuh7kc> <div class="relative max-w-[var(--page-width)] mx-auto" data-astro-cid-haiuh7kc> <!-- TOC component --> <div id="toc-wrapper" class="hidden lg:block transition absolute top-0 w-[var(--toc-width)] items-center -right-[var(--toc-width)] toc-hide" data-astro-cid-haiuh7kc> <div id="toc-inner-wrapper" class="fixed top-14 w-[var(--toc-width)] h-[calc(100vh_-_20rem)] overflow-y-scroll overflow-x-hidden hide-scrollbar" data-astro-cid-haiuh7kc> <div id="toc" class="w-full h-full transition-swup-fade " data-astro-cid-haiuh7kc> <table-of-contents id="toc" data-astro-cid-7ckeuxew="true" class="group"> <!-- TOC内容将由JavaScript动态生成 --> </table-of-contents> <script type="module" src="/_astro/TOC.astro_astro_type_script_index_0_lang.Cbx8um_w.js"></script>  </div> </div> </div> <!-- #toc needs to exist for Swup to work normally -->  </div> </div>  <!-- Music Player --> <script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><astro-island uid="1odrd" component-url="/_astro/MusicPlayer.pvBODPyD.js" component-export="default" renderer-url="/_astro/client.svelte.OvdBSOKf.js" props="{&quot;data-astro-cid-sckkx6r4&quot;:[0,true]}" ssr client="load" opts="{&quot;name&quot;:&quot;MusicPlayer&quot;,&quot;value&quot;:true}" await-children><!--[--><!--[--><!--[!--><!--]--> <div class="music-player fixed bottom-4 right-4 z-50 transition-all duration-300 ease-in-out hidden-mode"><div class="orb-player w-12 h-12 bg-[var(--primary)] rounded-full shadow-lg cursor-pointer transition-all duration-500 ease-in-out flex items-center justify-center hover:scale-110 active:scale-95" role="button" tabindex="0" aria-label="显示音乐播放器"><!--[!--><!--[!--><!--[!--><!--]--><!--]--><!--]--></div> <div class="mini-player card-base bg-[var(--float-panel-bg)] shadow-xl rounded-2xl p-3 transition-all duration-500 ease-in-out opacity-0 scale-95 pointer-events-none" role="button" tabindex="0" aria-label="展开音乐播放器"><div class="flex items-center gap-3 cursor-pointer"><div class="cover-container relative w-12 h-12 rounded-full overflow-hidden"><img src="/favicon/favicon-light-192.png" alt="封面" class="w-full h-full object-cover transition-transform duration-300"/> <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"><!--[!--><!--[!--><!--[!--><!--]--><!--]--><!--]--></div></div> <div class="flex-1 min-w-0"><div class="text-sm font-medium text-90 truncate">示例歌曲</div> <div class="text-xs text-50 truncate">示例艺术家</div></div> <div class="flex items-center gap-1"><button class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center" title="隐藏播放器"><!--[!--><!--]--><!----></button> <button class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"><!--[!--><!--]--><!----></button></div></div></div> <div class="expanded-player card-base bg-[var(--float-panel-bg)] shadow-xl rounded-2xl p-4 transition-all duration-500 ease-in-out opacity-0 scale-95 pointer-events-none"><div class="flex items-center gap-4 mb-4"><div class="cover-container relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0"><img src="/favicon/favicon-light-192.png" alt="封面" class="w-full h-full object-cover transition-transform duration-300"/></div> <div class="flex-1 min-w-0"><div class="song-title text-lg font-bold text-90 truncate mb-1">示例歌曲</div> <div class="song-artist text-sm text-50 truncate">示例艺术家</div> <div class="text-xs text-30 mt-1">0:00 / 0:00</div></div> <div class="flex items-center gap-1"><button class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center" title="隐藏播放器"><!--[!--><!--]--><!----></button> <button class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"><!--[!--><!--]--><!----></button></div></div> <div class="progress-section mb-4"><div class="progress-bar flex-1 h-2 bg-[var(--btn-regular-bg)] rounded-full cursor-pointer" role="slider" tabindex="0" aria-label="播放进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="h-full bg-[var(--primary)] rounded-full transition-all duration-100" style="width: 0%"></div></div></div> <div class="controls flex items-center justify-center gap-2 mb-4"><button class="w-10 h-10 rounded-lg btn-plain" disabled><!--[!--><!--]--><!----></button> <button class="btn-plain w-10 h-10 rounded-lg" disabled><!--[!--><!--]--><!----></button> <button class="btn-regular w-12 h-12 rounded-full"><!--[!--><!--[!--><!--[!--><!--]--><!--]--><!--]--></button> <button class="btn-plain w-10 h-10 rounded-lg" disabled><!--[!--><!--]--><!----></button> <button class="w-10 h-10 rounded-lg btn-plain"><!--[!--><!--[!--><!--[!--><!--]--><!--]--><!--]--></button></div> <div class="bottom-controls flex items-center gap-2"><button class="btn-plain w-8 h-8 rounded-lg"><!--[!--><!--[!--><!--[!--><!--]--><!--]--><!--]--></button> <div class="flex-1 h-2 bg-[var(--btn-regular-bg)] rounded-full cursor-pointer" role="slider" tabindex="0" aria-label="音量控制" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70"><div class="h-full bg-[var(--primary)] rounded-full transition-all duration-100" style="width: 70%"></div></div> <button class="btn-plain w-8 h-8 rounded-lg"><!--[!--><!--]--><!----></button></div></div> <!--[!--><!--]--></div> <style>
+.orb-player {
+	position: relative;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+}
+.orb-player::before {
+	content: '';
+	position: absolute;
+	inset: -2px;
+	background: linear-gradient(45deg, var(--primary), transparent, var(--primary));
+	border-radius: 50%;
+	z-index: -1;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+.orb-player:hover::before {
+	opacity: 0.3;
+	animation: rotate 2s linear infinite;
+}
+.orb-player .animate-pulse {
+	animation: musicWave 1.5s ease-in-out infinite;
+}
+@keyframes rotate {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+@keyframes musicWave {
+	0%, 100% { transform: scaleY(0.5); }
+	50% { transform: scaleY(1); }
+}
+.music-player.hidden-mode {
+	width: 48px;
+	height: 48px;
+}
+.music-player {
+    max-width: 320px;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+}
+.mini-player {
+    width: 280px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    /*left: 0;*/
+}
+.expanded-player {
+    width: 320px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+.progress-section div:hover,
+.bottom-controls > div:hover {
+    transform: scaleY(1.2);
+    transition: transform 0.2s ease;
+}
+@media (max-width: 768px) {
+    .music-player {
+        max-width: 280px;
+        /*left: 8px !important;*/
+        bottom: 8px !important;
+        right: 8px !important;
+    }
+    .music-player.expanded {
+        width: calc(100vw - 16px);
+        max-width: none;
+        /*left: 8px !important;*/
+        right: 8px !important;
+    }
+    .playlist-panel {
+        width: calc(100vw - 16px) !important;
+        /*left: 8px !important;*/
+        right: 8px !important;
+        max-width: none;
+    }
+    .controls {
+        gap: 8px;
+    }
+    .controls button {
+        width: 36px;
+        height: 36px;
+    }
+    .controls button:nth-child(3) {
+        width: 44px;
+        height: 44px;
+    }
+}
+@media (max-width: 480px) {
+    .music-player {
+        max-width: 260px;
+    }
+    .song-title {
+        font-size: 14px;
+    }
+    .song-artist {
+        font-size: 12px;
+    }
+    .controls {
+        gap: 6px;
+        margin-bottom: 12px;
+    }
+    .controls button {
+        width: 32px;
+        height: 32px;
+    }
+    .controls button:nth-child(3) {
+        width: 40px;
+        height: 40px;
+    }
+    .playlist-item {
+        padding: 8px 12px;
+    }
+    .playlist-item .w-10 {
+        width: 32px;
+        height: 32px;
+    }
+}
+@keyframes slide-up {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+.animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+}
+@media (hover: none) and (pointer: coarse) {
+    .music-player button,
+    .playlist-item {
+        min-height: 44px;
+    }
+    .progress-section > div,
+    .bottom-controls > div:nth-child(2) {
+        height: 12px;
+    }
+}
+/* 自定义旋转动画，停止时保持当前位置 */
+@keyframes spin-continuous {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+.cover-container img {
+    animation: spin-continuous 3s linear infinite;
+    animation-play-state: paused;
+}
+.cover-container img.spinning {
+    animation-play-state: running;
+}
+/* 让主题色按钮更有视觉反馈 */
+button.bg-\[var\(--primary\)\] {
+    box-shadow: 0 0 0 2px var(--primary);
+    border: none;
+}
+</style><!--]--><!--]--><!--astro:end--></astro-island> <!-- Pio 看板娘组件 --> <!-- 注意：Pio 组件需要放在 body 标签内，但要在其他内容之前 --> <!-- 如果启用了侧边栏，可能需要调整 z-index --> <astro-island uid="ZB93l" component-url="/_astro/Pio.C3oEg5uj.js" component-export="default" renderer-url="/_astro/client.svelte.OvdBSOKf.js" props="{&quot;data-astro-cid-sckkx6r4&quot;:[0,true]}" ssr client="load" opts="{&quot;name&quot;:&quot;Pio&quot;,&quot;value&quot;:true}" await-children><!--[--><!--[!--><!--]--><!--]--><!--astro:end--></astro-island> <!-- increase the page height during page transition to prevent the scrolling animation from jumping --> <div id="page-height-extend" class="hidden h-[300vh]" data-astro-cid-sckkx6r4 style="--bannerOffset: 15vh;--banner-height-home: 65vh;--banner-height: 35vh;--configHue: 280;--page-width: 90rem;"></div> <!-- Sakura Effect -->  </body> </html>  <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.uKgwcQsE.js"></script> <script type="module">(function(e,n,r,t,m){e[t]=e[t]||[],e[t].push({"gtm.start":new Date().getTime(),event:"gtm.js"});var g=n.getElementsByTagName(r)[0],a=n.createElement(r),s="";a.async=!0,a.src="https://www.googletagmanager.com/gtm.js?id="+m+s,g.parentNode.insertBefore(a,g)})(window,document,"script","dataLayer","GTM-KRX3XGVH");</script> 
