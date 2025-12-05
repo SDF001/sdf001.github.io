@@ -1,1 +1,0 @@
-import"./config.DKY2bWTK.js";import"./translation.JPGhtMPO.js";function e(n){return n.replace(/\.(md|mdx|markdown)$/i,"")}function o(...n){return n.join("/").replace(/\/+/g,"/")}function s(n){const t=e(n);return r(`/posts/${t}/`)}function l(n){const t=n.replace(/^\/+/,"");return r(`/posts/${t}/`)}function r(n){return o("","/",n)}export{s as a,l as g,r as u};
